@@ -1,9 +1,8 @@
 # Git Convention : Strategy
 
-### Strategy : GitHub Flow
+### Flow :
 
-- 규모가 작고 잦은 기능수정과 배포가 있는 프로젝트에 적합합니다.
-- 브랜치 종류 : main, develop, feature
+
 
 #### 1. main
 

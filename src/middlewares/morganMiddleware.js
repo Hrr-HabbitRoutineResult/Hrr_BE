@@ -10,7 +10,7 @@ const format = () => (process.env.NODE_ENV === 'production' ? 'combined' : 'dev'
 // 로그 작성을 위한 Output stream 옵션
 const stream = {
   write: message => {
-    logger.info(message.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, ''));
+    logger.http(message.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, ''));
   },
 };
 

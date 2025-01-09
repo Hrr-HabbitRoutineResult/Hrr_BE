@@ -1,6 +1,9 @@
 import express from 'express';
+import dotenv from 'dotenv';
 import logger from './logger.js';
 import morganMiddleware from './middlewares/morganMiddleware.js';
+
+dotenv.config();
 
 const app = express();
 const port = 3000;
@@ -8,7 +11,6 @@ const port = 3000;
 app.use(morganMiddleware);
 
 app.get('/', (req, res) => {
-  logger.info('GET /');
   res.send('Hello World!');
 });
 

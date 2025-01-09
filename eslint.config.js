@@ -8,7 +8,10 @@ import pluginSQL from 'eslint-plugin-sql';
 export default [
   {
     languageOptions: {
-      globals: globals.browser,
+      globals: {
+        ...globals.browser, // 브라우저 전역 변수
+        ...globals.node, // Node.js 전역 변수 추가
+      },
     },
   },
   pluginJs.configs.recommended,

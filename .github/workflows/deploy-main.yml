@@ -22,7 +22,7 @@ jobs:
           cat >>~/.ssh/config <<END
           Host Hrr-BE
             HostName 13.124.126.83
-            IdentityFile ~/.ssh/Hrr-BE.pem
+            IdentityFile ~/.ssh/id_rsa
             User ubuntu
             StrictHostKeyChecking no
           END

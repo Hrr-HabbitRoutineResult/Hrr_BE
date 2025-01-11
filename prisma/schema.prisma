@@ -1,0 +1,405 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  userBadge1      UserBadge?  @relation("Badge1", fields: [userBadge1_id], references: [id])
+  userBadge1_id Int
+  userBadge2      UserBadge?  @relation("Badge2", fields: [userBadge2_id], references: [id])
+  userBadge2_id Int
+  userBadge3      UserBadge?  @relation("Badge3", fields: [userBadge3_id], references: [id])
+  userBadge3_id Int
+  name          String   @db.VarChar(10)
+  gender        String   @db.VarChar(255)
+  email         String   @db.VarChar(255)
+  phoneNumber   String   @db.VarChar(15)
+  password      String   @db.VarChar(255)
+  created_at    DateTime  @db.DateTime(6)
+  updated_at    DateTime  @db.DateTime(6)
+  inactiveDate  DateTime  @db.DateTime(6)
+  profilePhoto  String?  @db.VarChar(255)
+  level         Int 
+  followerCount Int
+  followingCount Int
+  points        Int
+
+  challengeLikes ChallengeLike[]
+  comments Comment[]
+  posts Post[]
+  postLikes PostLike[]
+  verifications Verification[]
+  userBadges UserBadge[]
+  userCategoryTypes UserCategoryType[]
+  scraps Scrap[]
+  temporaryVerifications TemporaryVerification[]
+  challenges Challenge[]
+  userChallenges UserChallenge[]
+  
+  followers       Follow[]    @relation("FollowerRelation")
+  followings      Follow[]    @relation("FollowingRelation")
+  receivedMessages Message[]  @relation("ReceivedMessages")
+  sentMessages     Message[]  @relation("SentMessages")
+
+
+  @@map("Users")
+}
+
+model Keyword {
+  id   Int    @id @default(autoincrement())
+  name String? @db.VarChar(15)
+
+  challengeKeywords ChallengeKeyword[]
+
+  @@map("Keywords")
+}
+
+model ChallengeLike {
+  id         Int @id @default(autoincrement())
+  user User @relation(fields: [user_id], references: [id])
+  user_id    Int
+  challenge Challenge @relation(fields: [challenge_id], references: [id])
+  challenge_id Int
+
+  @@map("ChallengeLikes")
+}
+
+model Comment {
+  id            Int      @id @default(autoincrement())
+  user User @relation(fields: [user_id], references: [id])
+  user_id       Int
+  post Post @relation(fields: [post_id], references: [id])
+  post_id       Int
+  verification Verification @relation(fields: [verification_id], references: [id])
+  verification_id Int
+  content       String?  @db.Text
+  created_at    DateTime? @db.DateTime(6)
+  updated_at    DateTime? @db.DateTime(6)
+
+  @@map("Comments")
+}
+
+model Board {
+  id          Int    @id @default(autoincrement())
+  name        String  @db.VarChar(10)
+  description String? @db.VarChar(120)
+  boardStatus BoardStatus  @map("status")
+
+  posts Post[]
+  boardCategories BoardCategory[]
+
+  @@map("Boards")
+}
+
+model Post {
+  id          Int      @id @default(autoincrement())
+  user User @relation(fields: [user_id], references: [id])
+  user_id     Int
+  board Board @relation(fields: [board_id], references: [id])
+  board_id    Int
+  title       String?  @db.VarChar(50)
+  content     String?  @db.VarChar(200)
+  anonymous   Boolean?
+  created_at  DateTime? @db.DateTime(6)
+  updated_at  DateTime? @db.DateTime(6)
+
+  comments Comment []
+  postLikes PostLike[]
+
+  @@map("Posts")
+}
+
+model PostLike {
+  id         Int @id @default(autoincrement())
+  user User @relation(fields: [user_id], references: [id])
+  user_id    Int
+  post Post @relation(fields: [post_id], references: [id])
+  post_id    Int
+
+  @@map("PostLikes")
+}
+
+model Message {
+  id             Int      @id @default(autoincrement())
+  receivedUser   User     @relation("ReceivedMessages", fields: [receivedUser_id], references: [id])
+  receivedUser_id Int
+  sendUser       User     @relation("SentMessages", fields: [sendUser_id], references: [id])
+  sendUser_id    Int
+  content        String?  @db.Text
+  created_at     DateTime? @db.DateTime(6)
+
+  @@map("Messages")
+}
+
+model Verification {
+  id            Int      @id @default(autoincrement())
+  user User @relation(fields: [user_id], references: [id])
+  user_id       Int
+  userChallenge UserChallenge @relation(fields: [userChallenge_id], references: [id])
+  userChallenge_id Int
+  challengeType ChallengeType
+  verificationType  VerificationType  @map("type")
+  photoUrl      String?  @db.VarChar(255)
+  title         String?  @db.VarChar(20)
+  content       String?  @db.VarChar(200)
+  question      Boolean?
+  textUrl       String?  @db.VarChar(255)
+  verificationStatus  VerificationStatus  @map("status")
+  created_at    DateTime? @db.DateTime(6)
+  updated_at    DateTime? @db.DateTime(6)
+
+  comments Comment[]
+  temporaryVerifications TemporaryVerification[]
+
+scrapTarget1          Scrap[]               @relation("ScrapTarget1")
+  scrapTarget2          Scrap[]               @relation("ScrapTarget2")
+
+  @@map("Verifications")
+}
+
+model KickOut {
+  id             Int      @id @default(autoincrement())
+  userChallenge UserChallenge @relation(fields: [userChallenge_id], references: [id])
+  userChallenge_id Int
+  challengeType ChallengeType
+  created_at     DateTime? @db.DateTime(6)
+
+  @@map("KickOuts")
+}
+
+model Follow {
+  id           Int @id @default(autoincrement())
+  follower     User  @relation("FollowerRelation", fields: [follower_id], references: [id])
+  follower_id  Int
+  following    User  @relation("FollowingRelation", fields: [following_id], references: [id])
+  following_id Int
+
+  @@map("Follows")
+}
+
+model Badge {
+  id          Int    @id @default(autoincrement())
+  name        String? @db.VarChar(50)
+  icon        String? @db.VarChar(255)
+  description String? @db.Text
+
+  userBadges UserBadge[]
+
+  @@map("Badges")
+}
+
+model UserBadge {
+  id         Int      @id @default(autoincrement())
+  user User @relation(fields: [user_id], references: [id])
+  user_id    Int
+  badge Badge @relation(fields: [badge_id], references: [id])
+  badge_id   Int
+  created_at DateTime? @db.DateTime(6)
+
+  userBadge1 User[] @relation("Badge1")
+  userBadge2 User[] @relation("Badge2")
+  userBadge3 User[] @relation("Badge3")
+
+  @@map("User_Badge")
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String? @db.VarChar(15)
+
+  userCategoryTypes UserCategoryType[]
+  challengeCategories ChallengeCategory[]
+  boardCategories BoardCategory[]
+
+
+}
+
+model FavorType {
+  id   Int    @id @default(autoincrement())
+  name String? @db.VarChar(10)
+
+  userCategoryTypes UserCategoryType[]
+}
+
+model UserCategoryType {
+  id          Int
+  user User @relation(fields: [user_id], references: [id])
+  user_id     Int
+  category Category @relation(fields: [category_id], references: [id])
+  category_id Int
+  favorType FavorType @relation(fields: [favorType_id], references: [id])
+  favorType_id Int
+  @@id([id, user_id, category_id, favorType_id])
+
+  @@map("User_CategoryType")
+}
+
+model ChallengeCategory {
+  id          Int
+  category Category @relation(fields: [category_id], references: [id])
+  category_id Int
+  challenge Challenge @relation(fields: [challenge_id], references: [id])
+  challenge_id Int
+  @@id([id, category_id, challenge_id])
+
+  @@map("Challenge_Category")
+}
+
+model BoardCategory {
+  id        Int
+  board Board @relation(fields: [board_id], references: [id])
+  board_id  Int
+  category Category @relation(fields: [category_id], references: [id])
+  category_id Int
+  @@id([id, board_id, category_id])
+
+  @@map("Board_Category")
+}
+
+model Scrap {
+  id             Int      @id @default(autoincrement())
+  user User @relation(fields: [user_id], references: [id])
+  user_id        Int
+  scrapTarget1    Verification? @relation("ScrapTarget1", fields: [scrapTarget1_id], references: [id])
+  scrapTarget1_id Int
+  scrapTarget2    Verification? @relation("ScrapTarget2", fields: [scrapTarget2_id], references: [id])
+  scrapTarget2_id Int
+  scrapType      ScrapType
+  created_at     DateTime? @db.DateTime(6)
+
+  @@map("Scraps")
+}
+
+model TemporaryVerification {
+  id            Int      @id @default(autoincrement())
+  user User @relation(fields: [user_id], references: [id])
+  user_id       Int
+  verification Verification @relation(fields: [verification_id], references: [id])
+  verification_id Int
+  challengeType ChallengeType
+  title         String?  @db.VarChar(20)
+  content       String?  @db.VarChar(200)
+  created_at    DateTime? @db.DateTime(6)
+  updated_at    DateTime? @db.DateTime(6)
+
+  @@map("TemporaryVerifications")
+}
+
+model Challenge {
+  id             Int      @id @default(autoincrement())
+  user User @relation(fields: [owner_id], references: [id])
+  owner_id       Int
+  name           String?  @db.VarChar(10)
+  type           ChallengeType
+  description    String?  @db.VarChar(120)
+  challengeImage String?  @db.VarChar(255)
+  challengeStatus ChallengeStatus  @map("status")
+  maxParticipants Int?
+  verificationType VerificationType
+  rule           String?  @db.Text
+  created_at     DateTime? @db.DateTime(6)
+  updated_at     DateTime? @db.DateTime(6)
+
+  challengeLikes ChallengeLike[]
+  challengeCategories ChallengeCategory[]
+  frequencies Frequency[]
+  userChallenges UserChallenge[]
+  challengeKeywords ChallengeKeyword[]
+
+  @@map("Challenges")
+}
+
+model Frequency {
+  id             Int      @id @default(autoincrement())
+  challenge Challenge @relation(fields: [challenge_id], references: [id])
+  challenge_id   Int
+  frequencyType  FrequencyType
+  frequencyValue Json?
+
+  @@map("Frequencies")
+}
+
+model UserChallenge {
+  id             Int      @id @default(autoincrement())
+  challenge Challenge @relation(fields: [challenge_id], references: [id])
+  challenge_id   Int
+  user User @relation(fields: [user_id], references: [id])
+  user_id        Int
+  challengeStatus ChallengeStatus
+  joinDate       DateTime? @db.DateTime(6)
+  endDate        DateTime? @db.DateTime(6)
+  verifyCount    Int?
+  unverifiedCount Int?
+  userChallengeStatus  UserChallengeStatus  @map("status")
+  warn           Int?
+
+  verification Verification[]
+  kickOuts KickOut[]
+
+  @@map("User_Challenge")
+}
+
+model ChallengeKeyword {
+  id          Int
+  challenge Challenge @relation(fields: [challenge_id], references: [id])
+  challenge_id Int
+  keyword Keyword @relation(fields: [keyword_id], references: [id])
+  keyword_id  Int
+  @@id([id, challenge_id, keyword_id])
+
+  @@map("Challenge_Keyword")
+}
+
+enum BoardStatus {
+  basic
+  pinned
+  default
+}
+
+enum ChallengeType {
+  study
+  basic
+}
+
+enum VerificationType {
+  camera
+  text
+}
+
+enum VerificationStatus {
+  verified
+  unverified
+}
+
+enum ScrapType {
+  post
+  verification
+}
+
+enum ChallengeStatus {
+  open
+  ongoing
+  completed
+}
+
+enum FrequencyType {
+  weeklyCount
+  specificDays
+}
+
+enum UserChallengeStatus {
+  kick
+  active
+}
+

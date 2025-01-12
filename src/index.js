@@ -2,21 +2,50 @@ import express from 'express';
 import dotenv from 'dotenv';
 import logger from './logger.js';
 import morganMiddleware from './middlewares/morganMiddleware.js';
-
+import swaggerAutogen from 'swagger-autogen';
+import swaggerUiExpress from 'swagger-ui-express';
+import app from './app.js';
 dotenv.config();
 
-const app = express();
 const port = 3000;
+app.use(
+  '/docs',
+  swaggerUiExpress.serve,
+  swaggerUiExpress.setup(
+    {},
+    {
+      swaggerOptions: {
+        url: '/openapi.json',
+      },
+    },
+  ),
+);
+
+app.get('/openapi.json', async (req, res, next) => {
+  // #swagger.ignore = true
+  const options = {
+    openapi: '3.0.0',
+    disableLogs: true,
+    writeOutputFile: false,
+  };
+  const outputFile = '/dev/null'; // 파일 출력은 사용하지 않습니다.
+  const routes = ['./src/index.js', './src/app.js'];
+  const doc = {
+    info: {
+      title: 'UMC 7th',
+      description: 'UMC 7th Node.js 테스트 프로젝트입니다.',
+    },
+    host: 'localhost:3000',
+  };
+
+  const result = await swaggerAutogen(options)(outputFile, routes, doc);
+  res.json(result ? result.data : null);
+});
 
 app.use(morganMiddleware);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
-});
-
-app.get('/error', (req, res) => {
-  logger.error('Error message');
-  res.sendStatus(500);
 });
 
 app.listen(port, () => {

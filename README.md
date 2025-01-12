@@ -18,7 +18,7 @@ Briefly describe your project, its purpose, and key features.
 ---
 
 ## Conventions
-- For code conventions and guidelines, please refer to [rules.md](./rules.md).
+- For code conventions and guidelines, please refer to [[rules.md](https://github.com/Hrr-HabbitRoutineResult/Hrr_BE/blob/main/Rules.md)]
 
 ---
 

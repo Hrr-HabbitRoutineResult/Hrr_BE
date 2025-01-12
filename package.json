@@ -1,15 +1,7 @@
 {
-  "name": "hrr",
+  "name": "hrr_be",
   "version": "1.0.0",
-  "description": "Hrr_BE",
-  "homepage": "https://github.com/Hrr-HabbitRoutineResult/Hrr_BE#readme",
-  "bugs": {
-    "url": "https://github.com/Hrr-HabbitRoutineResult/Hrr_BE/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Hrr-HabbitRoutineResult/Hrr_BE.git"
-  },
+  "description": "hrr project",
   "license": "ISC",
   "author": "",
   "type": "module",
@@ -23,9 +15,10 @@
     "seed": "node prisma/seed.js"
   },
   "dependencies": {
+    "axios": "^1.7.9",
     "@prisma/client": "^6.2.1",
     "dotenv": "^16.4.7",
-    "express": "^5.0.1",
+    "express": "^4.21.2",
     "morgan": "^1.10.0",
     "prisma": "^6.2.1",
     "swagger-autogen": "^2.23.7",

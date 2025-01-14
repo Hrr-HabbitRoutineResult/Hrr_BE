@@ -19,6 +19,6 @@ app.use('/api/v1/challenge', challengeRoutes);
 app.use('/api/v1/message', messageRoutes);
 app.use('/api/v1/board', boardRoutes);
 app.use('/api/v1/post', postRoutes);
-app.use('api/v1/', verificationRoutes);
+app.use('/api/v1', verificationRoutes);
 
 export default app;

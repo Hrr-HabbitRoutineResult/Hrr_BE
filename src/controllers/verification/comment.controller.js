@@ -149,6 +149,7 @@ const postVerificationComment = () => {
   };
   #swagger.requestBody = {
     required: true,
+    description: '댓글 작성 요청 본문 데이터',
     content: {
       'application/json': {
         schema: {
@@ -160,7 +161,6 @@ const postVerificationComment = () => {
           },
           required: ['content', 'userId', 'username']
         },
-        description: '댓글 작성 요청 본문 데이터'
       }
     }
   };
@@ -285,6 +285,7 @@ const updateVerificationComment = () => {
   };
   #swagger.requestBody = {
     required: true,
+    description: '댓글 수정 요청 본문 데이터',
     content: {
       'application/json': {
         schema: {
@@ -294,7 +295,6 @@ const updateVerificationComment = () => {
           },
           required: ['content']
         },
-        description: '댓글 수정 요청 본문 데이터'
       }
     }
   };

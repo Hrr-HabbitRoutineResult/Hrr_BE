@@ -16,11 +16,11 @@ datasource db {
 model User {
   id            Int      @id @default(autoincrement())
   userBadge1      UserBadge?  @relation("Badge1", fields: [userBadge1_id], references: [id])
-  userBadge1_id Int
+  userBadge1_id Int?
   userBadge2      UserBadge?  @relation("Badge2", fields: [userBadge2_id], references: [id])
-  userBadge2_id Int
+  userBadge2_id Int?
   userBadge3      UserBadge?  @relation("Badge3", fields: [userBadge3_id], references: [id])
-  userBadge3_id Int
+  userBadge3_id Int?
   name          String   @db.VarChar(10)
   gender        Gender?  
   email         String   @db.VarChar(255)

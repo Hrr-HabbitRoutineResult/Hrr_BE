@@ -78,98 +78,6 @@ const getBoardCategories = () => {
 };
 const createBoard = () => {
   /**
-  #swagger.summary = '게시글 상단 고정 API';
-  #swagger.description = '특정 게시글을 게시판 상단에 고정하는 API입니다.';
-  #swagger.tags = ['Board'];
-  #swagger.parameters['Authorization'] = {
-    in: 'header',
-    required: true,
-    schema: { type: 'string', example: 'Bearer <access_token>' },
-    description: '인증을 위한 액세스 토큰'
-  };
-  #swagger.parameters['boardID'] = {
-    in: 'path',
-    required: true,
-    schema: { type: 'integer', example: 1 },
-    description: '게시판 ID'
-  };
-  #swagger.requestBody = {
-    required: false,
-    content: {
-      'application/json': {
-        schema: { type: 'object' },
-        description: '이 요청에는 본문이 필요하지 않습니다.'
-      }
-    }
-  };
-  #swagger.responses[200] = {
-    description: '게시글 상단 고정 성공',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            resultType: { type: 'string', example: 'SUCCESS' },
-            error: { type: 'object', nullable: true, example: null },
-            success: {
-              type: 'object',
-              properties: {
-                message: { type: 'string', example: 'Post pinned successfully' },
-                boardId: { type: 'integer', example: 3 },
-                status: { type: 'string', example: 'pinned' }
-              }
-            }
-          }
-        }
-      }
-    }
-  };
-  #swagger.responses[401] = {
-    description: '인증 실패',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            resultType: { type: 'string', example: 'FAILURE' },
-            error: { type: 'string', example: 'Unauthorized access.' }
-          }
-        }
-      }
-    }
-  };
-  #swagger.responses[404] = {
-    description: '게시판을 찾을 수 없음',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            resultType: { type: 'string', example: 'NOT_FOUND' },
-            error: { type: 'string', example: 'Board not found.' }
-          }
-        }
-      }
-    }
-  };
-  #swagger.responses[500] = {
-    description: '서버 오류',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            resultType: { type: 'string', example: 'FAILURE' },
-            error: { type: 'string', example: 'Internal server error.' }
-          }
-        }
-      }
-    }
-  };
-   */
-};
-const updateBoardPinned = () => {
-  /**
   #swagger.summary = '게시판 생성 API';
   #swagger.description = '사용자가 새로운 게시판을 생성하는 API입니다.';
   #swagger.tags = ['Board'];
@@ -181,6 +89,7 @@ const updateBoardPinned = () => {
   };
   #swagger.requestBody = {
     required: true,
+    description: '새로운 게시판 생성 요청 데이터',
     content: {
       'application/json': {
         schema: {
@@ -192,7 +101,6 @@ const updateBoardPinned = () => {
           },
           required: ['name', 'description', 'category']
         },
-        description: '새로운 게시판 생성 요청 데이터'
       }
     }
   };
@@ -247,6 +155,98 @@ const updateBoardPinned = () => {
           properties: {
             resultType: { type: 'string', example: 'FAILURE' },
             error: { type: 'string', example: 'Unauthorized access.' }
+          }
+        }
+      }
+    }
+  };
+  #swagger.responses[500] = {
+    description: '서버 오류',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'FAILURE' },
+            error: { type: 'string', example: 'Internal server error.' }
+          }
+        }
+      }
+    }
+  };
+   */
+};
+const updateBoardPinned = () => {
+  /**
+  #swagger.summary = '게시글 상단 고정 API';
+  #swagger.description = '특정 게시글을 게시판 상단에 고정하는 API입니다.';
+  #swagger.tags = ['Board'];
+  #swagger.parameters['Authorization'] = {
+    in: 'header',
+    required: true,
+    schema: { type: 'string', example: 'Bearer <access_token>' },
+    description: '인증을 위한 액세스 토큰'
+  };
+  #swagger.parameters['boardID'] = {
+    in: 'path',
+    required: true,
+    schema: { type: 'integer', example: 1 },
+    description: '게시판 ID'
+  };
+  #swagger.requestBody = {
+    required: false,
+    description: '이 요청에는 본문이 필요하지 않습니다.',
+    content: {
+      'application/json': {
+        schema: { type: 'object' },
+      }
+    }
+  };
+  #swagger.responses[200] = {
+    description: '게시글 상단 고정 성공',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'SUCCESS' },
+            error: { type: 'object', nullable: true, example: null },
+            success: {
+              type: 'object',
+              properties: {
+                message: { type: 'string', example: 'Post pinned successfully' },
+                boardId: { type: 'integer', example: 3 },
+                status: { type: 'string', example: 'pinned' }
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+  #swagger.responses[401] = {
+    description: '인증 실패',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'FAILURE' },
+            error: { type: 'string', example: 'Unauthorized access.' }
+          }
+        }
+      }
+    }
+  };
+  #swagger.responses[404] = {
+    description: '게시판을 찾을 수 없음',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'NOT_FOUND' },
+            error: { type: 'string', example: 'Board not found.' }
           }
         }
       }

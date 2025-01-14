@@ -5,6 +5,7 @@ const emailLogin = () => {
   #swagger.tags = ['Auth'];
   #swagger.requestBody = {
     required: true,
+    description: '로그인 요청 정보',
     content: {
       'application/json': {
         schema: {
@@ -15,7 +16,6 @@ const emailLogin = () => {
           },
           required: ['email', 'password']
         },
-        description: '로그인 요청 정보'
       }
     }
   };
@@ -71,6 +71,7 @@ const kakaoLogin = () => {
   #swagger.tags = ['Auth'];
   #swagger.requestBody = {
     required: true,
+    description: '카카오 OAuth 토큰 인증 요청 정보',
     content: {
       'application/json': {
         schema: {
@@ -80,7 +81,6 @@ const kakaoLogin = () => {
           },
           required: ['kakaoAccessToken']
         },
-        description: '카카오 OAuth 토큰 인증 요청 정보'
       }
     }
   };
@@ -135,6 +135,7 @@ const naverLogin = () => {
 #swagger.tags = ['Auth'];
 #swagger.requestBody = {
   required: true,
+  description: '네이버 OAuth 토큰 인증 요청 정보',
   content: {
     'application/json': {
       schema: {
@@ -144,7 +145,6 @@ const naverLogin = () => {
         },
         required: ['naverAccessToken']
       },
-      description: '네이버 OAuth 토큰 인증 요청 정보'
     }
   }
 };
@@ -199,6 +199,7 @@ const findEmail = () => {
   #swagger.tags = ['Auth'];
   #swagger.requestBody = {
     required: true,
+    description: '이메일 찾기 요청 정보',
     content: {
       'application/json': {
         schema: {
@@ -209,7 +210,6 @@ const findEmail = () => {
           },
           required: ['name', 'phoneNumber']
         },
-        description: '이메일 찾기 요청 정보'
       }
     }
   };
@@ -263,6 +263,7 @@ const ressetPasswordByPhone = () => {
   #swagger.tags = ['Auth'];
   #swagger.requestBody = {
     required: true,
+    description: '이메일 찾기 요청 정보',
     content: {
       'application/json': {
         schema: {
@@ -273,7 +274,6 @@ const ressetPasswordByPhone = () => {
           },
           required: ['name', 'phoneNumber']
         },
-        description: '이메일 찾기 요청 정보'
       }
     }
   };
@@ -327,6 +327,7 @@ const ressetPasswordByEmail = () => {
   #swagger.tags = ['Auth'];
   #swagger.requestBody = {
     required: true,
+    description: '비밀번호 재설정 요청 정보',
     content: {
       'application/json': {
         schema: {
@@ -337,7 +338,6 @@ const ressetPasswordByEmail = () => {
           },
           required: ['email', 'newPassword']
         },
-        description: '비밀번호 재설정 요청 정보'
       }
     }
   };
@@ -391,6 +391,7 @@ const register = () => {
   #swagger.tags = ['Auth'];
   #swagger.requestBody = {
     required: true,
+    description: '회원가입 요청 정보',
     content: {
       'application/json': {
         schema: {
@@ -403,7 +404,6 @@ const register = () => {
           },
           required: ['email', 'password', 'name', 'phoneNumber']
         },
-        description: '회원가입 요청 정보'
       }
     }
   };

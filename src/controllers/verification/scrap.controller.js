@@ -23,13 +23,13 @@ export const scrapVerification = () => {
   };
   #swagger.requestBody = {
     required: false,
+    description: '요청 본문 데이터는 비어 있습니다.',
     content: {
       'application/json': {
         schema: {
           type: 'object',
           properties: {},
         },
-        description: '요청 본문 데이터는 비어 있습니다.'
       }
     }
   };
@@ -147,6 +147,7 @@ export const unscrapVerification = () => {
   };
   #swagger.requestBody = {
     required: true,
+    description: '스크랩 취소 요청 데이터',
     content: {
       'application/json': {
         schema: {
@@ -156,7 +157,6 @@ export const unscrapVerification = () => {
           },
           required: ['scrapId']
         },
-        description: '스크랩 취소 요청 데이터'
       }
     }
   };

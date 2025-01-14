@@ -23,6 +23,7 @@ const joinChallenge = () => {
   };
   #swagger.requestBody = {
     required: true,
+    description: '참가 요청 본문 데이터',
     content: {
       'application/json': {
         schema: {
@@ -33,7 +34,6 @@ const joinChallenge = () => {
           },
           required: ['userId', 'joinDate']
         },
-        description: '참가 요청 본문 데이터'
       }
     }
   };
@@ -150,6 +150,7 @@ const likeChallenge = () => {
 };
 #swagger.requestBody = {
   required: true,
+  description: '좋아요 요청 본문 데이터',
   content: {
     'application/json': {
       schema: {
@@ -161,7 +162,6 @@ const likeChallenge = () => {
         },
         required: ['userId', 'likeId', 'action']
       },
-      description: '좋아요 요청 본문 데이터'
     }
   }
 };

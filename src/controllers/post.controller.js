@@ -492,6 +492,7 @@ const createPost = () => {
   };
   #swagger.requestBody = {
     required: true,
+    description: '새로운 게시글 작성 요청 데이터',
     content: {
       'application/json': {
         schema: {
@@ -507,7 +508,6 @@ const createPost = () => {
           },
           required: ['title', 'content', 'anonymity']
         },
-        description: '새로운 게시글 작성 요청 데이터'
       }
     }
   };
@@ -595,10 +595,10 @@ const likePost = () => {
   };
   #swagger.requestBody = {
     required: false,
+    description: '이 요청에는 본문이 필요하지 않습니다.',
     content: {
       'application/json': {
         schema: { type: 'object' },
-        description: '이 요청에는 본문이 필요하지 않습니다.'
       }
     }
   };
@@ -685,6 +685,7 @@ const commentOnPost = () => {
   };
   #swagger.requestBody = {
     required: true,
+    description: '댓글 내용',
     content: {
       'application/json': {
         schema: {
@@ -694,7 +695,6 @@ const commentOnPost = () => {
           },
           required: ['content']
         },
-        description: '댓글 내용'
       }
     }
   };
@@ -796,10 +796,10 @@ const savePost = () => {
   };
   #swagger.requestBody = {
     required: false,
+    description: '이 요청에는 본문이 필요하지 않습니다.',
     content: {
       'application/json': {
         schema: { type: 'object' },
-        description: '이 요청에는 본문이 필요하지 않습니다.'
       }
     }
   };

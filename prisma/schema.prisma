@@ -23,12 +23,12 @@ model User {
   userBadge3_id Int?
   name          String   @db.VarChar(10)
   gender        Gender?  
-  email         String   @db.VarChar(255)
+  email         String   @db.VarChar(255) @unique
   phoneNumber   String   @db.VarChar(15)
   password      String   @db.VarChar(255)
-  created_at    DateTime  @db.DateTime(6)
-  updated_at    DateTime  @db.DateTime(6)
-  inactiveDate  DateTime  @db.DateTime(6)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  inactiveDate  DateTime? @db.DateTime(6)
   profilePhoto  String?  @db.VarChar(255)
   level         Level?
   followerCount Int
@@ -37,8 +37,6 @@ model User {
   job           Job?
   userCategory    UserCategory?
   ageGroup      AgeGroup?
-
-
 
   challengeLikes ChallengeLike[]
   comments Comment[]
@@ -58,7 +56,6 @@ model User {
   followings      Follow[]    @relation("FollowingRelation")
   receivedMessages Message[]  @relation("ReceivedMessages")
   sentMessages     Message[]  @relation("SentMessages")
-
 
   @@map("Users")
 }
@@ -118,8 +115,8 @@ model Post {
   title       String?  @db.VarChar(50)
   content     String?  @db.VarChar(200)
   anonymous   Boolean?
-  created_at  DateTime? @db.DateTime(6)
-  updated_at  DateTime? @db.DateTime(6)
+  created_at  DateTime? @default(now())
+  updated_at  DateTime? @updatedAt
 
   comments Comment []
   postLikes PostLike[]
@@ -144,7 +141,7 @@ model Message {
   sendUser       User     @relation("SentMessages", fields: [sendUser_id], references: [id])
   sendUser_id    Int
   content        String?  @db.Text
-  created_at     DateTime? @db.DateTime(6)
+  created_at     DateTime? @default(now())
 
   @@map("Messages")
 }
@@ -163,8 +160,8 @@ model Verification {
   question      Boolean?
   textUrl       String?  @db.VarChar(255)
   verificationStatus  VerificationStatus  @map("status")
-  created_at    DateTime? @db.DateTime(6)
-  updated_at    DateTime? @db.DateTime(6)
+  created_at    DateTime? @default(now())
+  updated_at    DateTime? @updatedAt
   deadline      DateTime? @db.DateTime(6)
 
   comments Comment[]
@@ -181,7 +178,7 @@ model KickOut {
   userChallenge UserChallenge @relation(fields: [userChallenge_id], references: [id])
   userChallenge_id Int
   challengeType ChallengeType
-  created_at     DateTime? @db.DateTime(6)
+  created_at     DateTime? @default(now())
 
   @@map("KickOuts")
 }
@@ -220,9 +217,9 @@ model UserBadge {
   user_id    Int
   badge Badge @relation(fields: [badge_id], references: [id])
   badge_id   Int
-  created_at DateTime? @db.DateTime(6)
+  created_at DateTime? @default(now())
   obtain     Boolean
-  updated_at DateTime? @db.DateTime(6)
+  updated_at DateTime? @updatedAt
 
   userBadge1 User[] @relation("Badge1")
   userBadge2 User[] @relation("Badge2")
@@ -294,7 +291,7 @@ model Scrap {
   scrapTarget2    Verification? @relation("ScrapTarget2", fields: [scrapTarget2_id], references: [id])
   scrapTarget2_id Int
   scrapType      ScrapType
-  created_at     DateTime? @db.DateTime(6)
+  created_at     DateTime? @default(now())
 
   @@map("Scraps")
 }
@@ -308,8 +305,8 @@ model TemporaryVerification {
   challengeType ChallengeType
   title         String?  @db.VarChar(20)
   content       String?  @db.VarChar(200)
-  created_at    DateTime? @db.DateTime(6)
-  updated_at    DateTime? @db.DateTime(6)
+  created_at    DateTime? @default(now())
+  updated_at    DateTime? @updatedAt
 
   @@map("TemporaryVerifications")
 }

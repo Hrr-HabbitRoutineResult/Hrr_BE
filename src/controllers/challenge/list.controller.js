@@ -319,6 +319,7 @@ const createChallenge = () => {
   };
   #swagger.requestBody = {
     required: true,
+    description: '챌린지 개설 요청 본문',
     content: {
       'application/json': {
         schema: {
@@ -346,7 +347,6 @@ const createChallenge = () => {
           },
           required: ['category', 'type', 'profileImage', 'duration', 'maxParticipants', 'verificationMethod', 'rule', 'keywords']
         },
-        description: '챌린지 개설 요청 본문'
       }
     }
   };

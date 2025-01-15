@@ -17,13 +17,13 @@ const getChallengeVerificationStatus = () => {
   };
   #swagger.requestBody = {
     required: false,
+    description: '요청 본문 데이터는 비어 있습니다.',
     content: {
       'application/json': {
         schema: {
           type: 'object',
           properties: {}
         },
-        description: '요청 본문 데이터는 비어 있습니다.'
       }
     }
   };
@@ -373,6 +373,7 @@ const cameraVerification = () => {
   };
   #swagger.requestBody = {
     required: true,
+    description: '사진 업로드를 위한 multipart/form-data 형식의 요청 데이터',
     content: {
       'multipart/form-data': {
         schema: {
@@ -386,7 +387,6 @@ const cameraVerification = () => {
           },
           required: ['photoUrl']
         },
-        description: '사진 업로드를 위한 multipart/form-data 형식의 요청 데이터'
       }
     }
   };
@@ -516,6 +516,7 @@ const textVerification = () => {
   };
   #swagger.requestBody = {
     required: true,
+    description: '챌린지 글 인증 요청 데이터',
     content: {
       'application/json': {
         schema: {
@@ -528,7 +529,6 @@ const textVerification = () => {
           },
           required: ['title', 'content', 'textUrl', 'question']
         },
-        description: '챌린지 글 인증 요청 데이터'
       }
     }
   };

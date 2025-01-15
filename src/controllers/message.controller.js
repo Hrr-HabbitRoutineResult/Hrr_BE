@@ -17,6 +17,7 @@ const sendMessage = () => {
   };
   #swagger.requestBody = {
     required: true,
+    description: '전송할 쪽지의 내용 및 수신자 ID',
     content: {
       'application/json': {
         schema: {
@@ -27,7 +28,6 @@ const sendMessage = () => {
           },
           required: ['receivedUser_id', 'content']
         },
-        description: '전송할 쪽지의 내용 및 수신자 ID'
       }
     }
   };
@@ -205,6 +205,7 @@ const leaveMessage = () => {
   };
   #swagger.requestBody = {
     required: true,
+    description: '나가려는 쪽지함의 상대방 ID',
     content: {
       'application/json': {
         schema: {
@@ -214,7 +215,6 @@ const leaveMessage = () => {
           },
           required: ['chat_partner_id']
         },
-        description: '나가려는 쪽지함의 상대방 ID'
       }
     }
   };

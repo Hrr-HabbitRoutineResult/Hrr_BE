@@ -84,6 +84,7 @@ const putMe = () => {
 };
 #swagger.requestBody = {
   required: true,
+  description: '사용자 정보 수정 요청 정보'
   content: {
     'application/json': {
       schema: {
@@ -96,7 +97,6 @@ const putMe = () => {
         },
         required: ['name', 'email', 'gender', 'profilePhoto']
       },
-      description: '사용자 정보 수정 요청 정보'
     }
   }
 };
@@ -432,10 +432,10 @@ const postUserFollow = () => {
 };
 #swagger.requestBody = {
   required: false,
+  description: '이 요청에는 본문이 필요하지 않습니다.'
   content: {
     'application/json': {
       schema: { type: 'object' },
-      description: '이 요청에는 본문이 필요하지 않습니다.'
     }
   }
 };
@@ -509,10 +509,10 @@ const deleteUserFollow = () => {
   };
   #swagger.requestBody = {
     required: false,
+    description: '이 요청에는 본문이 필요하지 않습니다.'
     content: {
       'application/json': {
         schema: { type: 'object' },
-        description: '이 요청에는 본문이 필요하지 않습니다.'
       }
     }
   };
@@ -653,6 +653,7 @@ const blockUser = () => {
   };
   #swagger.requestBody = {
     required: true,
+    description: '차단할 이용자의 ID',
     content: {
       'application/json': {
         schema: {
@@ -662,7 +663,6 @@ const blockUser = () => {
           },
           required: ['user_id']
         },
-        description: '차단할 이용자의 ID'
       }
     }
   };

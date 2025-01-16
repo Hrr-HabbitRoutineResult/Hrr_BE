@@ -2,15 +2,15 @@
 //const axios = require("axios");
 //const jwt = require("jsonwebtoken");
 
-import { userDao } from "../models/userDao.js";
-import axios from "axios";
-import jwt from "jsonwebtoken";
+import { userDao } from '../../models/userDao.js';
+import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
-export const signInKakao = async (kakaoToken) => {
-  const result = await axios.get("https://kapi.kakao.com/v2/user/me", {
+export const signInKakao = async kakaoToken => {
+  const result = await axios.get('https://kapi.kakao.com/v2/user/me', {
     headers: {
       Authorization: `Bearer ${kakaoToken}`,
-      "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
     },
   });
 
@@ -21,7 +21,7 @@ export const signInKakao = async (kakaoToken) => {
   const profileImage = data.properties.profile_image;
 
   if (!name || !email || !kakaoId) {
-    throw new Error("KEY_ERROR");
+    throw new Error('KEY_ERROR');
   }
 
   const user = await userDao.getUserById(kakaoId);

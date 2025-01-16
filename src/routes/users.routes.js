@@ -1,10 +1,10 @@
 import express from 'express';
 import usersController from '../controllers/users.controller.js';
-
+import authMiddleware from '../middlewares/auth.middleware.js';
 const router = express.Router();
 
 router.put('/:userId/interests', usersController.putUserInterests);
-router.get('/me', usersController.getMe);
+router.get('/me', authMiddleware, usersController.getMe);
 router.put('/me', usersController.putMe);
 router.get('/challenges/ongoing', usersController.getUserChallengesOngoing);
 router.get('/challenges/completed', usersController.getUserChallengesCompleted);

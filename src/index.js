@@ -7,7 +7,32 @@ import swaggerUiExpress from 'swagger-ui-express';
 import app from './app.js';
 dotenv.config();
 
-const port = 3000;
+const port = process.env.PORT;
+
+/*****************공통 응답을 사용할 수 있는 헬퍼 함수 등록*********************/
+app.use((req, res, next) => {
+  res.success = success => {
+    return res.json({
+      resultType: 'SUCCESS',
+      error: null,
+      success: success,
+    });
+  };
+
+  res.error = ({ errorCode = 'unknown', reason = null, data = null }) => {
+    logger.error(`Error occurred: ${errorCode}, Reason: ${reason}`);
+
+    return res.json({
+      resultType: 'FAIL',
+      error: { errorCode, reason, data },
+      success: null,
+    });
+  };
+
+  next();
+});
+/*****************공통 응답을 사용할 수 있는 헬퍼 함수 등록*********************/
+
 app.use(
   '/docs',
   swaggerUiExpress.serve,
@@ -49,5 +74,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-  logger.info('Server listening on port 3000');
+  logger.info('Server listening on port ' + port);
 });

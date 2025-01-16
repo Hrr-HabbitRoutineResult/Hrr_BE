@@ -1,4 +1,28 @@
-const emailLogin = () => {
+// // Token Refresh Controller
+// export const refreshToken = (req, res) => {
+//   const { refreshToken } = req.body;
+
+//   if (!refreshToken) {
+//     return res.status(401).json({ message: 'Refresh token required' });
+//   }
+
+//   try {
+//     const user = verifyRefreshToken(refreshToken);
+//     const { accessToken } = generateTokens({ username: user.username });
+//     res.json({ accessToken });
+//   } catch (error) {
+//     console.error('Error during token refresh:', error);
+//     res.status(403).json({ message: 'Invalid refresh token' });
+//   }
+// };
+
+import authService from '../services/auth.service.js';
+import logger from '../logger.js';
+import { StatusCodes } from 'http-status-codes';
+// In-memory storage for refresh tokens and users (for testing)
+
+// Login Controller
+export const emailLogin = async (req, res) => {
   /**
   #swagger.summary = '로그인 API';
   #swagger.description = '이메일과 비밀번호로 사용자를 인증하고, JWT 또는 세션 토큰을 반환합니다.';
@@ -62,8 +86,34 @@ const emailLogin = () => {
     }
   };
    */
+  const { email, password } = req.body;
+  const login = await authService.login(email, password);
+  const { accessToken, refreshToken } = authService.generateTokens({ email: email });
+  return res.status(StatusCodes.OK).json({ accessToken, refreshToken });
 };
-const refreshToken = () => {};
+
+export const refreshToken = (req, res) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+    return res.status(401).json({ message: 'Refresh token required' });
+  }
+
+  // Check if refresh token exists in storage
+  if (!refreshTokens.includes(refreshToken)) {
+    return res.status(403).json({ message: 'Invalid refresh token' });
+  }
+
+  try {
+    const user = authService.verifyRefreshToken(refreshToken);
+    const { accessToken } = authService.generateTokens({ username: user.username });
+    res.json({ accessToken });
+  } catch (error) {
+    console.error('Error during token refresh:', error);
+    res.status(403).json({ message: 'Invalid refresh token' });
+  }
+};
+
 const kakaoLogin = () => {
   /**
   #swagger.summary = '카카오 로그인 API';

@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import authRepository from '../repositories/auth.repository.js';
 import authError from '../errors/auth.error.js';
-import logger from '../logger.js';
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 const ACCESS_TOKEN_EXPIRATION = process.env.ACCESS_TOKEN_EXPIRATION;

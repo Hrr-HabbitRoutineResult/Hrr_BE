@@ -1,4 +1,3 @@
-import express from 'express';
 import dotenv from 'dotenv';
 import logger from './logger.js';
 import morganMiddleware from './middlewares/morganMiddleware.js';

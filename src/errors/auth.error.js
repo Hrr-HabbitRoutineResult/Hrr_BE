@@ -58,6 +58,16 @@ export class InvalidTokenError extends Error {
   }
 }
 
+export class RefreshTokenMissingError extends Error {
+  errorCode = 'A007';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 401;
+    this.data = data;
+  }
+}
+
 export default {
   UserNotExistError,
   PasswordMismatchError,
@@ -65,4 +75,5 @@ export default {
   RefreshTokenError,
   AccessTokenError,
   InvalidTokenError,
+  RefreshTokenMissingError,
 };

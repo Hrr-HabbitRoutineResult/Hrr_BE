@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import authService from '../services/auth.service.js';
-import logger from '../logger.js';
 import authError from '../errors/auth.error.js';
 
 export const authMiddleware = async (req, res, next) => {
@@ -12,7 +11,6 @@ export const authMiddleware = async (req, res, next) => {
 
   try {
     const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    console.log(user);
     req.user = user;
     next();
   } catch (err) {

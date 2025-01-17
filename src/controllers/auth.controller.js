@@ -1,27 +1,7 @@
-// // Token Refresh Controller
-// export const refreshToken = (req, res) => {
-//   const { refreshToken } = req.body;
-
-//   if (!refreshToken) {
-//     return res.status(401).json({ message: 'Refresh token required' });
-//   }
-
-//   try {
-//     const user = verifyRefreshToken(refreshToken);
-//     const { accessToken } = generateTokens({ username: user.username });
-//     res.json({ accessToken });
-//   } catch (error) {
-//     console.error('Error during token refresh:', error);
-//     res.status(403).json({ message: 'Invalid refresh token' });
-//   }
-// };
-
 import authService from '../services/auth.service.js';
-import logger from '../logger.js';
 import { StatusCodes } from 'http-status-codes';
-// In-memory storage for refresh tokens and users (for testing)
+import authError from '../errors/auth.error.js';
 
-// Login Controller
 export const emailLogin = async (req, res) => {
   /**
   #swagger.summary = '로그인 API';
@@ -96,21 +76,15 @@ export const refreshToken = (req, res) => {
   const { refreshToken } = req.body;
 
   if (!refreshToken) {
-    return res.status(401).json({ message: 'Refresh token required' });
+    throw new authError.RefreshTokenMissingError('Refresh token required');
   }
-
-  // Check if refresh token exists in storage
-  if (!refreshTokens.includes(refreshToken)) {
-    return res.status(403).json({ message: 'Invalid refresh token' });
-  }
-
   try {
     const user = authService.verifyRefreshToken(refreshToken);
     const { accessToken } = authService.generateTokens({ username: user.username });
-    res.json({ accessToken });
+    return res.status(StatusCodes.OK).json({ accessToken });
   } catch (error) {
     console.error('Error during token refresh:', error);
-    res.status(403).json({ message: 'Invalid refresh token' });
+    throw new authError.RefreshTokenError('Invalid refresh token');
   }
 };
 

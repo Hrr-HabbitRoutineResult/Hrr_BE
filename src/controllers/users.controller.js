@@ -1,5 +1,7 @@
+import { StatusCodes } from 'http-status-codes';
+
 const putUserInterests = () => {};
-const getMe = () => {
+const getMe = async (req, res) => {
   /**
 #swagger.summary = '사용자 정보 조회 API';
 #swagger.description = '사용자의 기본 정보를 조회합니다.';
@@ -8,7 +10,7 @@ const getMe = () => {
   in: 'header',
   required: true,
   schema: { type: 'string', example: 'Bearer <access_token>' },
-  description: '인증을 위한 액세스 토큰'
+  description: '인증을 위한 액세스 토큰 (Bearer 형태로 전달)'
 };
 #swagger.responses[200] = {
   description: '사용자 정보 조회 성공',
@@ -70,6 +72,7 @@ const getMe = () => {
   }
 };
  */
+  return res.status(StatusCodes.OK).json({ message: '성공' });
 };
 const putMe = () => {
   /**

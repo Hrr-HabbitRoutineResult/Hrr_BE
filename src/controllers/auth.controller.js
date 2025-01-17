@@ -1,4 +1,8 @@
-const emailLogin = () => {
+import authService from '../services/auth.service.js';
+import { StatusCodes } from 'http-status-codes';
+import authError from '../errors/auth.error.js';
+
+export const emailLogin = async (req, res) => {
   /**
   #swagger.summary = '로그인 API';
   #swagger.description = '이메일과 비밀번호로 사용자를 인증하고, JWT 또는 세션 토큰을 반환합니다.';
@@ -62,8 +66,28 @@ const emailLogin = () => {
     }
   };
    */
+  const { email, password } = req.body;
+  const login = await authService.login(email, password);
+  const { accessToken, refreshToken } = authService.generateTokens({ email: email });
+  return res.status(StatusCodes.OK).json({ accessToken, refreshToken });
 };
-const refreshToken = () => {};
+
+export const refreshToken = (req, res) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+    throw new authError.RefreshTokenMissingError('Refresh token required');
+  }
+  try {
+    const user = authService.verifyRefreshToken(refreshToken);
+    const { accessToken } = authService.generateTokens({ username: user.username });
+    return res.status(StatusCodes.OK).json({ accessToken });
+  } catch (error) {
+    console.error('Error during token refresh:', error);
+    throw new authError.RefreshTokenError('Invalid refresh token');
+  }
+};
+
 const kakaoLogin = () => {
   /**
   #swagger.summary = '카카오 로그인 API';

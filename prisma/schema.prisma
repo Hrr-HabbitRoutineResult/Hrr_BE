@@ -14,10 +14,10 @@ model User {
   userBadge1_id          Int?
   userBadge2_id          Int?
   userBadge3_id          Int?
-  name                   String                  @db.VarChar(10)
+  nickname               String?                 @db.VarChar(20) @default("사용자")
   gender                 Gender?
   email                  String                  @unique @db.VarChar(255)
-  phoneNumber            String                  @db.VarChar(15)
+  phoneNumber            String?                 @db.VarChar(15)
   password               String                  @db.VarChar(255)
   created_at             DateTime                @default(now())
   updated_at             DateTime                @updatedAt
@@ -26,7 +26,7 @@ model User {
   level                  Level?
   followerCount          Int
   followingCount         Int
-  points                 Int
+  points                 Int                     @default(0)
   job                    Job?
   userCategory           UserCategory?
   ageGroup               AgeGroup?
@@ -299,11 +299,13 @@ model Challenge {
   name                String?             @db.VarChar(10)
   type                ChallengeType
   description         String?             @db.VarChar(120)
-  challengeImage      String?             @db.VarChar(255)
+  challengeImage      String              @db.VarChar(255)
   challengeStatus     ChallengeStatus     @map("status")
   maxParticipants     Int?
   verificationType    VerificationType
   rule                String?             @db.Text
+  joinDate            DateTime?           @db.DateTime(6)
+  endDate             DateTime?           @db.DateTime(6)
   created_at          DateTime?           @db.DateTime(6)
   updated_at          DateTime?           @db.DateTime(6)
   user                User                @relation(fields: [owner_id], references: [id])
@@ -380,6 +382,7 @@ model Alarm {
   sender_id   Int?
   alarmType   AlarmType
   referenceId Int       @map("reference_id")
+  title       String    @db.VarChar(30)
   message     String?   @db.VarChar(200)
   isRead      Boolean?
   created_at  DateTime  @default(now())

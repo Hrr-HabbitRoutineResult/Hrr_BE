@@ -68,7 +68,7 @@ const setEmailVerifiedTrue = async email => {
         verified: true, // verified 값을 true로 설정
       },
     });
-    return updated_verification; // 업데이트된 정보 반환
+    return { id: updated_verification.id, email: updated_verification.email, verified: updated_verification.verified }; // 업데이트된 정보 반환
   } catch (error) {
     throw new authError.DataBaseError('Error on updating email verification');
   }
@@ -80,7 +80,7 @@ const createUser = async new_user => {
     const created_user = await prisma.user.create({
       data: new_user,
     });
-    return created_user;
+    return { id: created_user.id, email: created_user.email, name: created_user.name };
   } catch (error) {
     console.log(error);
     throw new authError.DataBaseError('Error on creating email verification');

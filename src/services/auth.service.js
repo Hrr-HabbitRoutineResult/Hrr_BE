@@ -99,10 +99,10 @@ const register = async dto => {
     points: 0,
   };
 
-  await authRepository.createUser(new_user);
+  const created_user = await authRepository.createUser(new_user);
 
   // 성공적으로 등록된 경우
-  return { new_user };
+  return { created_user };
 };
 
 //checkEmailVerificationCode-api

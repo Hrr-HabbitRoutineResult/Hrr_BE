@@ -11,6 +11,7 @@ const bodyToChallenge = body => {
     type: body.type,
     description: body.description,
     challengeImage: body.challengeImage,
+    category: body.category,
     challengeStatus: body.challengeStatus,
     maxParticipants: body.maxParticipants,
     verificationType: body.verificationType,

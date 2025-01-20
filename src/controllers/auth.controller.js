@@ -481,7 +481,7 @@ const register = async (req, res, next) => {
   try {
     const dto = authDTO.registerDto(req.body);
     const new_user = await authService.register(dto);
-    return res.status(StatusCodes.OK).json({ new_user });
+    return res.status(StatusCodes.OK).json(new_user);
   } catch (error) {
     next(error);
   }
@@ -625,7 +625,7 @@ const checkEmailVerificationCode = async (req, res, next) => {
   try {
     const { email, verification_code } = authDTO.emailVerificationCodeDto(req.body);
     const email_verification = await authService.checkEmailVerificationCode(email, verification_code);
-    return res.status(StatusCodes.OK).json({ email_verification });
+    return res.status(StatusCodes.OK).json(email_verification);
   } catch (error) {
     return next(error);
   }

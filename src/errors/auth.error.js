@@ -68,6 +68,36 @@ export class RefreshTokenMissingError extends Error {
   }
 }
 
+export class UserAlreadyExistsError extends Error {
+  errorCode = 'A008';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 400;
+    this.data = data;
+  }
+}
+
+export class SendmailError extends Error {
+  errorCode = 'A009';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 400;
+    this.data = data;
+  }
+}
+
+export class DataBaseError extends Error {
+  errorCode = 'A010';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 400;
+    this.data = data;
+  }
+}
+
 export default {
   UserNotExistError,
   PasswordMismatchError,
@@ -76,4 +106,7 @@ export default {
   AccessTokenError,
   InvalidTokenError,
   RefreshTokenMissingError,
+  UserAlreadyExistsError,
+  SendmailError,
+  DataBaseError,
 };

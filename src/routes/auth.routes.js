@@ -12,7 +12,9 @@ router.post('/find-email', authController.findEmail);
 router.post('/reset-password/phone', authController.ressetPasswordByPhone);
 router.post('/reset-password/email', authController.ressetPasswordByEmail);
 
-router.post('/api/auth/register', authController.register);
+router.post('/register', authController.register);
+router.post('/send-verify-email', authController.sendVerificationCode);
+router.post('/check-email-verification-code', authController.checkEmailVerificationCode);
 
 // Refresh Token Route
 router.post('/token', authController.refreshToken);

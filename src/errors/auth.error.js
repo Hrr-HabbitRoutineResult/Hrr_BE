@@ -68,6 +68,26 @@ export class RefreshTokenMissingError extends Error {
   }
 }
 
+export class MissingAuthorizationHeader extends Error {
+  errorCode = 'A008';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
+export class InvalidAuthorizationFormat extends Error {
+  errorCode = 'A009';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 401;
+    this.data = data;
+  }
+}
+
 export default {
   UserNotExistError,
   PasswordMismatchError,
@@ -76,4 +96,6 @@ export default {
   AccessTokenError,
   InvalidTokenError,
   RefreshTokenMissingError,
+  MissingAuthorizationHeader,
+  InvalidAuthorizationFormat,
 };

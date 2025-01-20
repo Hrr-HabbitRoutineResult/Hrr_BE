@@ -1,3 +1,7 @@
+import { StatusCodes } from 'http-status-codes';
+import listDto from '../../dtos/challenge/list.dto.js';
+import listSerivce from '../../services/challenge/list.service.js';
+import logger from '../../logger.js';
 const getChallengeList = () => {
   /**
   #swagger.summary = '챌린지 리스트 조회 API';
@@ -300,7 +304,7 @@ const getChallengeDetail = () => {
   };
    */
 };
-const createChallenge = () => {
+const createChallenge = async (req, res, next) => {
   /**
   #swagger.summary = '챌린지 개설 API';
   #swagger.description = '사용자가 새로운 챌린지를 개설하는 API입니다. 카테고리, 유형, 사진, 기간, 제한 인원, 인증 수단, 규칙, 키워드를 포함합니다.';
@@ -443,6 +447,15 @@ const createChallenge = () => {
     }
   };
    */
+  try {
+    logger.debug('챌린지를 개설했습니다!');
+    console.log('body:', req.body); // 값이 잘 들어오나 확인하기 위한 테스트용
+
+    const challenge = await listSerivce.createChallenge(listDto.bodyToChallenge(req.body));
+    res.status(StatusCodes.OK).json({ result: challenge });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export default {

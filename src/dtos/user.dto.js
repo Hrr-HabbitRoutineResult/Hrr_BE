@@ -1,7 +1,7 @@
 const serviceToControllerDto = user => {
   const response_data = {
     id: user.id,
-    name: user.name,
+    name: user.nickname,
     gender: user.gender,
     email: user.email,
     phoneNumber: user.phoneNumber,
@@ -10,11 +10,11 @@ const serviceToControllerDto = user => {
     points: user.points,
     followerCount: user.followerCount,
     followingCount: user.followingCount,
-    badges: user.badges.map(badge => ({
-      id: badge.id,
-      name: badge.name,
-      icon: badge.icon,
-    })),
+    // badges: user.badges.map(badge => ({
+    //   id: badge.id,
+    //   name: badge.name,
+    //   icon: badge.icon,
+    // })),
     // const id = body.id;
     // const name = body.name;
     // const gender = body.gender;
@@ -30,16 +30,15 @@ const serviceToControllerDto = user => {
 
     //   icon: badge.icon,
   };
-
+  console.log(user, response_data);
   return response_data;
 };
 
 const modifyUserInfoDto = updated_user => {
   const new_info = {
-    name: updated_user.name,
-    gender: updated_user.gender,
-    email: updated_user.email,
+    name: updated_user.nickname,
     profilePhoto: updated_user.profile_photo,
+    badges: updated_user.badges,
   };
 
   return new_info;

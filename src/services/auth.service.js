@@ -92,7 +92,7 @@ const register = async dto => {
   const new_user = {
     email: email,
     password: password,
-    name: '사용자',
+    nickname: '사용자',
     phoneNumber: '010012345678',
     followerCount: 0,
     followingCount: 0,

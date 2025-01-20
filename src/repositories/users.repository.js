@@ -8,6 +8,7 @@ const getUserInfoById = async user_id => {
       badges: true,
     },
   });
+  console.log(user);
   return user;
 };
 
@@ -15,7 +16,7 @@ const putUserInfoById = async user_id => {
   try {
     const updated_user = await prisma.user.update({
       where: { id: user_id },
-      data: { name, profile_photo, badges },
+      data: { nickname, profile_photo, badges },
     });
     return updated_user;
   } catch (error) {

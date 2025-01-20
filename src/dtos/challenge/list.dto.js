@@ -6,7 +6,7 @@ const bodyToChallenge = body => {
   console.log(formattedJoinDate);
   const formatted_EndDate = moment.tz(body.endDate, 'YYYY-MM-DD 00:00:00.000000', 'Asia/Seoul');
   return {
-    name: body.name,
+    name: body.nickname,
     owner_id: body.owner_id,
     type: body.type,
     description: body.description,

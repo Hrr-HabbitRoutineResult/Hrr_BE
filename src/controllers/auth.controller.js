@@ -88,7 +88,7 @@ export const refreshToken = (req, res) => {
   }
 };
 
-const kakaoLogin = () => {
+const kakaoLogin = async(req, res, next) => {
   /**
   #swagger.summary = '카카오 로그인 API';
   #swagger.description = '카카오 OAuth 토큰을 사용하여 사용자를 인증합니다.';
@@ -151,6 +151,22 @@ const kakaoLogin = () => {
     }
   };
    */
+  try {
+    const headers = req.headers['authorization'];
+    if (!headers) {
+      throw new authError.MissingAuthorizationHeader();
+    }
+
+    const kakao_token = headers.split(' ')[1];
+    if (!kakao_token) {
+      throw new authError.InvalidAuthorizationFormat();
+    }
+
+    const access_token = await authService.signInKakao(kakao_token);
+    return res.status(StatusCodes.OK).json({ access_token });
+  } catch (error) {
+    next(error);
+  }
 };
 const naverLogin = () => {
   /**

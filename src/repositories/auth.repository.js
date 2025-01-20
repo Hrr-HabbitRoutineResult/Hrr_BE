@@ -11,4 +11,29 @@ const findUserPassword = async email => {
   return user.password;
 };
 
-export default { findUserPassword };
+const getUserById = async (kakao_id) => {
+  return await prisma.user.findUnique({
+    where: {
+      kakao_id: kakao_id,
+    },
+    select: {
+      kakao_id: true,
+      account_email: true,
+      name: true,
+      profile_image: true,
+    },
+  });
+};
+
+const signUp = async (email, name, kakao_id, profile_image) => {
+  return await prisma.user.create({
+    data: {
+      account_email: email,
+      name: name,
+      kakao_id: kakao_id,
+      profile_image: profile_image,
+    },
+  });
+};
+
+export default { findUserPassword, getUserById, signUp };

@@ -1,112 +1,153 @@
-import { PrismaClient } from '@prisma/client';
+import {
+  PrismaClient,
+  Gender,
+  Level,
+  Job,
+  AgeGroup,
+  Category,
+  VerificationType,
+  VerificationStatus,
+  ChallengeType,
+  ChallengeStatus,
+  AlarmType,
+  BadgeType,
+} from '@prisma/client';
+
 const prisma = new PrismaClient();
 
-const main = async () => {
-  console.log('Seeding database...');
-
-  // Users Table
-  await prisma.user.createMany({
-    data: [
-      {
-        name: 'John Doe',
-        gender: 'male',
-        email: 'john@example.com',
-        phoneNumber: '1234567890',
-        password: 'password123',
-        profilePhoto: 'https://example.com/profile1.jpg',
-        level: 'bronze',
-        followerCount: 10,
-        followingCount: 5,
-        points: 100,
-        job: 'officeWorker',
-        userCategory: 'exercise',
-        ageGroup: 'twenty',
-      },
-      {
-        name: 'Jane Smith',
-        gender: 'female',
-        email: 'jane@example.com',
-        phoneNumber: '0987654321',
-        password: 'password456',
-        profilePhoto: 'https://example.com/profile2.jpg',
-        level: 'silver',
-        followerCount: 20,
-        followingCount: 15,
-        points: 200,
-        job: 'collegeStudent',
-        userCategory: 'study',
-        ageGroup: 'thirty',
-      },
-    ],
+async function main() {
+  // 기본 사용자 추가
+  const user1 = await prisma.user.create({
+    data: {
+      nickname: '사용자1',
+      gender: Gender.male,
+      email: 'user1@example.com',
+      phoneNumber: '010-1234-5678',
+      password: 'password123',
+      followerCount: 10,
+      followingCount: 5,
+      points: 100,
+      job: Job.collegeStudent,
+      category: Category.study,
+      ageGroup: AgeGroup.twenty,
+      level: Level.silver,
+    },
   });
 
-  // Keywords Table
-  await prisma.keyword.createMany({
-    data: [
-      { name: 'motivation' },
-      { name: 'study' },
-      { name: 'health' },
-      { name: 'productivity' },
-    ],
+  const user2 = await prisma.user.create({
+    data: {
+      nickname: '사용자2',
+      gender: Gender.female,
+      email: 'user2@example.com',
+      phoneNumber: '010-9876-5432',
+      password: 'password456',
+      followerCount: 15,
+      followingCount: 10,
+      points: 200,
+      job: Job.officeWorker,
+      category: Category.exercise,
+      ageGroup: AgeGroup.thirty,
+      level: Level.gold,
+    },
   });
 
-  // Badges Table
-  await prisma.badge.createMany({
-    data: [
-      {
-        name: 'Starter Badge',
-        icon: 'https://example.com/badge1.png',
-        description: 'Awarded for starting your first challenge',
-        type: 'category',
-        obtainedCount: 100,
-        profileImage: 'https://example.com/badge1_profile.png',
-      },
-      {
-        name: 'Achiever Badge',
-        icon: 'https://example.com/badge2.png',
-        description: 'Awarded for completing 5 challenges',
-        type: 'type',
-        obtainedCount: 50,
-        profileImage: 'https://example.com/badge2_profile.png',
-      },
-    ],
+  // 배지 추가
+  const badge1 = await prisma.badge.create({
+    data: {
+      name: '최고의 사용자',
+      type: BadgeType.category,
+      obtainedCount: 50,
+    },
   });
 
-  // Challenges Table
-  await prisma.challenge.createMany({
-    data: [
-      {
-        owner_id: 1,
-        name: '매일 운동',
-        type: 'basic',
-        description: 'A challenge to exercise daily for 30 minutes',
-        challengeImage: 'https://example.com/challenge1.png',
-        challengeStatus: 'open',
-        maxParticipants: 50,
-        verificationType: 'camera',
-        rule: 'Submit a photo after exercise',
-      },
-      {
-        owner_id: 2,
-        name: '같이 공부',
-        type: 'study',
-        description: 'Study 2 hours every day for a week',
-        challengeImage: 'https://example.com/challenge2.png',
-        challengeStatus: 'ongoing',
-        maxParticipants: 30,
-        verificationType: 'text',
-        rule: 'Submit a text summary of what you studied',
-      },
-    ],
+  const badge2 = await prisma.badge.create({
+    data: {
+      name: '우수 참여자',
+      type: BadgeType.type,
+      obtainedCount: 30,
+    },
   });
 
-  // Other Tables (Add similar logic for other tables as needed)
-  console.log('Database seeded successfully!');
-};
+  // 사용자 배지 추가
+  await prisma.userBadge.create({
+    data: {
+      user_id: user1.id,
+      badge_id: badge1.id,
+      isObtained: true,
+    },
+  });
+
+  await prisma.userBadge.create({
+    data: {
+      user_id: user2.id,
+      badge_id: badge2.id,
+      isObtained: true,
+    },
+  });
+
+  // 챌린지 추가
+  const challenge = await prisma.challenge.create({
+    data: {
+      owner_id: user1.id,
+      name: '코딩 마스터 챌린지',
+      type: ChallengeType.study,
+      challengeImage: 'https://example.com/challenge-image.jpg',
+      challengeStatus: ChallengeStatus.ongoing,
+      verificationType: VerificationType.camera,
+      rule: '주어진 문제를 풀고 제출하세요.',
+      joinDate: new Date(),
+      endDate: new Date('2025-12-31'),
+      category: Category.study,
+    },
+  });
+
+  // 알람 추가
+  await prisma.alarm.create({
+    data: {
+      user_id: user1.id,
+      alarmType: AlarmType.follow,
+      title: '새로운 팔로워',
+      message: '사용자2님이 당신을 팔로우했습니다.',
+    },
+  });
+
+  // 검증 추가
+  const verification = await prisma.verification.create({
+    data: {
+      user_id: user1.id,
+      userChallenge_id: challenge.id,
+      challengeType: ChallengeType.study,
+      verificationType: VerificationType.text,
+      verificationStatus: VerificationStatus.unverified,
+      title: '코딩 문제 검증',
+      content: '주어진 코딩 문제를 풀었습니다.',
+      created_at: new Date(),
+      updated_at: new Date(),
+      deadline: new Date('2025-12-31'),
+    },
+  });
+
+  // 키워드 추가
+  const keyword = await prisma.keyword.create({
+    data: {
+      name: 'JavaScript',
+    },
+  });
+
+  // 챌린지와 키워드 연결
+  await prisma.challengeKeyword.create({
+    data: {
+      challenge_id: challenge.id,
+      keyword_id: keyword.id,
+    },
+  });
+
+  console.log('데이터 seeding 완료');
+}
 
 main()
-  .catch((e) => {
-    console.error('Error seeding database:', e);
+  .catch(e => {
+    console.error(e);
     process.exit(1);
   })
   .finally(async () => {

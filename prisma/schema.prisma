@@ -14,10 +14,10 @@ model User {
   userBadge1_id          Int?
   userBadge2_id          Int?
   userBadge3_id          Int?
-  name                   String                  @db.VarChar(10)
+  nickname               String?                 @db.VarChar(40) @default("사용자")
   gender                 Gender?
   email                  String                  @unique @db.VarChar(255)
-  phoneNumber            String                  @db.VarChar(15)
+  phoneNumber            String?                 @db.VarChar(40)
   password               String                  @db.VarChar(255)
   created_at             DateTime                @default(now())
   updated_at             DateTime                @updatedAt
@@ -26,9 +26,9 @@ model User {
   level                  Level?
   followerCount          Int
   followingCount         Int
-  points                 Int
+  points                 Int                     @default(0)
   job                    Job?
-  userCategory           UserCategory?
+  category               Category
   ageGroup               AgeGroup?
   userBadge1             UserBadge?              @relation("Badge1", fields: [userBadge1_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   userBadge2             UserBadge?              @relation("Badge2", fields: [userBadge2_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -56,7 +56,7 @@ model User {
 
 model Keyword {
   id                Int                @id @default(autoincrement())
-  name              String?            @db.VarChar(15)
+  name              String?            @db.VarChar(40)
   challengeKeywords ChallengeKeyword[]
 
   @@map("Keywords")
@@ -89,11 +89,11 @@ model Comment {
 
 model Board {
   id              Int             @id @default(autoincrement())
-  name            String          @db.VarChar(10)
-  description     String?         @db.VarChar(120)
+  name            String          @db.VarChar(40)
+  description     String?         @db.VarChar(255)
   boardStatus     BoardStatus     @map("status")
   posts           Post[]
-  boardCategories BoardCategory[]
+  category        Category
 
   @@map("Boards")
 }
@@ -102,7 +102,7 @@ model Post {
   id         Int        @id @default(autoincrement())
   user_id    Int
   board_id   Int
-  title      String?    @db.VarChar(50)
+  title      String?    @db.VarChar(100)
   content    String?    @db.VarChar(200)
   anonymous  Boolean?
   created_at DateTime?  @default(now())
@@ -144,7 +144,7 @@ model Verification {
   challengeType          ChallengeType
   verificationType       VerificationType        @map("type")
   photoUrl               String?                 @db.VarChar(255)
-  title                  String?                 @db.VarChar(20)
+  title                  String?                 @db.VarChar(80)
   content                String?                 @db.VarChar(200)
   question               Boolean?
   textUrl                String?                 @db.VarChar(255)
@@ -203,7 +203,7 @@ model UserBadge {
   user_id            Int
   badge_id           Int
   created_at         DateTime?            @default(now())
-  obtain             Boolean
+  isObtained         Boolean
   updated_at         DateTime?            @updatedAt
   user               User                 @relation(fields: [user_id], references: [id])
   badge              Badge                @relation(fields: [badge_id], references: [id])
@@ -215,17 +215,10 @@ model UserBadge {
   @@map("User_Badge")
 }
 
-model Category {
-  id                  Int                 @id @default(autoincrement())
-  name                String?             @db.VarChar(15)
-  userCategoryTypes   UserCategoryType[]
-  challengeCategories ChallengeCategory[]
-  boardCategories     BoardCategory[]
-}
 
 model FavorType {
   id                Int                @id @default(autoincrement())
-  name              String?            @db.VarChar(10)
+  name              String?            @db.VarChar(40)
   userCategoryTypes UserCategoryType[]
 }
 
@@ -235,33 +228,11 @@ model UserCategoryType {
   category_id  Int
   favorType_id Int
   user         User      @relation(fields: [user_id], references: [id])
-  category     Category  @relation(fields: [category_id], references: [id])
+  category     Category  
   favorType    FavorType @relation(fields: [favorType_id], references: [id])
 
   @@id([id, user_id, category_id, favorType_id])
   @@map("User_CategoryType")
-}
-
-model ChallengeCategory {
-  id           Int
-  category_id  Int
-  challenge_id Int
-  category     Category  @relation(fields: [category_id], references: [id])
-  challenge    Challenge @relation(fields: [challenge_id], references: [id])
-
-  @@id([id, category_id, challenge_id])
-  @@map("Challenge_Category")
-}
-
-model BoardCategory {
-  id          Int
-  board_id    Int
-  category_id Int
-  board       Board    @relation(fields: [board_id], references: [id])
-  category    Category @relation(fields: [category_id], references: [id])
-
-  @@id([id, board_id, category_id])
-  @@map("Board_Category")
 }
 
 model Scrap {
@@ -283,8 +254,8 @@ model TemporaryVerification {
   user_id         Int
   verification_id Int
   challengeType   ChallengeType
-  title           String?       @db.VarChar(20)
-  content         String?       @db.VarChar(200)
+  title           String?       @db.VarChar(80)
+  content         String?       @db.VarChar(255)
   created_at      DateTime?     @default(now())
   updated_at      DateTime?     @updatedAt
   user            User          @relation(fields: [user_id], references: [id])
@@ -296,19 +267,21 @@ model TemporaryVerification {
 model Challenge {
   id                  Int                 @id @default(autoincrement())
   owner_id            Int
-  name                String?             @db.VarChar(10)
+  name                String?             @db.VarChar(40)
   type                ChallengeType
-  description         String?             @db.VarChar(120)
-  challengeImage      String?             @db.VarChar(255)
+  description         String?             @db.VarChar(255)
+  challengeImage      String              @db.VarChar(255)
   challengeStatus     ChallengeStatus     @map("status")
   maxParticipants     Int?
   verificationType    VerificationType
   rule                String?             @db.Text
+  joinDate            DateTime?           @db.DateTime(6)
+  endDate             DateTime?           @db.DateTime(6)
   created_at          DateTime?           @db.DateTime(6)
   updated_at          DateTime?           @db.DateTime(6)
+  category            Category
   user                User                @relation(fields: [owner_id], references: [id])
   challengeLikes      ChallengeLike[]
-  challengeCategories ChallengeCategory[]
   frequencies         Frequency[]
   userChallenges      UserChallenge[]
   challengeKeywords   ChallengeKeyword[]
@@ -380,7 +353,8 @@ model Alarm {
   sender_id   Int?
   alarmType   AlarmType
   referenceId Int       @map("reference_id")
-  message     String?   @db.VarChar(200)
+  title       String    @db.VarChar(120)
+  message     String?   @db.VarChar(255)
   isRead      Boolean?
   created_at  DateTime  @default(now())
   user        User      @relation(fields: [user_id], references: [id])
@@ -514,15 +488,16 @@ enum AgeGroup {
   fiftyUp @map("50s+")
 }
 
-enum UserCategory {
+
+enum BadgeType {
+  category
+  type
+}
+
+enum Category {
   exercise
   study
   hobby
   jobPreparation
   lifestyle
-}
-
-enum BadgeType {
-  category
-  type
 }

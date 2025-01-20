@@ -88,7 +88,7 @@ export const refreshToken = (req, res) => {
   }
 };
 
-const kakaoLogin = () => {
+const kakaoLogin = async(req, res) => {
   /**
   #swagger.summary = '카카오 로그인 API';
   #swagger.description = '카카오 OAuth 토큰을 사용하여 사용자를 인증합니다.';
@@ -151,6 +151,27 @@ const kakaoLogin = () => {
     }
   };
    */
+  try {
+    const headers = req.headers['authorization'];
+    if (!headers) {
+      throw new authError.MissingAuthorizationHeader();
+    }
+
+    const kakaoToken = headers.split(' ')[1];
+    if (!kakaoToken) {
+      throw new authError.InvalidAuthorizationFormat();
+    }
+
+    const accessToken = await authService.signInKakao(kakaoToken);
+    return res.status(200).json({ accessToken });
+  } catch (error) {
+    if (error instanceof authError.BaseAuthError) {
+      // Handle specific auth errors from `auth.error.js`
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+    // Handle generic errors
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 };
 const naverLogin = () => {
   /**

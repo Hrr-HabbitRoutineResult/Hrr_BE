@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import authRepository from '../repositories/auth.repository.js';
 import authError from '../errors/auth.error.js';
-import { userDao } from '../../models/userDao.js';
 import axios from 'axios';
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
@@ -26,10 +25,10 @@ const login = async (email, password) => {
   return email;
 };
 
-const signInKakao = async kakaoToken => {
+const signInKakao = async kakao_token => {
   const result = await axios.get('https://kapi.kakao.com/v2/user/me', {
     headers: {
-      Authorization: `Bearer ${kakaoToken}`,
+      Authorization: `Bearer ${kakao_token}`,
       'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
     },
   });
@@ -37,20 +36,20 @@ const signInKakao = async kakaoToken => {
   const { data } = result;
   const name = data.properties.nickname;
   const email = data.kakao_account.email;
-  const kakaoId = data.id;
-  const profileImage = data.properties.profile_image;
+  const kakao_id = data.id;
+  const profile_image = data.properties.profile_image;
 
-  if (!name || !email || !kakaoId) {
+  if (!name || !email || !kakao_id) {
     throw new Error('KEY_ERROR');
   }
 
-  const user = await userDao.getUserById(kakaoId);
+  const user = await authRepository.getUserById(kakao_id);
 
   if (!user) {
-    await userDao.signUp(email, name, kakaoId, profileImage);
+    await authRepository.signUp(email, name, kakao_id, profile_image);
   }
 
-  return jwt.sign({ kakao_id: kakaoId }, process.env.TOKKENSECRET);
+  return jwt.sign({ kakao_id: kakao_id }, process.env.TOKKENSECRET);
 };
 
 export default {

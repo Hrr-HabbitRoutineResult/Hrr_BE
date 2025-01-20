@@ -23,6 +23,8 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "mysql2": "^3.12.0",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.16",
     "prisma": "^6.2.1",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1",

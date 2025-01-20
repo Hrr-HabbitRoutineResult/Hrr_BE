@@ -410,6 +410,16 @@ model UserBadgeCondition {
   @@map("User_Badge_Condition")
 }
 
+model EmailVerification {
+  id               Int      @id @default(autoincrement())
+  email            String   @unique
+  verificationCode String  
+  codeExpires      DateTime
+  verified         Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
 enum AlarmType {
   follow
   verificationComment

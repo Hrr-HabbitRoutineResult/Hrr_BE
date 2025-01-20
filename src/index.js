@@ -4,6 +4,7 @@ import morganMiddleware from './middlewares/morganMiddleware.js';
 import swaggerAutogen from 'swagger-autogen';
 import swaggerUiExpress from 'swagger-ui-express';
 import app from './app.js';
+import cronjobs from './utils/cronjobs.util.js';
 dotenv.config();
 
 const port = process.env.PORT;
@@ -31,6 +32,20 @@ app.use((req, res, next) => {
   next();
 });
 /*****************공통 응답을 사용할 수 있는 헬퍼 함수 등록*********************/
+
+// /****************전역 오류를 처리하기 위한 미들웨어*******************/
+// app.use((err, req, res, next) => {
+//   if (res.headersSent) {
+//     return next(err);
+//   }
+//   console.log(err);
+//   res.status(err.statusCode || 500).error({
+//     errorCode: err.errorCode || 'unknown',
+//     reason: err.reson || err.message || null,
+//     data: err.data || null,
+//   });
+// });
+// /****************전역 오류를 처리하기 위한 미들웨어*******************/
 
 app.use(
   '/docs',
@@ -74,4 +89,5 @@ app.get('/', (req, res) => {
 
 app.listen(port, () => {
   logger.info('Server listening on port ' + port);
+  cronjobs.startCronJobs();
 });

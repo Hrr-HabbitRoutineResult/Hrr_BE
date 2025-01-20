@@ -1,7 +1,8 @@
 import { StatusCodes } from 'http-status-codes';
+import userService from '../services/users.service.js';
 
 const putUserInterests = () => {};
-const getMe = async (req, res) => {
+const getMe = async (req, res, next) => {
   /**
 #swagger.summary = '사용자 정보 조회 API';
 #swagger.description = '사용자의 기본 정보를 조회합니다.';
@@ -72,9 +73,16 @@ const getMe = async (req, res) => {
   }
 };
  */
-  return res.status(StatusCodes.OK).json({ message: '성공' });
+  try {
+    const my_id = req.user;
+    const my_info = await userService.getUserInfo(my_id);
+
+    return res.status(StatusCodes.OK).json(my_info);
+  } catch (error) {
+    next(error);
+  }
 };
-const putMe = () => {
+const putMe = async (req, res, next) => {
   /**
 #swagger.summary = '사용자 정보 수정 API';
 #swagger.description = '사용자가 자신의 정보를 수정하는 API입니다.';
@@ -182,6 +190,14 @@ const putMe = () => {
   }
 };
  */
+  try {
+    const my_id = req.user;
+    const my_new_info = userService.putUserInfo(my_id);
+
+    return res.status(StatusCodes.OK).json(my_new_info);
+  } catch (error) {
+    next(error);
+  }
 };
 const getUserChallengesOngoing = () => {
   /**

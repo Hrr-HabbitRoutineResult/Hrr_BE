@@ -98,6 +98,46 @@ export class DataBaseError extends Error {
   }
 }
 
+export class EmailVerificationNotExistsError extends Error {
+  errorCode = 'A011';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 400;
+    this.data = data;
+  }
+}
+
+export class EmailVerificationExpiredError extends Error {
+  errorCode = 'A011';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 400;
+    this.data = data;
+  }
+}
+
+export class InvalidVerificationCodeError extends Error {
+  errorCode = 'A012';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 400;
+    this.data = data;
+  }
+}
+
+export class EmailVerificationError extends Error {
+  errorCode = 'A013';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 400;
+    this.data = data;
+  }
+}
+
 export default {
   UserNotExistError,
   PasswordMismatchError,
@@ -109,4 +149,7 @@ export default {
   UserAlreadyExistsError,
   SendmailError,
   DataBaseError,
+  EmailVerificationExpiredError,
+  EmailVerificationNotExistsError,
+  InvalidVerificationCodeError,
 };

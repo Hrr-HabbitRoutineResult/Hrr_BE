@@ -573,7 +573,7 @@ const checkEmailVerificationCode = async (req, res, next) => {
           type: 'object',
           properties: {
             email: { type: 'string', example: 'user@example.com' },
-            verification_code: { type: 'string', example: 'ABCD12' }
+            verificationCode: { type: 'string', example: 'ABCD12' }
           },
           required: ['email', 'verification_code']
         },
@@ -624,8 +624,8 @@ const checkEmailVerificationCode = async (req, res, next) => {
    */
   try {
     const { email, verification_code } = authDTO.emailVerificationCodeDto(req.body);
-    const emailVerification = await authService.checkEmailVerificationCode(email, verification_code);
-    return res.status(StatusCodes.OK).json({ emailVerification });
+    const email_verification = await authService.checkEmailVerificationCode(email, verification_code);
+    return res.status(StatusCodes.OK).json({ email_verification });
   } catch (error) {
     return next(error);
   }

@@ -1,10 +1,8 @@
 const registerDto = body => {
   const email = body.email;
-  const phone_number = body.phoneNumber;
-  const name = body.name;
   const password = body.password;
-  const verification_code = body.verificationCode;
-  return { email, phone_number, name, password, verification_code };
+  const verification_id = body.verificationId;
+  return { email, password, verification_id };
 };
 
 const emailVerificationCodeDto = body => {

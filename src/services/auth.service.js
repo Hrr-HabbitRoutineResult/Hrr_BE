@@ -4,21 +4,20 @@ import authError, { SendmailError } from '../errors/auth.error.js';
 import sendmail from '../utils/sendmail.util.js';
 import crypto from 'crypto';
 
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
-const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
-const ACCESS_TOKEN_EXPIRATION = process.env.ACCESS_TOKEN_EXPIRATION;
-const REFRESH_TOKEN_EXPIRATION = process.env.REFRESH_TOKEN_EXPIRATION;
-
 //emailLogin-api
 const generateTokens = payload => {
-  const access_token = jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRATION });
-  const refresh_token = jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRATION });
+  const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: process.env.ACCESS_TOKEN_EXPIRATION,
+  });
+  const refresh_token = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
+    expiresIn: process.env.REFRESH_TOKEN_EXPIRATION,
+  });
   return { access_token, refresh_token };
 };
 
 //refreshToken-api
 const verifyRefreshToken = token => {
-  return jwt.verify(token, REFRESH_TOKEN_SECRET);
+  return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
 };
 
 //emailLogin-api
@@ -33,6 +32,7 @@ const login = async (email, password) => {
   return email;
 };
 
+//sendVerficationEmail-api
 const sendVerificationEmail = async email => {
   const user = await authRepository.findUserByEmail(email);
   if (user) {
@@ -61,12 +61,19 @@ const sendVerificationEmail = async email => {
   }
 };
 
+//sendVerficationEmail-api
 const generateVerificationCode = () => {
   return crypto.randomBytes(3).toString('hex').toUpperCase(); // 6자리 코드 생성
 };
 
+//register-api
 const register = async dto => {
-  const { email, password } = dto;
+  const { email, password, verification_id } = dto;
+
+  const verificated_email = await authRepository.findEmailVerificationById(verification_id);
+  if (!verificated_email) {
+    throw new authError.EmailVerificationError('인증되지 않은 이메일입니다.');
+  }
 
   const user = await authRepository.findUserByEmail(email);
   if (user) {
@@ -88,8 +95,8 @@ const register = async dto => {
     name: '사용자',
     phoneNumber: '010012345678',
     followerCount: 0,
-    followingCount: 1,
-    points: 1,
+    followingCount: 0,
+    points: 0,
   };
 
   await authRepository.createUser(new_user);
@@ -98,6 +105,7 @@ const register = async dto => {
   return { new_user };
 };
 
+//checkEmailVerificationCode-api
 const checkEmailVerificationCode = async (email, verification_code) => {
   const email_verification = await authRepository.findEmailVerification(email);
   if (!email_verification) {

@@ -74,6 +74,7 @@ const setEmailVerifiedTrue = async email => {
   }
 };
 
+//register-api
 const createUser = async new_user => {
   try {
     const created_user = await prisma.user.create({
@@ -86,6 +87,14 @@ const createUser = async new_user => {
   }
 };
 
+//register-appi
+const findEmailVerificationById = async id => {
+  const email_verification = await prisma.emailVerification.findUnique({
+    where: { id },
+  });
+  return email_verification;
+};
+
 export default {
   findUserByEmail,
   findEmailVerification,
@@ -94,4 +103,5 @@ export default {
   deleteExpiredEmailVerifications,
   setEmailVerifiedTrue,
   createUser,
+  findEmailVerificationById,
 };

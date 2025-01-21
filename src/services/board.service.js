@@ -1,5 +1,6 @@
 import boardRepository from '../repositories/board.repository.js';
 import boardDto from '../dtos/board.dto.js';
+import { create } from 'domain';
 
 const getBoardCategories = async user_email => {
   const user_board = await boardRepository.getUserBoard(user_email);
@@ -26,7 +27,13 @@ const patchBoardPinStatus = async (board_id, status) => {
   return pinned;
 };
 
+const createBoard = async new_board_info => {
+  const new_board = await boardRepository.createBoard(new_board_info);
+  return new_board;
+};
+
 export default {
   getBoardCategories,
   patchBoardPinStatus,
+  createBoard,
 };

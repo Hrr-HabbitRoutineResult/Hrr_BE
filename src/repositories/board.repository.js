@@ -49,7 +49,19 @@ const patchBoardPinStatus = async (board_id, status) => {
   }
 };
 
+const createBoard = async new_board_info => {
+  try {
+    const created_board = await prisma.board.create({
+      data: new_board_info,
+    });
+    return created_board;
+  } catch (error) {
+    throw new boardError.DataBaseError('Error on creating board');
+  }
+};
+
 export default {
   getUserBoard,
   patchBoardPinStatus,
+  createBoard,
 };

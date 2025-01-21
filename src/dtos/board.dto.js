@@ -1,3 +1,5 @@
+import { create } from 'domain';
+
 const getBoardsFromUser = user_board => {
   const board_categories = [];
 
@@ -9,6 +11,16 @@ const getBoardsFromUser = user_board => {
   return board_categories;
 };
 
+const createBoardResponseDto = body => {
+  const new_board_info = {
+    name: body.name,
+    description: body.description,
+    category: body.category,
+  };
+  return new_board_info;
+};
+
 export default {
   getBoardsFromUser,
+  createBoardResponseDto,
 };

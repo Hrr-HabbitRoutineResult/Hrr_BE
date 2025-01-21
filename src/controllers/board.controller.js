@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import boardService from '../services/board.service.js';
-
+import boardDto from '../dtos/board.dto.js';
 const getBoardCategories = async (req, res, next) => {
   /**
   #swagger.summary = '게시판 카테고리 목록 조회 API';
@@ -87,7 +87,7 @@ const getBoardCategories = async (req, res, next) => {
   }
 };
 
-const createBoard = () => {
+const createBoard = async (req, res, next) => {
   /**
   #swagger.summary = '게시판 생성 API';
   #swagger.description = '사용자가 새로운 게시판을 생성하는 API입니다.';
@@ -186,7 +186,14 @@ const createBoard = () => {
     }
   };
    */
+  try {
+    const new_board = await boardService.createBoard(boardDto.createBoardResponseDto(req.body));
+    return res.status(StatusCodes.OK).json(new_board);
+  } catch (error) {
+    next(error);
+  }
 };
+
 const pinBoard = async (req, res, next) => {
   /**
   #swagger.summary = '게시판 상단 고정 API';

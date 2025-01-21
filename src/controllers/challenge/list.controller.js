@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import listDto from '../../dtos/challenge/list.dto.js';
-import listSerivce from '../../services/challenge/list.service.js';
+import listService from '../../services/challenge/list.service.js';
 import logger from '../../logger.js';
 const getChallengeList = () => {
   /**
@@ -194,7 +194,7 @@ const searchChallenge = () => {
   };
    */
 };
-const getChallengeDetail = () => {
+const getChallengeDetail = async (req, res, next) => {
   /**
   #swagger.summary = '챌린지 검색 API';
   #swagger.description = '사용자가 특정 조건에 따라 챌린지를 검색하는 API입니다. 검색 조건은 쿼리 스트링을 사용합니다.';
@@ -303,7 +303,16 @@ const getChallengeDetail = () => {
     }
   };
    */
+  try {
+    const challenge_id = parseInt(req.params.challengeId, 10);
+    const challenge_info = await listService.getChallengeDetailById(challenge_id);
+
+    return res.status(StatusCodes.OK).json(challenge_info);
+  } catch (error) {
+    next(error);
+  }
 };
+
 const createChallenge = async (req, res, next) => {
   /**
   #swagger.summary = '챌린지 개설 API';
@@ -450,7 +459,7 @@ const createChallenge = async (req, res, next) => {
   try {
     logger.debug('챌린지를 개설했습니다!');
 
-    const challenge = await listSerivce.createChallenge(listDto.bodyToChallenge(req.body));
+    const challenge = await listService.createChallenge(listDto.bodyToChallenge(req.body));
     res.status(StatusCodes.OK).json({ result: challenge });
   } catch (error) {
     next(error);

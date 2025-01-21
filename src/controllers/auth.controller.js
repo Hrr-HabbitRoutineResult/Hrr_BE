@@ -70,7 +70,7 @@ export const emailLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const login = await authService.login(email, password);
-    const { access_token, refresh_token } = authService.generateTokens({ email: email });
+    const { access_token, refresh_token } = authService.generateTokens({ email: email, id: id });
     return res.status(StatusCodes.OK).json({ accessToken: access_token, refreshToken: refresh_token });
   } catch (error) {
     next(error);

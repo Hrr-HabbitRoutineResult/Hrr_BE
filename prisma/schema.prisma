@@ -293,6 +293,7 @@ model Challenge {
   created_at          DateTime?           @db.DateTime(6)
   updated_at          DateTime?           @db.DateTime(6)
   category            Category
+  duration            Duration
   user                User                @relation(fields: [owner_id], references: [id])
   challengeLikes      ChallengeLike[]
   frequencies         Frequency[]
@@ -301,6 +302,7 @@ model Challenge {
 
   @@map("Challenges")
 }
+
 
 model Frequency {
   id             Int           @id @default(autoincrement())
@@ -321,7 +323,7 @@ model UserChallenge {
   endDate             DateTime?           @db.DateTime(6)
   verifyCount         Int?
   unverifiedCount     Int?
-  userChallengeStatus UserChallengeStatus @map("status")
+  userChallengeStatus UserChallengeStatus @map("status") @default(active)
   warn                Int                 @default(0)
   challenge           Challenge           @relation(fields: [challenge_id], references: [id])
   user                User                @relation(fields: [user_id], references: [id])
@@ -507,4 +509,13 @@ enum Category {
   hobby
   jobPreparation
   lifestyle
+}
+
+enum Duration {
+  week_1     // 1주일
+  week_2     // 2주일
+  week_3     // 3주일
+  month_1    // 1달
+  month_2    // 2달
+  month_3    // 3달
 }

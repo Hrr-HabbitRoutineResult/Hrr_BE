@@ -74,8 +74,8 @@ const getMe = async (req, res, next) => {
 };
  */
   try {
-    const my_id = req.user;
-    const my_info = await userService.getUserInfo(my_id);
+    const my_email = req.user.email;
+    const my_info = await userService.getUserInfoByEmail(my_email);
 
     return res.status(StatusCodes.OK).json(my_info);
   } catch (error) {

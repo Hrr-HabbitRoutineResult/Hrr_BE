@@ -1,4 +1,4 @@
-const serviceToControllerDto = user => {
+const serviceToControllerDto = (user, user_badge_1, user_badge_2, user_badge_3) => {
   const response_data = {
     id: user.id,
     name: user.nickname,
@@ -10,25 +10,9 @@ const serviceToControllerDto = user => {
     points: user.points,
     followerCount: user.followerCount,
     followingCount: user.followingCount,
-    // badges: user.badges.map(badge => ({
-    //   id: badge.id,
-    //   name: badge.name,
-    //   icon: badge.icon,
-    // })),
-    // const id = body.id;
-    // const name = body.name;
-    // const gender = body.gender;
-    // const email = body.email;
-    // const phone_number = body.phoneNumber;
-    // const profile_photo = body.profilePhoto;
-    // const level = body.level;
-    // const points = body.points;
-    // const follower_count = body.followerCount;
-    // const following_count = body.followingCount;
-    // const badges = body.badges.map(badge => ({
-    //   const id = badge.id
-
-    //   icon: badge.icon,
+    user_badge_1: user_badge_1,
+    user_badge_2: user_badge_2,
+    user_badge_3: user_badge_3,
   };
   console.log(user, response_data);
   return response_data;

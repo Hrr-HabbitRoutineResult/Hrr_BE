@@ -8,7 +8,6 @@ const getUserInfoById = async user_id => {
       badges: true,
     },
   });
-  console.log(user);
   return user;
 };
 

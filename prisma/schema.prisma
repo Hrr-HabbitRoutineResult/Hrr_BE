@@ -91,7 +91,7 @@ model UserBoard {
   id        Int       @id @default(autoincrement())
   userId    Int
   boardId   Int
-  pinned    Boolean
+  pinned    Boolean   @default(false)
   user      User      @relation(fields: [userId], references: [id])
   board     Board     @relation(fields: [boardId], references: [id])
 
@@ -104,7 +104,7 @@ model Board {
   name        String       @db.VarChar(40)
   description String?      @db.VarChar(255)
   posts       Post[]
-  status      Boolean
+  status      Boolean      @default(false)
   category    Category
   userBoards  UserBoard[]
   

@@ -56,7 +56,6 @@ const sendVerificationEmail = async email => {
   try {
     await sendmail.sendVerificationEmail(email, verificationCode);
   } catch (error) {
-    console.log(error);
     throw new SendmailError('이메일 전송 중 오류가 발생했습니다.');
   }
 };
@@ -92,7 +91,7 @@ const register = async dto => {
   const new_user = {
     email: email,
     password: password,
-    name: '사용자',
+    nickname: '사용자',
     phoneNumber: '010012345678',
     followerCount: 0,
     followingCount: 0,

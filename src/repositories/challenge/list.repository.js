@@ -9,7 +9,6 @@ const createChallenge = async data => {
     });
     return created_challenge;
   } catch (error) {
-    console.log(error);
     throw new listError.DataBaseError('Error on creating challenge');
   }
 };

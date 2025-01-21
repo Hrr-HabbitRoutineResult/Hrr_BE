@@ -56,7 +56,6 @@ const sendVerificationEmail = async email => {
   try {
     await sendmail.sendVerificationEmail(email, verificationCode);
   } catch (error) {
-    console.log(error);
     throw new SendmailError('이메일 전송 중 오류가 발생했습니다.');
   }
 };

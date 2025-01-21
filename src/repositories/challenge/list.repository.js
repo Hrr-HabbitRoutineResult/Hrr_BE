@@ -15,7 +15,7 @@ const createChallenge = async data => {
 };
 
 //챌린지 리스트 조회 함수
-const challengeList = async filters => {
+const challengeList = async (filters, orderBy) => {
   try {
     return await prisma.challenge.findMany({
       where: filters,
@@ -31,6 +31,7 @@ const challengeList = async filters => {
           },
         },
       },
+      orderBy, // 정렬 조건 적용
     });
   } catch (error) {
     console.error('Error in challengeList: ', error.message);

@@ -5,7 +5,7 @@ const createChallenge = async data => {
   return created_challenge;
 };
 
-const getChallengeList = async ({ type, category, status, frequencyValue, name }) => {
+const getChallengeList = async ({ type, category, status, frequencyValue, name, sort = 'latest' }) => {
   const filters = {};
   if (type) filters.type = type;
   if (category) filters.category = category;
@@ -27,7 +27,17 @@ const getChallengeList = async ({ type, category, status, frequencyValue, name }
     };
   }
 
-  return await listRepository.challengeList(filters);
+  // 정렬 조건 처리
+  let orderBy = {};
+  if (sort === 'popular') {
+    orderBy = { challengeLikes: { _count: 'desc' } }; // 인기순 (좋아요 수 기준)
+  } else if (sort === 'oldest') {
+    orderBy = { created_at: 'asc' }; // 오래된 순
+  } else {
+    orderBy = { created_at: 'desc' }; // 최신순 (기본값)
+  }
+
+  return await listRepository.challengeList(filters, orderBy);
 };
 
 export default {

@@ -187,10 +187,10 @@ const createBoard = () => {
   };
    */
 };
-const updateBoardPinned = () => {
+const pinBoard = async (req, res, next) => {
   /**
-  #swagger.summary = '게시글 상단 고정 API';
-  #swagger.description = '특정 게시글을 게시판 상단에 고정하는 API입니다.';
+  #swagger.summary = '게시판 상단 고정 API';
+  #swagger.description = '특정 게시판을 게시판 상단에 고정하는 API입니다.';
   #swagger.tags = ['Board'];
   #swagger.parameters['Authorization'] = {
     in: 'header',
@@ -214,7 +214,7 @@ const updateBoardPinned = () => {
     }
   };
   #swagger.responses[200] = {
-    description: '게시글 상단 고정 성공',
+    description: '게시판 상단 고정 성공',
     content: {
       'application/json': {
         schema: {
@@ -278,7 +278,115 @@ const updateBoardPinned = () => {
     }
   };
    */
+  try {
+    const board_id = parseInt(req.params.boardId, 10);
+    const board = await boardService.patchBoardPinStatus(board_id, true);
+    return res.status(StatusCodes.OK).json(board);
+  } catch (error) {
+    next(error);
+  }
 };
+
+const unpinBoard = async (req, res, next) => {
+  /**
+  #swagger.summary = '게시판 상단 고정 해제 API';
+  #swagger.description = '특정 게시판을 게시판 상단에서 고정 해제하는 API입니다.';
+  #swagger.tags = ['Board'];
+  #swagger.parameters['Authorization'] = {
+    in: 'header',
+    required: true,
+    schema: { type: 'string', example: 'Bearer <access_token>' },
+    description: '인증을 위한 액세스 토큰'
+  };
+  #swagger.parameters['boardID'] = {
+    in: 'path',
+    required: true,
+    schema: { type: 'integer', example: 1 },
+    description: '게시판 ID'
+  };
+  #swagger.requestBody = {
+    required: false,
+    description: '이 요청에는 본문이 필요하지 않습니다.',
+    content: {
+      'application/json': {
+        schema: { type: 'object' },
+      }
+    }
+  };
+  #swagger.responses[200] = {
+    description: '게시판 상단 고정 해제 성공',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'SUCCESS' },
+            error: { type: 'object', nullable: true, example: null },
+            success: {
+              type: 'object',
+              properties: {
+                message: { type: 'string', example: 'Post pinned successfully' },
+                boardId: { type: 'integer', example: 3 },
+                status: { type: 'string', example: 'pinned' }
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+  #swagger.responses[401] = {
+    description: '인증 실패',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'FAILURE' },
+            error: { type: 'string', example: 'Unauthorized access.' }
+          }
+        }
+      }
+    }
+  };
+  #swagger.responses[404] = {
+    description: '게시판을 찾을 수 없음',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'NOT_FOUND' },
+            error: { type: 'string', example: 'Board not found.' }
+          }
+        }
+      }
+    }
+  };
+  #swagger.responses[500] = {
+    description: '서버 오류',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'FAILURE' },
+            error: { type: 'string', example: 'Internal server error.' }
+          }
+        }
+      }
+    }
+  };
+   */
+  try {
+    const board_id = parseInt(req.params.boardId, 10);
+    const board = await boardService.patchBoardPinStatus(board_id, false);
+    return res.status(StatusCodes.OK).json(board);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getBoardHotPosts = () => {
   /**
   #swagger.summary = '특정 게시판 인기 글 목록 조회 API';
@@ -370,6 +478,7 @@ const getBoardHotPosts = () => {
 export default {
   getBoardCategories,
   createBoard,
-  updateBoardPinned,
+  pinBoard,
+  unpinBoard,
   getBoardHotPosts,
 };

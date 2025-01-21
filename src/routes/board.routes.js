@@ -5,7 +5,8 @@ const router = express.Router();
 
 router.get('/categories', authMiddleware, boardController.getBoardCategories);
 router.post('/', boardController.createBoard);
-router.patch('/:boardId/pin', boardController.updateBoardPinned);
+router.patch('/:boardId/pin', authMiddleware, boardController.pinBoard);
+router.patch('/:boardId/unpin', authMiddleware, boardController.unpinBoard);
 router.get('/:boardId/hotness', boardController.getBoardHotPosts);
 
 export default router;

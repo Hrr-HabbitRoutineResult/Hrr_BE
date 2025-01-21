@@ -9,7 +9,6 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendVerificationEmail = (email, code) => {
-  console.log(process.env.SERVER_EMAIL_ADDR, process.env.SERVER_EMAIL_PASS);
   const mailOptions = {
     from: process.env.SERVER_EMAIL_ADDR,
     to: email,

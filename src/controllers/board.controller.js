@@ -1,4 +1,7 @@
-const getBoardCategories = () => {
+import { StatusCodes } from 'http-status-codes';
+import boardService from '../services/board.service.js';
+
+const getBoardCategories = async (req, res, next) => {
   /**
   #swagger.summary = '게시판 카테고리 목록 조회 API';
   #swagger.description = '게시판의 카테고리 목록을 조회하는 API입니다.';
@@ -75,7 +78,15 @@ const getBoardCategories = () => {
     }
   };
    */
+  try {
+    const user_email = req.user.email;
+    const user_board = await boardService.getBoardCategories(user_email);
+    return res.status(StatusCodes.OK).json(user_board);
+  } catch (error) {
+    next(error);
+  }
 };
+
 const createBoard = () => {
   /**
   #swagger.summary = '게시판 생성 API';

@@ -50,7 +50,7 @@ model User {
   followings             Follow[]                @relation("FollowingRelation")
   receivedMessages       Message[]               @relation("ReceivedMessages")
   sentMessages           Message[]               @relation("SentMessages")
-
+  userBoards             UserBoard[] 
   @@map("Users")
 }
 
@@ -87,14 +87,27 @@ model Comment {
   @@map("Comments")
 }
 
-model Board {
-  id              Int             @id @default(autoincrement())
-  name            String          @db.VarChar(40)
-  description     String?         @db.VarChar(255)
-  boardStatus     BoardStatus     @map("status")
-  posts           Post[]
-  category        Category
+model UserBoard {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  boardId   Int
+  pinned    Boolean
+  user      User      @relation(fields: [userId], references: [id])
+  board     Board     @relation(fields: [boardId], references: [id])
 
+  @@unique([userId, boardId])
+  @@map("UserBoard")
+}
+
+model Board {
+  id          Int          @id @default(autoincrement())
+  name        String       @db.VarChar(40)
+  description String?      @db.VarChar(255)
+  posts       Post[]
+  status      Boolean
+  category    Category
+  userBoards  UserBoard[]
+  
   @@map("Boards")
 }
 
@@ -415,12 +428,6 @@ enum Name {
   buildCapacity
   escape_3
   qualification
-}
-
-enum BoardStatus {
-  basic
-  pinned
-  default
 }
 
 enum ChallengeType {

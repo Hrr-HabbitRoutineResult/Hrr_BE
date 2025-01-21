@@ -18,7 +18,7 @@ const sortBoards = boards => {
   group2.sort((a, b) => a.index - b.index);
 
   // 두 그룹을 합쳐서 반환
-  return [...group1, ...group2];
+  return { group1, group2 };
 };
 
 export default {

@@ -1,5 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import userService from '../services/users.service.js';
+import userDto from '../dtos/user.dto.js';
 
 const putUserInterests = () => {};
 const getMe = async (req, res, next) => {
@@ -95,18 +96,27 @@ const putMe = async (req, res, next) => {
 };
 #swagger.requestBody = {
   required: true,
-  description: '사용자 정보 수정 요청 정보'
+  description: '사용자 정보 수정 요청 정보',
   content: {
     'application/json': {
       schema: {
         type: 'object',
         properties: {
           name: { type: 'string', example: '흐르르' },
-          email: { type: 'string', example: 'updated@example.com' },
-          gender: { type: 'string', example: '남자' },
-          profilePhoto: { type: 'string', example: 'https://example.com/newprofile.jpg' }
+          profilePhoto: { type: 'string', example: 'https://example.com/newprofile.jpg' },
+          badges: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        id1: { type: 'integer', example: 1 },
+                        id2: { type: 'integer', example: 2 },
+                        id3: { type: 'integer', example: 3 }
+                      }
+                    }
+                  }
         },
-        required: ['name', 'email', 'gender', 'profilePhoto']
+        required: ['name', 'profilePhoto', 'badges']
       },
     }
   }
@@ -123,35 +133,17 @@ const putMe = async (req, res, next) => {
           success: {
             type: 'object',
             properties: {
-              userInfo: {
-                type: 'object',
-                properties: {
-                  id: { type: 'integer', example: 1 },
-                  phoneNumber: { type: 'string', example: '010-1234-5678' },
-                  level: { type: 'integer', example: 3 },
-                  points: { type: 'integer', example: 2000 },
-                  followerCount: { type: 'integer', example: 100 },
-                  followingCount: { type: 'integer', example: 150 },
-                  badges: {
-                    type: 'array',
-                    items: {
-                      type: 'object',
-                      properties: {
-                        id: { type: 'integer', example: 1 },
-                        name: { type: 'string', example: 'A' },
-                        icon: { type: 'string', example: 'https://example.com/badge1.png' }
-                      }
-                    }
+              name: { type: 'string', example: '흐르르' },
+              profilePhoto: { type: 'string', example: 'https://example.com/newprofile.jpg' },
+              badges: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    id1: { type: 'integer', example: 1 },
+                    id2: { type: 'integer', example: 2 },
+                    id3: { type: 'integer', example: 3 }
                   }
-                }
-              },
-              data: {
-                type: 'object',
-                properties: {
-                  name: { type: 'string', example: '흐르르' },
-                  gender: { type: 'string', example: '남자' },
-                  email: { type: 'string', example: 'updated@example.com' },
-                  profilePhoto: { type: 'string', example: 'https://example.com/newprofile.jpg' }
                 }
               }
             }
@@ -191,8 +183,8 @@ const putMe = async (req, res, next) => {
 };
  */
   try {
-    const my_id = req.user;
-    const my_new_info = userService.putUserInfo(my_id);
+    const email = req.user.email;
+    const my_new_info = await userService.updateUserInfobyEmail(email, userDto.updateUserInfoRequestDto(req.body));
 
     return res.status(StatusCodes.OK).json(my_new_info);
   } catch (error) {

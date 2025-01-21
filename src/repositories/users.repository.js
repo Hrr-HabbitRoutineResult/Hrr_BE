@@ -11,11 +11,11 @@ const getUserInfoById = async user_id => {
   return user;
 };
 
-const putUserInfoById = async user_id => {
+const updateUserInfo = async (email, update_data) => {
   try {
     const updated_user = await prisma.user.update({
-      where: { id: user_id },
-      data: { nickname, profile_photo, badges },
+      where: { email: email },
+      data: update_data,
     });
     return updated_user;
   } catch (error) {
@@ -25,5 +25,5 @@ const putUserInfoById = async user_id => {
 
 export default {
   getUserInfoById,
-  putUserInfoById,
+  updateUserInfo,
 };

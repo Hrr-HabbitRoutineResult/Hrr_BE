@@ -1,7 +1,7 @@
 const serviceToControllerDto = (user, user_badge_1, user_badge_2, user_badge_3) => {
   const response_data = {
     id: user.id,
-    name: user.nickname,
+    nickname: user.nickname,
     gender: user.gender,
     email: user.email,
     phoneNumber: user.phoneNumber,
@@ -14,21 +14,31 @@ const serviceToControllerDto = (user, user_badge_1, user_badge_2, user_badge_3) 
     user_badge_2: user_badge_2,
     user_badge_3: user_badge_3,
   };
-  console.log(user, response_data);
   return response_data;
 };
 
-const modifyUserInfoDto = updated_user => {
+const updateUserInfoResponseDto = updated_user => {
   const new_info = {
-    name: updated_user.nickname,
-    profilePhoto: updated_user.profile_photo,
-    badges: updated_user.badges,
+    nickname: updated_user.nickname,
+    profilePhoto: updated_user.profilePhoto,
+    badges: [updated_user.userBadge1_id, updated_user.userBadge2_id, updated_user.userBadge3_id],
   };
+  return new_info;
+};
 
+const updateUserInfoRequestDto = body => {
+  const new_info = {
+    nickname: body.nickname,
+    profilePhoto: body.profilePhoto,
+    userBadge1: body.badges[0] ? { connect: { id: body.badges[0] } } : undefined,
+    userBadge2: body.badges[1] ? { connect: { id: body.badges[1] } } : undefined,
+    userBadge3: body.badges[2] ? { connect: { id: body.badges[2] } } : undefined,
+  };
   return new_info;
 };
 
 export default {
   serviceToControllerDto,
-  modifyUserInfoDto,
+  updateUserInfoResponseDto,
+  updateUserInfoRequestDto,
 };

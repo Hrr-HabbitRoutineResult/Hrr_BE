@@ -14,6 +14,30 @@ const createChallenge = async data => {
   }
 };
 
+//챌린지 리스트 조회 함수
+const challengeList = async filters => {
+  try {
+    return await prisma.challenge.findMany({
+      where: filters,
+      include: {
+        frequencies: {
+          select: {
+            frequencyValue: true,
+          },
+        },
+        challengeKeywords: {
+          include: {
+            keyword: true,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Error in challengeList: ', error.message);
+    throw new listError.DataBaseError('Error on listing challenge');
+  }
+};
 export default {
   createChallenge,
+  challengeList,
 };

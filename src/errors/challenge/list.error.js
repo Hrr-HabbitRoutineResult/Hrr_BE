@@ -1,5 +1,5 @@
 export class CreateChallengeError extends Error {
-  errorCode = 'B001';
+  errorCode = 'C001';
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
@@ -9,7 +9,7 @@ export class CreateChallengeError extends Error {
 }
 
 export class SendChallengeError extends Error {
-  errorCode = 'B002';
+  errorCode = 'C002';
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
@@ -20,7 +20,7 @@ export class SendChallengeError extends Error {
 
 //인증 실패 오류
 export class ChallengeExpiredError extends Error {
-  errorCode = 'B003';
+  errorCode = 'C003';
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
@@ -31,7 +31,7 @@ export class ChallengeExpiredError extends Error {
 
 //서버오류
 export class DataBaseError extends Error {
-  errorCode = 'B004';
+  errorCode = 'C004';
   constructor(reason, data) {
     super(reason);
     this.reason = reason;

@@ -21,6 +21,12 @@ const sortBoards = boards => {
   return { group1, group2 };
 };
 
+const patchBoardPinStatus = async (board_id, status) => {
+  const pinned = await boardRepository.patchBoardPinStatus(board_id, status);
+  return pinned;
+};
+
 export default {
   getBoardCategories,
+  patchBoardPinStatus,
 };

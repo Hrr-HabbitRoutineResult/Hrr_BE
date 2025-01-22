@@ -1,4 +1,7 @@
-const getChallengeCategory = () => {
+import categoryService from '../../services/challenge/category.service.js';
+import { StatusCodes } from 'http-status-codes';
+
+const getChallengeCategory = async (req, res, next) => {
   /**
   #swagger.summary = '챌린지 카테고리 불러오기 API';
   #swagger.description = '사용 가능한 챌린지 카테고리 목록을 불러옵니다.';
@@ -52,6 +55,13 @@ const getChallengeCategory = () => {
     }
   };
 */
+  try {
+    //logger.debug('챌린지 카테고리 보여드립니다!');
+    const category = await categoryService.getChallengeCategories();
+    res.status(StatusCodes.OK).json(category);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const getWeeklyHotChallenge = () => {

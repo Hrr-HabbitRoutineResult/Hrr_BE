@@ -36,7 +36,7 @@ const getUserInfoByEmail = async email => {
       }
     } // 다른 Prisma 관련 에러 처리
     else {
-      throw new userError.DatabaseError('DataBase Error on updating user information');
+      throw new userError.DataBaseError('DataBase Error on updating user information');
     }
   }
 };
@@ -55,7 +55,28 @@ const updateUserInfobyEmail = async (email, update_data) => {
       }
     } // 다른 Prisma 관련 에러 처리
     else {
-      throw new userError.DatabaseError('DataBase Error on updating user information');
+      throw new userError.DataBaseError('DataBase Error on updating user information');
+    }
+  }
+};
+
+const getOngoingChallenge = async email => {
+  try {
+    // 사용자 챌린지 가져오기
+    const user = await userRepository.getUserChallenge(email);
+    const ongoingChallenges = await userRepository.findOngoingChallenges(user.id);
+    const response_data = userDto.userChallengeDto(ongoingChallenges);
+
+    return response_data;
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'U003') {
+        // 진행 중인 챌린지가 없을 경우
+        throw new userError.OngoingChallengeNotExistError('진행 중인 챌린지지를 찾을 수 없습니다.');
+      }
+    } // 다른 Prisma 관련 에러 처리
+    else {
+      throw new userError.DataBaseError('DataBase Error on updating user information');
     }
   }
 };
@@ -63,4 +84,5 @@ const updateUserInfobyEmail = async (email, update_data) => {
 export default {
   getUserInfoByEmail,
   updateUserInfobyEmail,
+  getOngoingChallenge,
 };

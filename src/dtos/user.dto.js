@@ -37,8 +37,17 @@ const updateUserInfoRequestDto = body => {
   return new_info;
 };
 
+const userChallengeDto = challenges => {
+  return challenges.map(challenge => ({
+    challenge_id: challenge.challenge_id,
+    name: challenge.challenge.name,
+    challengeImage: challenge.challenge.challengeImage,
+  }));
+};
+
 export default {
   serviceToControllerDto,
   updateUserInfoResponseDto,
   updateUserInfoRequestDto,
+  userChallengeDto,
 };

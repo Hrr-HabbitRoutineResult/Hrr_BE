@@ -42,6 +42,8 @@ const userChallengeDto = challenges => {
     challenge_id: challenge.challenge_id,
     name: challenge.challenge.name,
     challengeImage: challenge.challenge.challengeImage,
+    type: challenge.challenge.type,
+    // 인증 추가가
   }));
 };
 

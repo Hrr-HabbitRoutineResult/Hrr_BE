@@ -222,7 +222,9 @@ const getUserChallengesOngoing = async (req, res, next) => {
                   properties: {
                     challengeId: { type: 'integer', example: 1 },
                     name: { type: 'string', example: '자잘자잘' },
-                    image: { type: 'string', example: 'https://img1' }
+                    type: { type: 'string', example: '베이직'},
+                    image: { type: 'string', example: 'https://img1' },
+                    verification: { type: 'boolean', example: 'true'}
                   }
                 }
               }

@@ -34,6 +34,8 @@ const findOngoingChallenges = async user_id => {
         select: {
           name: true,
           challengeImage: true,
+          type: true,
+          // 인증 추가
         },
       },
     },

@@ -72,7 +72,7 @@ const getOngoingChallenge = async email => {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'U003') {
         // 진행 중인 챌린지가 없을 경우
-        throw new userError.OngoingChallengeNotExistError('진행 중인 챌린지지를 찾을 수 없습니다.');
+        throw new userError.OngoingChallengeNotExistError('진행 중인 챌린지를 찾을 수 없습니다.');
       }
     } // 다른 Prisma 관련 에러 처리
     else {

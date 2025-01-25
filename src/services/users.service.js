@@ -71,7 +71,6 @@ const getOngoingChallenge = async email => {
   } catch (error) {
     if (error.code === 'U003') {
       // 진행 중인 챌린지가 없을 경우
-      console.log(error);
       throw new userError.OngoingChallengeNotExistError('진행 중인 챌린지를 찾을 수 없습니다.');
     } else {
       throw new userError.DataBaseError('DataBase Error on updating user information');

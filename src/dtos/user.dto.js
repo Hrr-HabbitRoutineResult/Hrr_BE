@@ -37,8 +37,19 @@ const updateUserInfoRequestDto = body => {
   return new_info;
 };
 
+const userChallengeDto = challenges => {
+  return challenges.map(challenge => ({
+    challenge_id: challenge.challenge_id,
+    name: challenge.challenge.name,
+    challengeImage: challenge.challenge.challengeImage,
+    type: challenge.challenge.type,
+    // 인증 추가가
+  }));
+};
+
 export default {
   serviceToControllerDto,
   updateUserInfoResponseDto,
   updateUserInfoRequestDto,
+  userChallengeDto,
 };

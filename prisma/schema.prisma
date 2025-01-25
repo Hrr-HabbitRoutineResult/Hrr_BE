@@ -306,7 +306,13 @@ model Frequency {
   id             Int           @id @default(autoincrement())
   challenge_id   Int
   frequencyType  FrequencyType
-  frequencyValue String?       @db.LongText
+  monday         Boolean       @default(false)
+  tuesday        Boolean       @default(false)
+  wednesday      Boolean       @default(false)
+  thursday       Boolean       @default(false)
+  friday         Boolean       @default(false)
+  saturday       Boolean       @default(false)
+  sunday         Boolean       @default(false)
   challenge      Challenge     @relation(fields: [challenge_id], references: [id])
 
   @@map("Frequencies")

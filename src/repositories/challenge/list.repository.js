@@ -21,7 +21,14 @@ const challengeList = async (filters, orderBy) => {
       include: {
         frequencies: {
           select: {
-            frequencyValue: true,
+            frequencyType: true,
+            monday: true,
+            tuesday: true,
+            wednesday: true,
+            thursday: true,
+            friday: true,
+            saturday: true,
+            sunday: true,
           },
         },
         challengeKeywords: {
@@ -33,7 +40,6 @@ const challengeList = async (filters, orderBy) => {
       orderBy, // 정렬 조건 적용
     });
   } catch (error) {
-    console.error('Error in challengeList: ', error.message);
     throw new listError.DataBaseError('Error on listing challenge');
   }
 };

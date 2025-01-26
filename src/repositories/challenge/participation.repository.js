@@ -1,5 +1,5 @@
 import { prisma } from '../../db.config.js';
-import authError from '../../errors/auth.error.js';
+import participationError from '../../errors/challenge/participation.error.js';
 
 const joinChallenge = async data => {
   try {
@@ -8,11 +8,25 @@ const joinChallenge = async data => {
     });
     return created_user_challenge;
   } catch (error) {
-    console.log(error);
-    throw new authError.DataBaseError('Error on creating email verification');
+    throw new participationError.DataBaseError('Error on creating userChallenge');
+  }
+};
+
+const getUserChallengeById = async (user_id, challenge_id) => {
+  try {
+    const user_challenge = await prisma.userChallenge.findFirst({
+      where: {
+        user_id,
+        challenge_id,
+      },
+    });
+    return user_challenge;
+  } catch (error) {
+    throw new participationError.DataBaseError('Failed to fetch user challenge');
   }
 };
 
 export default {
   joinChallenge,
+  getUserChallengeById,
 };

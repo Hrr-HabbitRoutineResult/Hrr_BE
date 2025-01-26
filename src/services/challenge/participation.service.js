@@ -2,8 +2,15 @@ import { ChallengeStatus } from '@prisma/client';
 import listRepository from '../../repositories/challenge/list.repository.js';
 import participationRepository from '../../repositories/challenge/participation.repository.js';
 import participationDto from '../../dtos/challenge/participation.dto.js';
+import participationError from '../../errors/challenge/participation.error.js';
 
 const joinChallenge = async (user_id, challenge_id) => {
+  // 챌린지 가입 여부 확인
+  const is_participating = await participationRepository.getUserChallengeById(user_id, challenge_id);
+  if (is_participating) {
+    throw new participationError.UserAlreadyJoinedChallenge('User had already joined the challenge');
+  }
+
   // 챌린지 정보 가져오기
   const challenge_info = await listRepository.getChallengeDetailById(challenge_id);
 
@@ -41,7 +48,7 @@ const joinChallenge = async (user_id, challenge_id) => {
       case 'month_6':
         challenge_end_date = new Date(current_time.setMonth(current_time.getMonth() + 3)); // 3달 후
         break;
-      case 'month_6':
+      case 'year_1':
         challenge_end_date = new Date(current_time.setMonth(current_time.getFullYear() + 1)); // 1년 후
         break;
       default:

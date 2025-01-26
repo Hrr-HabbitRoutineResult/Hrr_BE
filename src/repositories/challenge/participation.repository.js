@@ -49,7 +49,7 @@ const increaseChallengeLike = async challenge_id => {
         likesCount: { increment: 1 }, // likesCount 값을 1 증가
       },
     });
-    return updated_challenge;
+    return updated_challenge.likesCount;
   } catch (error) {
     throw new participationError.DataBaseError('Error on updating challenge likes');
   }

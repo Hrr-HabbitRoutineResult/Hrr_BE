@@ -109,6 +109,7 @@ async function main() {
       alarmType: AlarmType.follow,
       title: '새로운 팔로워',
       message: '사용자2님이 당신을 팔로우했습니다.',
+      referenceId, //동적으로 설정된 referenceId는 NOT NULL로 들어갑니다.
     },
   });
 

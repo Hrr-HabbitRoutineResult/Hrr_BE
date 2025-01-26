@@ -28,8 +28,19 @@ export class ChallengeExpiredError extends Error {
   }
 }
 
+export class AlreadyLikedError extends Error {
+  errorCode = 'P004';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 400;
+    this.data = data;
+  }
+}
+
 export default {
   UserAlreadyJoinedChallenge,
   DataBaseError,
   ChallengeExpiredError,
+  AlreadyLikedError,
 };

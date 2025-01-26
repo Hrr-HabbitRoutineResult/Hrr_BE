@@ -72,6 +72,10 @@ const joinChallenge = async (user_id, challenge_id) => {
 };
 
 const increaseChallengeLike = async (user_id, challenge_id) => {
+  const is_challenge_like_exists = await participationRepository.getChallengeLike(user_id, challenge_id);
+  if (is_challenge_like_exists) {
+    throw new participationError.AlreadyLikedError('User already liked the challenge');
+  }
   const like_challenge = await participationRepository.createChallengeLike(user_id, challenge_id);
   const update_challenge_like = await participationRepository.increaseChallengeLike(challenge_id);
   return { like_challenge, update_challenge_like };

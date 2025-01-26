@@ -29,8 +29,10 @@ const getUserChallengeById = async (user_id, challenge_id) => {
 const createChallengeLike = async (user_id, challenge_id) => {
   try {
     const created_challenge_like = await prisma.challengeLike.create({
-      user_id,
-      challenge_id,
+      data: {
+        user_id,
+        challenge_id,
+      },
     });
     return created_challenge_like;
   } catch (error) {
@@ -67,10 +69,25 @@ const decreaseChallengeLike = async challenge_id => {
   }
 };
 
+const getChallengeLike = async (user_id, challenge_id) => {
+  try {
+    const challenge_like = await prisma.challengeLike.findFirst({
+      where: {
+        user_id,
+        challenge_id,
+      },
+    });
+    return challenge_like;
+  } catch (error) {
+    throw new participationError.DataBaseError('Failed to fetch user challenge likes');
+  }
+};
+
 export default {
   joinChallenge,
   getUserChallengeById,
   createChallengeLike,
   increaseChallengeLike,
   decreaseChallengeLike,
+  getChallengeLike,
 };

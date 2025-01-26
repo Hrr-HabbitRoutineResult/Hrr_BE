@@ -260,7 +260,7 @@ const likeChallenge = async (req, res, next) => {
  */
   try {
     const user_id = req.user.id;
-    const challenge_id = req.body.challengeId;
+    const challenge_id = parseInt(req.params.challengeId, 10);
     console.log(user_id, challenge_id);
     const like_challenge = await participationService.increaseChallengeLike(user_id, challenge_id);
     return res.status(StatusCodes.OK).json(like_challenge);

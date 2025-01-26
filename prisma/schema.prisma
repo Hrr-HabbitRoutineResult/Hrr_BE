@@ -51,6 +51,7 @@ model User {
   receivedMessages       Message[]               @relation("ReceivedMessages")
   sentMessages           Message[]               @relation("SentMessages")
   userBoards             UserBoard[] 
+  userAgreements         UserAgreement[]
   @@map("Users")
 }
 
@@ -78,11 +79,15 @@ model Comment {
   post_id         Int
   verification_id Int
   content         String?      @db.Text
+  parent_id       Int?         //부모 댓글 ID(NULL일 때는 최상위 댓글)
+  anonymous       Boolean      @default(false)
   created_at      DateTime?    @db.DateTime(6)
   updated_at      DateTime?    @db.DateTime(6)
   user            User         @relation(fields: [user_id], references: [id])
   post            Post         @relation(fields: [post_id], references: [id])
   verification    Verification @relation(fields: [verification_id], references: [id])
+  parent_comment  Comment?     @relation("CommentReplies", fields:[parent_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  child_comment   Comment[]    @relation("CommentReplies")
 
   @@map("Comments")
 }
@@ -165,6 +170,7 @@ model Verification {
   created_at             DateTime?               @default(now())
   updated_at             DateTime?               @updatedAt
   deadline               DateTime?               @db.DateTime(6)
+  adoptionComplete       Boolean                 @default(false)
   user                   User                    @relation(fields: [user_id], references: [id])
   userChallenge          UserChallenge           @relation(fields: [userChallenge_id], references: [id])
   comments               Comment[]
@@ -306,7 +312,13 @@ model Frequency {
   id             Int           @id @default(autoincrement())
   challenge_id   Int
   frequencyType  FrequencyType
-  frequencyValue String?       @db.LongText
+  monday         Boolean       @default(false)
+  tuesday        Boolean       @default(false)
+  wednesday      Boolean       @default(false)
+  thursday       Boolean       @default(false)
+  friday         Boolean       @default(false)
+  saturday       Boolean       @default(false)
+  sunday         Boolean       @default(false)
   challenge      Challenge     @relation(fields: [challenge_id], references: [id])
 
   @@map("Frequencies")
@@ -405,6 +417,21 @@ model EmailVerification {
   verified         Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+}
+
+model UserAgreement {
+  id                  Int      @id @default(autoincrement())
+  user_id             Int
+  user                User     @relation(fields: [user_id], references: [id])
+  agree_all           Boolean  @default(false) @map("agreeAll")
+  terms_of_service    Boolean  @default(false) @map("termsOfService")
+  privacy_policy      Boolean  @default(false) @map("privacyPolicy")
+  third_party_provision Boolean @default(false) @map("thirdPartyProvision")
+  marketing_and_ads   Boolean  @default(false) @map("marketingAndAds")
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+
+  @@map("UserAgreements")
 }
 
 enum AlarmType {

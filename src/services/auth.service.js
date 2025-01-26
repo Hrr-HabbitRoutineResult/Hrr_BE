@@ -29,7 +29,7 @@ const login = async (email, password) => {
   if (user.password !== password) {
     throw new authError.PasswordMismatchError('비밀번호가 일치하지 않습니다.', { password });
   }
-  return email;
+  return user.id;
 };
 
 //sendVerficationEmail-api

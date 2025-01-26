@@ -17,11 +17,11 @@ router.get('/:challengeId', authMiddleware, listController.getChallengeDetail);
 router.post('/', authMiddleware, listController.createChallenge);
 
 // Participation
-router.post('/:challengeId/join', authMiddleware, participationController.joinChallenge);
-router.post('/:challengeId/like', authMiddleware, participationController.likeChallenge);
-router.post('/:challengeId/participation', authMiddleware, participationController.participateInChallenge);
-router.get('/:challengeId/challengerslist', authMiddleware, participationController.getChallengeParticipantsList);
-router.get('/:challengeId/challengerslist/kick', authMiddleware, participationController.kickChallengeParticipant);
-router.get('/:challengeId/calendar', authMiddleware, participationController.getChallengeCalendar);
+router.post('/:challengeId/join', participationController.joinChallenge);
+router.post('/:challengeId/like', participationController.likeChallenge);
+router.post('/:challengeId/participation', participationController.participateInChallenge);
+router.get('/:challengeId/challengerslist', participationController.getChallengeParticipantsList);
+router.get('/:challengeId/challengerslist/kick', participationController.kickChallengeParticipant);
+router.get('/:challengeId/calendar', participationController.getChallengeCalendar);
 
 export default router;

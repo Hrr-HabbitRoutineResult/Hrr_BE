@@ -16,9 +16,9 @@ INSERT INTO Badges (name, icon, description, type, obtainedCount, profileImage) 
 ('Achiever Badge', 'https://example.com/badge2.png', 'Awarded for completing 5 challenges', 'type', 50, 'https://example.com/badge2_profile.png');
 
 --Challenges Table
-INSERT INTO Challenges (owner_id, name, type, description, challengeImage, status, maxParticipants, verificationType, rule, created_at, updated_at) VALUES
-(1, '매일 운동', 'basic', 'A challenge to exercise daily for 30 minutes', 'https://example.com/challenge1.png', 'open', 50, 'camera', 'Submit a photo after exercise', NOW(), NOW()),
-(2, '같이 공부', 'study', 'Study 2 hours every day for a week', 'https://example.com/challenge2.png', 'ongoing', 30, 'text', 'Submit a text summary of what you studied', NOW(), NOW());
+INSERT INTO Challenges (owner_id, name, type, description, challengeImage, status, maxParticipants, verificationType, rule, duration, created_at, updated_at) VALUES
+(1, '매일 운동', 'basic', 'A challenge to exercise daily for 30 minutes', 'https://example.com/challenge1.png', 'open', 50, 'camera', 'Submit a photo after exercise', 'week_1', NOW(), NOW()),
+(2, '같이 공부', 'study', 'Study 2 hours every day for a week', 'https://example.com/challenge2.png', 'ongoing', 30, 'text', 'Submit a text summary of what you studied', 'month_1', NOW(), NOW());
 
 --Posts Table 
 INSERT INTO Posts (user_id, board_id, title, content, anonymous, created_at, updated_at) VALUES

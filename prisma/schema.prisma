@@ -298,6 +298,7 @@ model Challenge {
   endDate             DateTime?           @db.DateTime(6)
   created_at          DateTime?           @db.DateTime(6)
   updated_at          DateTime?           @db.DateTime(6)
+  duration            Duration
   category            Category
   user                User                @relation(fields: [owner_id], references: [id])
   challengeLikes      ChallengeLike[]
@@ -333,7 +334,7 @@ model UserChallenge {
   endDate             DateTime?           @db.DateTime(6)
   verifyCount         Int?
   unverifiedCount     Int?
-  userChallengeStatus UserChallengeStatus @map("status")
+  status              Status              @default(active)
   warn                Int                 @default(0)
   challenge           Challenge           @relation(fields: [challenge_id], references: [id])
   user                User                @relation(fields: [user_id], references: [id])
@@ -488,7 +489,7 @@ enum FrequencyType {
   specificDays
 }
 
-enum UserChallengeStatus {
+enum Status {
   kick
   active
 }
@@ -534,4 +535,13 @@ enum Category {
   hobby
   jobPreparation
   lifestyle
+}
+
+enum Duration {
+  week_1
+  week_2
+  week_3
+  month_1
+  month_2
+  month_3
 }

@@ -128,10 +128,11 @@ const joinChallenge = async (req, res, next) => {
   };
    */
   try {
+    console.log(req.user);
     const user_id = req.user.id;
     const challenge_id = parseInt(req.params.challengeId, 10);
-    const join_challenge = participationService.joinChallenge(user_id, challenge_id);
-    return res.status(StatusCodes.OK).json(joinChallenge);
+    const join_challenge = await participationService.joinChallenge(user_id, challenge_id);
+    return res.status(StatusCodes.OK).json(join_challenge);
   } catch (error) {
     next(error);
   }

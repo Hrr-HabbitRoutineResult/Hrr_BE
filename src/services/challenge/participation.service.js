@@ -1,10 +1,11 @@
 import { ChallengeStatus } from '@prisma/client';
+import listRepository from '../../repositories/challenge/list.repository.js';
 import participationRepository from '../../repositories/challenge/participation.repository.js';
 import participationDto from '../../dtos/challenge/participation.dto.js';
 
 const joinChallenge = async (user_id, challenge_id) => {
   // 챌린지 정보 가져오기
-  const challenge_info = await listRepository.getChallengeDetail(challenge_id);
+  const challenge_info = await listRepository.getChallengeDetailById(challenge_id);
 
   let challenge_status = 'ongoing';
   let challenge_end_date = challenge_info.endDate;
@@ -34,11 +35,14 @@ const joinChallenge = async (user_id, challenge_id) => {
       case 'month_1':
         challenge_end_date = new Date(current_time.setMonth(current_time.getMonth() + 1)); // 1달 후
         break;
-      case 'month_2':
+      case 'month_3':
         challenge_end_date = new Date(current_time.setMonth(current_time.getMonth() + 2)); // 2달 후
         break;
-      case 'month_3':
+      case 'month_6':
         challenge_end_date = new Date(current_time.setMonth(current_time.getMonth() + 3)); // 3달 후
+        break;
+      case 'month_6':
+        challenge_end_date = new Date(current_time.setMonth(current_time.getFullYear() + 1)); // 1년 후
         break;
       default:
         challenge_end_date = current_time;
@@ -50,13 +54,12 @@ const joinChallenge = async (user_id, challenge_id) => {
     user_id,
     challenge_id,
     challenge_status,
-    start_date,
+    challenge_start_date,
     challenge_end_date,
   );
 
   // 참여 챌린지 저장
   const join_challenge = await participationRepository.joinChallenge(data);
-
   return join_challenge;
 };
 

@@ -56,7 +56,6 @@ const getChallengeCategory = async (req, res, next) => {
   };
 */
   try {
-    //logger.debug('챌린지 카테고리 보여드립니다!');
     const category = await categoryService.getChallengeCategories();
     res.status(StatusCodes.OK).json(category);
   } catch (error) {

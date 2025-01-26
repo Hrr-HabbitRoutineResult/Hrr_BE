@@ -1,12 +1,12 @@
 import categoryRepository from '../../repositories/challenge/category.repository.js';
+import categoryError from '../../errors/challenge/category.error.js';
 
-const getChallengeCategories = async () => {
-  try {
-    return await categoryRepository.getAllCategories();
-  } catch (error) {
-    console.error('Error in category service:', error.message);
-    throw new Error('SERVICE_ERROR');
+const getChallengeCategories = async category_id => {
+  const categories = await categoryRepository.getAllCategories(category_id);
+  if (!categories) {
+    throw new categoryError.CategoryFoundError('카테고리를 찾을 수 없습니다.', { category_id });
   }
+  return categories;
 };
 
 export default {

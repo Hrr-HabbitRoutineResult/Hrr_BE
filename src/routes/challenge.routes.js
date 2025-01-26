@@ -7,21 +7,21 @@ import authMiddleware from '../middlewares/auth.middleware.js';
 const router = express.Router();
 
 // Category
-router.get('/category', categoryController.getChallengeCategory);
-router.get('/hotness', categoryController.getWeeklyHotChallenge);
+router.get('/category', authMiddleware, categoryController.getChallengeCategory);
+router.get('/hotness', authMiddleware, categoryController.getWeeklyHotChallenge);
 
 // List and Detail
-router.get('/', listController.getChallengeList);
-router.get('/search', listController.searchChallenge);
+router.get('/', authMiddleware, listController.getChallengeList);
+router.get('/search', authMiddleware, listController.searchChallenge);
 router.get('/:challengeId', authMiddleware, listController.getChallengeDetail);
-router.post('/', listController.createChallenge);
+router.post('/', authMiddleware, listController.createChallenge);
 
 // Participation
-router.post('/:challengeId/join', participationController.joinChallenge);
-router.post('/:challengeId/like', participationController.likeChallenge);
-router.post('/:challengeId/participation', participationController.participateInChallenge);
-router.get('/:challengeId/challengerslist', participationController.getChallengeParticipantsList);
-router.get('/:challengeId/challengerslist/kick', participationController.kickChallengeParticipant);
-router.get('/:challengeId/calendar', participationController.getChallengeCalendar);
+router.post('/:challengeId/join', authMiddleware, participationController.joinChallenge);
+router.post('/:challengeId/like', authMiddleware, participationController.likeChallenge);
+router.post('/:challengeId/participation', authMiddleware, participationController.participateInChallenge);
+router.get('/:challengeId/challengerslist', authMiddleware, participationController.getChallengeParticipantsList);
+router.get('/:challengeId/challengerslist/kick', authMiddleware, participationController.kickChallengeParticipant);
+router.get('/:challengeId/calendar', authMiddleware, participationController.getChallengeCalendar);
 
 export default router;

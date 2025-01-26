@@ -1,9 +1,9 @@
-export class AccessTokenError extends Error {
+export class CategoryFoundError extends Error {
   errorCode = 'C001';
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 401;
+    this.statuscode = 400;
     this.data = data;
   }
 }
@@ -19,6 +19,6 @@ export class DataBaseError extends Error {
 }
 
 export default {
-  AccessTokenError,
   DataBaseError,
+  CategoryFoundError,
 };

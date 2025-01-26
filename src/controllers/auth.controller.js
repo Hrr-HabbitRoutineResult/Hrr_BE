@@ -69,8 +69,8 @@ export const emailLogin = async (req, res, next) => {
    */
   try {
     const { email, password } = req.body;
-    const login = await authService.login(email, password);
-    const { access_token, refresh_token } = authService.generateTokens({ email: email });
+    const user_id = await authService.login(email, password);
+    const { access_token, refresh_token } = authService.generateTokens({ email: email, id: user_id });
     return res.status(StatusCodes.OK).json({ accessToken: access_token, refreshToken: refresh_token });
   } catch (error) {
     next(error);
@@ -88,7 +88,7 @@ export const refreshToken = (req, res) => {
     const { accessToken } = authService.generateTokens({ username: user.username });
     return res.status(StatusCodes.OK).json({ accessToken });
   } catch (error) {
-    console.error('Error during token refresh:', error);
+    logger.error('Error during token refresh:', error);
     throw new authError.RefreshTokenError('Invalid refresh token');
   }
 };

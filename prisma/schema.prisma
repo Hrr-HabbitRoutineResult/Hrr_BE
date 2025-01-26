@@ -309,6 +309,7 @@ model Challenge {
   @@map("Challenges")
 }
 
+
 model Frequency {
   id             Int           @id @default(autoincrement())
   challenge_id   Int

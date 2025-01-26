@@ -13,10 +13,12 @@ const joinChallenge = async (user_id, challenge_id) => {
 
   // 챌린지 정보 가져오기
   const challenge_info = await listRepository.getChallengeDetailById(challenge_id);
-
+  const current_time = new Date(); // 현재 시간
+  if (challenge_info.endDate < current_time) {
+    throw new participationError.ChallengeExpiredError('Challenge already finished');
+  }
   let challenge_status = 'ongoing';
   let challenge_end_date = challenge_info.endDate;
-  const current_time = new Date(); // 현재 시간
   let challenge_start_date;
 
   if (challenge_info.type == 'study') {

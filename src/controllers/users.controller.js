@@ -191,7 +191,8 @@ const putMe = async (req, res, next) => {
     next(error);
   }
 };
-const getUserChallengesOngoing = () => {
+
+const getUserChallengesOngoing = async (req, res, next) => {
   /**
 #swagger.summary = '내 챌린지 조회 API';
 #swagger.description = '내가 참여한 챌린지들을 보여주는 API입니다.';
@@ -219,9 +220,11 @@ const getUserChallengesOngoing = () => {
                 items: {
                   type: 'object',
                   properties: {
-                    id: { type: 'integer', example: 1 },
+                    challengeId: { type: 'integer', example: 1 },
                     name: { type: 'string', example: '자잘자잘' },
-                    image: { type: 'string', example: 'https://img1' }
+                    type: { type: 'string', example: '베이직'},
+                    image: { type: 'string', example: 'https://img1' },
+                    verification: { type: 'boolean', example: 'true'}
                   }
                 }
               }
@@ -247,6 +250,14 @@ const getUserChallengesOngoing = () => {
   }
 };
  */
+  try {
+    const email = req.user.email;
+    const ongoing_challenge = await userService.getOngoingChallenge(email);
+
+    return res.status(StatusCodes.OK).json(ongoing_challenge);
+  } catch (error) {
+    next(error);
+  }
 };
 const getUserChallengesCompleted = () => {
   /**

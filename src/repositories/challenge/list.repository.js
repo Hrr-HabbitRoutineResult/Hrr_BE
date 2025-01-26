@@ -43,7 +43,16 @@ const challengeList = async (filters, orderBy) => {
     throw new listError.DataBaseError('Error on listing challenge');
   }
 };
+
+const getChallengeDetailById = async challenge_id => {
+  const challenge_info = await prisma.challenge.findUnique({
+    where: { id: challenge_id },
+  });
+  return challenge_info;
+};
+
 export default {
   createChallenge,
   challengeList,
+  getChallengeDetailById,
 };

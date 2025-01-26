@@ -95,6 +95,7 @@ async function main() {
       challengeStatus: ChallengeStatus.ongoing,
       verificationType: VerificationType.camera,
       rule: '주어진 문제를 풀고 제출하세요.',
+      duration: Duration.week_1,
       joinDate: new Date(),
       endDate: new Date('2025-12-31'),
       category: Category.study,

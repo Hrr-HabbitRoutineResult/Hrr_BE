@@ -40,9 +40,20 @@ export class DataBaseError extends Error {
   }
 }
 
+export class ChallengeIdNotExistsError extends Error {
+  errorCode = 'B005';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 400;
+    this.data = data;
+  }
+}
+
 export default {
   CreateChallengeError,
   DataBaseError,
   ChallengeExpiredError,
   SendChallengeError,
+  ChallengeIdNotExistsError,
 };

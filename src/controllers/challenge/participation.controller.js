@@ -128,7 +128,6 @@ const joinChallenge = async (req, res, next) => {
   };
    */
   try {
-    console.log(req.user);
     const user_id = req.user.id;
     const challenge_id = parseInt(req.params.challengeId, 10);
     const join_challenge = await participationService.joinChallenge(user_id, challenge_id);

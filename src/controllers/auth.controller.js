@@ -88,7 +88,7 @@ export const refreshToken = (req, res) => {
     const { accessToken } = authService.generateTokens({ username: user.username });
     return res.status(StatusCodes.OK).json({ accessToken });
   } catch (error) {
-    console.error('Error during token refresh:', error);
+    logger.error('Error during token refresh:', error);
     throw new authError.RefreshTokenError('Invalid refresh token');
   }
 };

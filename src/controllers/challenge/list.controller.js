@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import listDto from '../../dtos/challenge/list.dto.js';
 import listService from '../../services/challenge/list.service.js';
 import logger from '../../logger.js';
-const getChallengeList = () => {
+const getChallengeList = async (req, res, next) => {
   /**
   #swagger.summary = '챌린지 리스트 조회 API';
   #swagger.description = '챌린지 이름, 종류, 인원 제한, 참가 인원, 인증 방식, 한 줄 설명, 인증 빈도가 포함된 챌린지 리스트를 조회하는 API입니다.';
@@ -83,6 +83,25 @@ const getChallengeList = () => {
     }
   };
    */
+  try {
+    logger.debug('챌린지 리스트를 보여드립니다!');
+    logger.debug('Request Query:', req.query); // 디버깅 로그 추가
+    //쿼리 파라미터 추출하기
+    const { type, category, duration, max_participants, frequency_type, day, name, sort } = req.query;
+    const challenge_list = await listService.getChallengeList({
+      type: type || null,
+      category: category || null,
+      duration: duration || null,
+      max_participants: max_participants || null,
+      frequency_type: frequency_type || null,
+      day: day || null,
+      name: name || null,
+      sort: sort || 'popular', // 기본값 설정
+    });
+    res.status(StatusCodes.OK).json({ result: challenge_list });
+  } catch (error) {
+    next(error);
+  }
 };
 const searchChallenge = () => {
   /**

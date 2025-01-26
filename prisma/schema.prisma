@@ -300,6 +300,7 @@ model Challenge {
   updated_at          DateTime?           @db.DateTime(6)
   duration            Duration
   category            Category
+  likesCount          Int                 @default(0)
   user                User                @relation(fields: [owner_id], references: [id])
   challengeLikes      ChallengeLike[]
   frequencies         Frequency[]
@@ -308,6 +309,7 @@ model Challenge {
 
   @@map("Challenges")
 }
+
 
 model Frequency {
   id             Int           @id @default(autoincrement())

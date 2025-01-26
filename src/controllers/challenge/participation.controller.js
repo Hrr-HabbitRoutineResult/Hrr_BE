@@ -1,3 +1,5 @@
+import participationService from '../../services/challenge/participation.service.js';
+
 const joinChallenge = () => {
   /**
   #swagger.summary = '특정 챌린지 참가 API';
@@ -125,7 +127,7 @@ const joinChallenge = () => {
   };
    */
 };
-const likeChallenge = () => {
+const likeChallenge = async (req, res, next) => {
   /**
 #swagger.summary = '챌린지 좋아요 기능 API';
 #swagger.description = '사용자가 특정 챌린지에 좋아요를 추가하는 API입니다.';
@@ -156,11 +158,7 @@ const likeChallenge = () => {
       schema: {
         type: 'object',
         properties: {
-          userId: { type: 'string', example: 'user123', description: '좋아요를 누른 사용자의 ID' },
-          likeId: { type: 'string', example: 'like456', description: '좋아요 ID (새로운 좋아요 고유 식별자)' },
-          action: { type: 'string', example: 'like', description: '좋아요 액션 ("like")' }
         },
-        required: ['userId', 'likeId', 'action']
       },
     }
   }
@@ -178,8 +176,7 @@ const likeChallenge = () => {
             type: 'object',
             properties: {
               challengeId: { type: 'string', example: '101' },
-              userId: { type: 'string', example: 'user123' },
-              likeId: { type: 'string', example: 'like789' },
+              userId: { type: 'string', example: '123' },
               message: { type: 'string', example: 'Challenge liked successfully.' }
             }
           }
@@ -252,6 +249,15 @@ const likeChallenge = () => {
   }
 };
  */
+  try {
+    const user_id = req.user.id;
+    const challenge_id = req.body.challengeId;
+    console.log(user_id, challenge_id);
+    const like_challenge = await participationService.increaseChallengeLike(user_id, challenge_id);
+    return res.status(StatusCodes.OK).json(like_challenge);
+  } catch (error) {
+    next(error);
+  }
 };
 const participateInChallenge = () => {
   /**

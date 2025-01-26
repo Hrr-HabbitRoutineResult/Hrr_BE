@@ -1,6 +1,7 @@
+import { StatusCodes } from 'http-status-codes';
 import participationService from '../../services/challenge/participation.service.js';
 
-const joinChallenge = () => {
+const joinChallenge = async (req, res, next) => {
   /**
   #swagger.summary = '특정 챌린지 참가 API';
   #swagger.description = '사용자가 특정 챌린지에 참가하는 API입니다.';
@@ -126,6 +127,14 @@ const joinChallenge = () => {
     }
   };
    */
+  try {
+    const user_id = req.user.id;
+    const challenge_id = parseInt(req.params.challengeId, 10);
+    const join_challenge = await participationService.joinChallenge(user_id, challenge_id);
+    return res.status(StatusCodes.OK).json(join_challenge);
+  } catch (error) {
+    next(error);
+  }
 };
 const likeChallenge = async (req, res, next) => {
   /**

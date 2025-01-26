@@ -542,6 +542,7 @@ enum Duration {
   week_2
   week_3
   month_1
-  month_2
   month_3
+  month_6
+  year_1
 }

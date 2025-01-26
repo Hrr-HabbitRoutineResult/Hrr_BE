@@ -3,7 +3,6 @@ import authMiddleware from '../middlewares/auth.middleware.js';
 import categoryController from '../controllers/challenge/category.controller.js';
 import listController from '../controllers/challenge/list.controller.js';
 import participationController from '../controllers/challenge/participation.controller.js';
-import authMiddleware from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 

@@ -1,32 +1,60 @@
 import listRepository from '../../repositories/challenge/list.repository.js';
 import listError from '../../errors/challenge/list.error.js';
+
 const createChallenge = async data => {
   const created_challenge = await listRepository.createChallenge(data);
   return created_challenge;
 };
 
-const getChallengeList = async ({ type, category, status, frequency_type, name, sort = 'latest' }) => {
+const getChallengeList = async ({
+  type,
+  category,
+  duration,
+  max_participants,
+  status,
+  frequency_type,
+  name,
+  sort = 'latest',
+}) => {
   const filters = {};
   if (type) filters.type = type;
   if (category) filters.category = category;
+  if (duration) filters.duration = duration;
+  if (max_participants) filters.maxParticipants = parseInt(max_participants, 10);
   if (status) filters.status = status;
-  // Frequency 필터 추가
-  if (frequency_type === 'weekly_count') {
-    // 주 몇 회 인증 빈도 조건
-    filters.frequencies = {
-      some: {
-        frequencyType: 'weeklyCount', // 데이터베이스 컬럼명
-      },
-    };
-  } else if (frequency_type === 'specific_days' && day) {
+  if (frequency_type === 'specific_days') {
     // 특정 요일 인증 조건
+    if (day) {
+      filters.frequencies = {
+        some: {
+          frequencyType: 'specificDays',
+          [day]: true, // dynamic 요일 처리
+        },
+      };
+    } else {
+      throw new listError.SendChallengeError('특정 요일은 day 파라미터가 필요합니다.', challenge_id);
+    }
+  } else if (frequency_type === 'weekly_count') {
+    // 주 몇 회 인증 조건
     filters.frequencies = {
       some: {
-        frequencyType: 'specificDays', // 데이터베이스 컬럼명
-        [day]: true, // monday, tuesday 등의 요일 필드
+        frequencyType: 'weeklyCount',
       },
     };
   }
+  // } else if (frequency_type === 'specific_days') {
+  //   // 특정 요일 인증 조건
+  //   if (day) {
+  //     filters.frequencies = {
+  //       some: {
+  //         frequencyType: 'specificDays', // 데이터베이스 컬럼명
+  //         [day]: true, // monday, tuesday 등의 요일 필드
+  //       },
+  //     };
+  //   } else {
+  //     throw new Error();
+  //   }
+  // }
   if (name) {
     filters.challengeKeywords = {
       some: {

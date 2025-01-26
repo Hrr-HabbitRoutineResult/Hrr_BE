@@ -87,10 +87,12 @@ const getChallengeList = async (req, res, next) => {
     logger.debug('챌린지 리스트를 보여드립니다!');
     logger.debug('Request Query:', req.query); // 디버깅 로그 추가
     //쿼리 파라미터 추출하기
-    const { type, category, frequency_type, day, name, sort } = req.query;
-    const challenge_list = await listSerivce.getChallengeList({
+    const { type, category, duration, max_participants, frequency_type, day, name, sort } = req.query;
+    const challenge_list = await listService.getChallengeList({
       type: type || null,
       category: category || null,
+      duration: duration || null,
+      max_participants: max_participants || null,
       frequency_type: frequency_type || null,
       day: day || null,
       name: name || null,

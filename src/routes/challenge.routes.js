@@ -7,17 +7,17 @@ import authMiddleware from '../middlewares/auth.middleware.js';
 const router = express.Router();
 
 // Category
-router.get('/category', categoryController.getChallengeCategory);
-router.get('/hotness', categoryController.getWeeklyHotChallenge);
+router.get('/category', authMiddleware, categoryController.getChallengeCategory);
+router.get('/hotness', authMiddleware, categoryController.getWeeklyHotChallenge);
 
 // List and Detail
-router.get('/', listController.getChallengeList);
-router.get('/search', listController.searchChallenge);
+router.get('/', authMiddleware, listController.getChallengeList);
+router.get('/search', authMiddleware, listController.searchChallenge);
 router.get('/:challengeId', authMiddleware, listController.getChallengeDetail);
-router.post('/', listController.createChallenge);
+router.post('/', authMiddleware, listController.createChallenge);
 
 // Participation
-router.post('/:challengeId/join', authMiddleware, participationController.joinChallenge);
+router.post('/:challengeId/join', participationController.joinChallenge);
 router.post('/:challengeId/like', participationController.likeChallenge);
 router.post('/:challengeId/participation', participationController.participateInChallenge);
 router.get('/:challengeId/challengerslist', participationController.getChallengeParticipantsList);

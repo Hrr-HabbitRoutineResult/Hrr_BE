@@ -300,7 +300,6 @@ model Challenge {
   updated_at          DateTime?           @db.DateTime(6)
   duration            Duration
   category            Category
-  duration            Duration
   user                User                @relation(fields: [owner_id], references: [id])
   challengeLikes      ChallengeLike[]
   frequencies         Frequency[]

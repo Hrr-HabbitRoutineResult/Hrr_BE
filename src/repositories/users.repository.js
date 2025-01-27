@@ -14,51 +14,63 @@ const updateUserInfo = async (email, update_data) => {
 };
 
 const getUserChallenge = async id => {
-  return prisma.user.findUnique({
-    where: { id },
-    include: {
-      userChallenges: true,
-    },
-  });
+  try {
+    return prisma.user.findUnique({
+      where: { id },
+      include: {
+        userChallenges: true,
+      },
+    });
+  } catch (error) {
+    throw new authError.DataBaseError('DataBase Error on updating user information');
+  }
 };
 
 const findOngoingChallenges = async user_id => {
-  return prisma.userChallenge.findMany({
-    where: {
-      user_id,
-      challengeStatus: 'ongoing',
-    },
-    select: {
-      challenge_id: true,
-      challenge: {
-        select: {
-          name: true,
-          challengeImage: true,
-          type: true,
-          // 인증 추가
+  try {
+    return prisma.userChallenge.findMany({
+      where: {
+        user_id,
+        challengeStatus: 'ongoing',
+      },
+      select: {
+        challenge_id: true,
+        challenge: {
+          select: {
+            name: true,
+            challengeImage: true,
+            type: true,
+            // 인증 추가
+          },
         },
       },
-    },
-  });
+    });
+  } catch (error) {
+    throw new authError.DataBaseError('DataBase Error on updating user information');
+  }
 };
 
 const findCompletedChallenges = async user_id => {
-  return prisma.userChallenge.findMany({
-    where: {
-      user_id,
-      challengeStatus: 'completed',
-    },
-    select: {
-      challenge_id: true,
-      challenge: {
-        select: {
-          name: true,
-          challengeImage: true,
-          description: true,
+  try {
+    return prisma.userChallenge.findMany({
+      where: {
+        user_id,
+        challengeStatus: 'completed',
+      },
+      select: {
+        challenge_id: true,
+        challenge: {
+          select: {
+            name: true,
+            challengeImage: true,
+            description: true,
+          },
         },
       },
-    },
-  });
+    });
+  } catch (error) {
+    throw new authError.DataBaseError('DataBase Error on updating user information');
+  }
 };
 
 export default {

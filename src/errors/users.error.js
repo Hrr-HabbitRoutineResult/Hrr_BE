@@ -28,8 +28,19 @@ export class OngoingChallengeNotExistError extends Error {
   }
 }
 
+export class CompletedChallengeNotExistError extends Error {
+  errorCode = 'U004';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 404;
+    this.data = data;
+  }
+}
+
 export default {
   BadgeNotExistError,
   DataBaseError,
   OngoingChallengeNotExistError,
+  CompletedChallengeNotExistError,
 };

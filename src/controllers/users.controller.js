@@ -259,7 +259,7 @@ const getUserChallengesOngoing = async (req, res, next) => {
     next(error);
   }
 };
-const getUserChallengesCompleted = () => {
+const getUserChallengesCompleted = async (req, res, next) => {
   /**
 #swagger.summary = '완료한 챌린지 조회 API';
 #swagger.description = '내가 완료한 챌린지들을 보여주는 API입니다.';
@@ -315,6 +315,14 @@ const getUserChallengesCompleted = () => {
   }
 };
  */
+  try {
+    const email = req.user.email;
+    const completed_challenge = await userService.getCompletedChallenge(email);
+
+    return res.status(StatusCodes.OK).json(completed_challenge);
+  } catch (error) {
+    next(error);
+  }
 };
 const getUserChallengesHistory = () => {
   /**

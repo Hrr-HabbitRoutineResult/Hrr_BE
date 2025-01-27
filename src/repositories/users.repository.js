@@ -42,8 +42,28 @@ const findOngoingChallenges = async user_id => {
   });
 };
 
+const findCompletedChallenges = async user_id => {
+  return prisma.userChallenge.findMany({
+    where: {
+      user_id,
+      challengeStatus: 'completed',
+    },
+    select: {
+      challenge_id: true,
+      challenge: {
+        select: {
+          name: true,
+          challengeImage: true,
+          description: true,
+        },
+      },
+    },
+  });
+};
+
 export default {
   updateUserInfo,
   getUserChallenge,
   findOngoingChallenges,
+  findCompletedChallenges,
 };

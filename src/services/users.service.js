@@ -78,8 +78,25 @@ const getOngoingChallenge = async email => {
   }
 };
 
+const getCompletedChallenge = async email => {
+  try {
+    const user = await userRepository.getUserChallenge(email);
+    const ongoing_challenges = await userRepository.findCompletedChallenges(user.id);
+    const response_data = userDto.userChallengeDto(ongoing_challenges);
+
+    return response_data;
+  } catch (error) {
+    if (error.code === 'U004') {
+      throw new userError.CompletedChallengeNotExistError('진행 중인 챌린지를 찾을 수 없습니다.');
+    } else {
+      throw new userError.DataBaseError('DataBase Error on updating user information');
+    }
+  }
+};
+
 export default {
   getUserInfoByEmail,
   updateUserInfobyEmail,
   getOngoingChallenge,
+  getCompletedChallenge,
 };

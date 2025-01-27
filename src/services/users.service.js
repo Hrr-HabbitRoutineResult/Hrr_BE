@@ -60,10 +60,10 @@ const updateUserInfobyEmail = async (email, update_data) => {
   }
 };
 
-const getOngoingChallenge = async email => {
+const getOngoingChallenge = async id => {
   try {
-    // 사용자 챌린지 가져오기
-    const user = await userRepository.getUserChallenge(email);
+    // 사용자 진행 중인 챌린지 가져오기
+    const user = await userRepository.getUserChallenge(id);
     const ongoing_challenges = await userRepository.findOngoingChallenges(user.id);
     const response_data = userDto.userChallengeDto(ongoing_challenges);
 
@@ -78,9 +78,9 @@ const getOngoingChallenge = async email => {
   }
 };
 
-const getCompletedChallenge = async email => {
+const getCompletedChallenge = async id => {
   try {
-    const user = await userRepository.getUserChallenge(email);
+    const user = await userRepository.getUserChallenge(id);
     const ongoing_challenges = await userRepository.findCompletedChallenges(user.id);
     const response_data = userDto.userChallengeDto(ongoing_challenges);
 

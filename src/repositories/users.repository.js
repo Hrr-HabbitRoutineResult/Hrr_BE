@@ -13,9 +13,9 @@ const updateUserInfo = async (email, update_data) => {
   }
 };
 
-const getUserChallenge = async email => {
+const getUserChallenge = async id => {
   return prisma.user.findUnique({
-    where: { email },
+    where: { id },
     include: {
       userChallenges: true,
     },

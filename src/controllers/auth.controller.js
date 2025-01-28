@@ -428,8 +428,8 @@ const register = async (req, res, next) => {
           properties: {
             email: { type: 'string', example: 'user@example.com' },
             password: { type: 'string', example: 'password123' },
-            name: { type: 'string', example: 'John Doe' },
-            phoneNumber: { type: 'string', example: '01012345678' }
+            nickname: { type: 'string', example: 'John Doe' },
+            verificationId: { type: 'int', example: '1' }
           },
           required: ['email', 'password', 'name', 'phoneNumber']
         },
@@ -441,10 +441,31 @@ const register = async (req, res, next) => {
     content: {
       'application/json': {
         schema: {
-          type: 'object',
-          properties: {
-            message: { type: 'string', example: 'User registered successfully' }
+        type: 'object',
+        properties: {
+          message: { 
+            type: 'string', 
+            example: 'User registered successfully' 
+          },
+          created_user: {
+            type: 'object',
+            properties: {
+              id: { 
+                type: 'integer', 
+                example: 7 
+              },
+              email: { 
+                type: 'string', 
+                example: 'test@example.com' 
+              },
+              nickname: { 
+                type: 'string', 
+                example: 'testuser' 
+              }
+            }
           }
+        }
+      }
         }
       }
     }

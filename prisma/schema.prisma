@@ -28,7 +28,6 @@ model User {
   followingCount         Int
   points                 Int                     @default(0)
   job                    Job?
-  category               Category
   ageGroup               AgeGroup?
   userBadge1             UserBadge?              @relation("Badge1", fields: [userBadge1_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   userBadge2             UserBadge?              @relation("Badge2", fields: [userBadge2_id], references: [id], onDelete: NoAction, onUpdate: NoAction)

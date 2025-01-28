@@ -152,4 +152,5 @@ export default {
   EmailVerificationExpiredError,
   EmailVerificationNotExistsError,
   InvalidVerificationCodeError,
+  EmailVerificationError,
 };

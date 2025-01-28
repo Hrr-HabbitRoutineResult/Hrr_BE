@@ -67,7 +67,7 @@ const generateVerificationCode = () => {
 
 //register-api
 const register = async dto => {
-  const { email, password, verification_id } = dto;
+  const { email, password, nickname, verification_id } = dto;
 
   const verificated_email = await authRepository.findEmailVerificationById(verification_id);
   if (!verificated_email) {
@@ -91,7 +91,7 @@ const register = async dto => {
   const new_user = {
     email: email,
     password: password,
-    nickname: '사용자',
+    nickname: nickname,
     phoneNumber: '010012345678',
     followerCount: 0,
     followingCount: 0,

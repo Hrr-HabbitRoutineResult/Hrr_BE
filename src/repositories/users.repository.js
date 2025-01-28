@@ -13,18 +13,6 @@ const updateUserInfo = async (email, update_data) => {
   }
 };
 
-const getUserChallenge = async () => {
-  try {
-    return prisma.user.findUnique({
-      include: {
-        userChallenges: true,
-      },
-    });
-  } catch (error) {
-    throw new authError.DataBaseError('DataBase Error on updating user information');
-  }
-};
-
 const findOngoingChallenges = async user_id => {
   try {
     return prisma.userChallenge.findMany({
@@ -74,7 +62,6 @@ const findCompletedChallenges = async user_id => {
 
 export default {
   updateUserInfo,
-  getUserChallenge,
   findOngoingChallenges,
   findCompletedChallenges,
 };

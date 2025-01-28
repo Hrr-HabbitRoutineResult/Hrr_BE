@@ -19,7 +19,7 @@ router.post('/', listController.createChallenge);
 // Participation
 router.post('/:challengeId/join', authMiddleware, participationController.joinChallenge);
 router.post('/:challengeId/like', authMiddleware, participationController.likeChallenge);
-router.post('/:challengeId/unlike', authMiddleware, participationController.likeChallenge);
+router.delete('/:challengeId/unlike', authMiddleware, participationController.unlikeChallenge);
 router.post('/:challengeId/participation', participationController.participateInChallenge);
 router.get('/:challengeId/challengerslist', participationController.getChallengeParticipantsList);
 router.get('/:challengeId/challengerslist/kick', participationController.kickChallengeParticipant);

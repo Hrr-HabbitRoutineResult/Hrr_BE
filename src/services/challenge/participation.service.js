@@ -81,7 +81,22 @@ const increaseChallengeLike = async (user_id, challenge_id) => {
   return { ...like_challenge, update_challenge_like };
 };
 
+const decreaseChallengeLike = async (user_id, challenge_id) => {
+  const is_challenge_like_exists = await participationRepository.getChallengeLike(user_id, challenge_id);
+  if (!is_challenge_like_exists) {
+    throw new participationError.DidntLikedError('User didnt liked the challenge');
+  }
+  const challenge = await listRepository.getChallengeDetailById(challenge_id);
+  if (challenge.likesCount == 0) {
+    throw new participationError.LikesBelowZero('Likes cannot get below zero');
+  }
+  const like_challenge = await participationRepository.deleteChallengeLike(user_id, challenge_id);
+  const update_challenge_like = await participationRepository.decreaseChallengeLike(challenge_id);
+  return { ...like_challenge, update_challenge_like };
+};
+
 export default {
   joinChallenge,
   increaseChallengeLike,
+  decreaseChallengeLike,
 };

@@ -36,8 +36,21 @@ const createChallengeLike = async (user_id, challenge_id) => {
     });
     return created_challenge_like;
   } catch (error) {
-    console.log(error);
     throw new participationError.DataBaseError('Error on creating challenge likes');
+  }
+};
+
+const deleteChallengeLike = async (user_id, challenge_id) => {
+  try {
+    const deleted_challenge_like = await prisma.challengeLike.deleteMany({
+      where: {
+        user_id,
+        challenge_id,
+      },
+    });
+    return deleted_challenge_like;
+  } catch (error) {
+    throw new participationError.DataBaseError('Error on deleting challenge likes');
   }
 };
 
@@ -63,7 +76,7 @@ const decreaseChallengeLike = async challenge_id => {
         likesCount: { decrement: 1 }, // likesCount 값을 1 감소
       },
     });
-    return updated_challenge;
+    return updated_challenge.likesCount;
   } catch (error) {
     throw new participationError.DataBaseError('Error on decrementing challenge likes');
   }
@@ -90,4 +103,5 @@ export default {
   increaseChallengeLike,
   decreaseChallengeLike,
   getChallengeLike,
+  deleteChallengeLike,
 };

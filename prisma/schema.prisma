@@ -158,14 +158,17 @@ model Verification {
   id                     Int                     @id @default(autoincrement())
   user_id                Int
   userChallenge_id       Int
+  challengeType          ChallengeType
   verificationType       VerificationType        @map("type")
   photoUrl               String?                 @db.VarChar(255)
   title                  String?                 @db.VarChar(80)
   content                String?                 @db.VarChar(200)
   question               Boolean?
   textUrl                String?                 @db.VarChar(255)
+  verificationStatus     VerificationStatus      @map("status")
   created_at             DateTime?               @default(now())
   updated_at             DateTime?               @updatedAt
+  deadline               DateTime?               @db.DateTime(6)
   adoptionComplete       Boolean                 @default(false)
   user                   User                    @relation(fields: [user_id], references: [id])
   userChallenge          UserChallenge           @relation(fields: [userChallenge_id], references: [id])

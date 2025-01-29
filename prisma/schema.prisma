@@ -168,7 +168,6 @@ model Verification {
   verificationStatus     VerificationStatus      @map("status")
   created_at             DateTime?               @default(now())
   updated_at             DateTime?               @updatedAt
-  deadline               DateTime?               @db.DateTime(6)
   adoptionComplete       Boolean                 @default(false)
   user                   User                    @relation(fields: [user_id], references: [id])
   userChallenge          UserChallenge           @relation(fields: [userChallenge_id], references: [id])
@@ -470,8 +469,8 @@ enum VerificationType {
 }
 
 enum VerificationStatus {
-  verified
-  unverified
+  certified
+  uncertified
 }
 
 enum ScrapType {

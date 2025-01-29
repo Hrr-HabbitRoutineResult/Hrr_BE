@@ -13,37 +13,55 @@ const updateUserInfo = async (email, update_data) => {
   }
 };
 
-const getUserChallenge = async email => {
-  return prisma.user.findUnique({
-    where: { email },
-    include: {
-      userChallenges: true,
-    },
-  });
-};
-
 const findOngoingChallenges = async user_id => {
-  return prisma.userChallenge.findMany({
-    where: {
-      user_id,
-      challengeStatus: 'ongoing',
-    },
-    select: {
-      challenge_id: true,
-      challenge: {
-        select: {
-          name: true,
-          challengeImage: true,
-          type: true,
-          // 인증 추가
+  try {
+    return prisma.userChallenge.findMany({
+      where: {
+        user_id,
+        challengeStatus: 'ongoing',
+      },
+      select: {
+        challenge_id: true,
+        challenge: {
+          select: {
+            name: true,
+            challengeImage: true,
+            type: true,
+            // 인증 추가
+          },
         },
       },
-    },
-  });
+    });
+  } catch (error) {
+    throw new authError.DataBaseError('DataBase Error on updating user information');
+  }
+};
+
+const findCompletedChallenges = async user_id => {
+  try {
+    return prisma.userChallenge.findMany({
+      where: {
+        user_id,
+        challengeStatus: 'completed',
+      },
+      select: {
+        challenge_id: true,
+        challenge: {
+          select: {
+            name: true,
+            challengeImage: true,
+            description: true,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    throw new authError.DataBaseError('DataBase Error on updating user information');
+  }
 };
 
 export default {
   updateUserInfo,
-  getUserChallenge,
   findOngoingChallenges,
+  findCompletedChallenges,
 };

@@ -79,7 +79,7 @@ const createUser = async new_user => {
     const created_user = await prisma.user.create({
       data: new_user,
     });
-    return { id: created_user.id, email: created_user.email, name: created_user.nickname };
+    return { id: created_user.id, email: created_user.email, nickname: created_user.nickname };
   } catch (error) {
     throw new authError.DataBaseError('Error on creating email verification');
   }

@@ -43,7 +43,8 @@ const userChallengeDto = challenges => {
     name: challenge.challenge.name,
     challengeImage: challenge.challenge.challengeImage,
     type: challenge.challenge.type,
-    // 인증 추가가
+    description: challenge.challenge.description,
+    // 인증 추가
   }));
 };
 

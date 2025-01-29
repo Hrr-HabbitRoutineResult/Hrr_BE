@@ -1,5 +1,6 @@
 import categoryService from '../../services/challenge/category.service.js';
 import { StatusCodes } from 'http-status-codes';
+import logger from '../../logger.js';
 
 const getChallengeCategory = async (req, res, next) => {
   /**
@@ -56,6 +57,7 @@ const getChallengeCategory = async (req, res, next) => {
   };
 */
   try {
+    logger.debug('카테고리를 불러옵니다!');
     const category = await categoryService.getChallengeCategories();
     res.status(StatusCodes.OK).json(category);
   } catch (error) {

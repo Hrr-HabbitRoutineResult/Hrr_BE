@@ -28,7 +28,6 @@ model User {
   followingCount         Int
   points                 Int                     @default(0)
   job                    Job?
-  category               Category
   ageGroup               AgeGroup?
   userBadge1             UserBadge?              @relation("Badge1", fields: [userBadge1_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   userBadge2             UserBadge?              @relation("Badge2", fields: [userBadge2_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -207,10 +206,8 @@ model Badge {
   id            Int         @id @default(autoincrement())
   name          String?     @db.VarChar(50)
   icon          String?     @db.VarChar(255)
-  description   String?     @db.Text
   type          BadgeType?
   obtainedCount Int?
-  profileImage  String?     @db.VarChar(255)
   userBadges    UserBadge[]
   conditions    Condition[]
 
@@ -300,6 +297,7 @@ model Challenge {
   updated_at          DateTime?           @db.DateTime(6)
   duration            Duration
   category            Category
+  likesCount          Int                 @default(0)
   user                User                @relation(fields: [owner_id], references: [id])
   challengeLikes      ChallengeLike[]
   frequencies         Frequency[]

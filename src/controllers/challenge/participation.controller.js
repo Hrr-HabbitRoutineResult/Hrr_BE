@@ -1,4 +1,7 @@
-const joinChallenge = () => {
+import { StatusCodes } from 'http-status-codes';
+import participationService from '../../services/challenge/participation.service.js';
+
+const joinChallenge = async (req, res, next) => {
   /**
   #swagger.summary = '특정 챌린지 참가 API';
   #swagger.description = '사용자가 특정 챌린지에 참가하는 API입니다.';
@@ -124,8 +127,16 @@ const joinChallenge = () => {
     }
   };
    */
+  try {
+    const user_id = req.user.id;
+    const challenge_id = parseInt(req.params.challengeId, 10);
+    const join_challenge = await participationService.joinChallenge(user_id, challenge_id);
+    return res.status(StatusCodes.OK).json(join_challenge);
+  } catch (error) {
+    next(error);
+  }
 };
-const likeChallenge = () => {
+const likeChallenge = async (req, res, next) => {
   /**
 #swagger.summary = '챌린지 좋아요 기능 API';
 #swagger.description = '사용자가 특정 챌린지에 좋아요를 추가하는 API입니다.';
@@ -156,11 +167,7 @@ const likeChallenge = () => {
       schema: {
         type: 'object',
         properties: {
-          userId: { type: 'string', example: 'user123', description: '좋아요를 누른 사용자의 ID' },
-          likeId: { type: 'string', example: 'like456', description: '좋아요 ID (새로운 좋아요 고유 식별자)' },
-          action: { type: 'string', example: 'like', description: '좋아요 액션 ("like")' }
         },
-        required: ['userId', 'likeId', 'action']
       },
     }
   }
@@ -178,8 +185,7 @@ const likeChallenge = () => {
             type: 'object',
             properties: {
               challengeId: { type: 'string', example: '101' },
-              userId: { type: 'string', example: 'user123' },
-              likeId: { type: 'string', example: 'like789' },
+              userId: { type: 'string', example: '123' },
               message: { type: 'string', example: 'Challenge liked successfully.' }
             }
           }
@@ -252,7 +258,136 @@ const likeChallenge = () => {
   }
 };
  */
+  try {
+    const user_id = req.user.id;
+    const challenge_id = parseInt(req.params.challengeId, 10);
+    const like_challenge = await participationService.increaseChallengeLike(user_id, challenge_id);
+    return res.status(StatusCodes.OK).json(like_challenge);
+  } catch (error) {
+    next(error);
+  }
 };
+
+const unlikeChallenge = async (req, res, next) => {
+  /**
+   * #swagger.summary = '챌린지 좋아요 취소 API'
+   * #swagger.description = '특정 챌린지에 대한 좋아요를 취소하는 API입니다.'
+   * #swagger.tags = ['Challenge']
+   * #swagger.parameters['Authorization'] = {
+   *   in: 'header',
+   *   required: true,
+   *   schema: { type: 'string', example: 'Bearer {token}' },
+   *   description: '인증을 위한 액세스 토큰'
+   * }
+   * #swagger.parameters['Content-Type'] = {
+   *   in: 'header',
+   *   required: true,
+   *   schema: { type: 'string', example: 'application/json' },
+   *   description: '요청 본문의 콘텐츠 타입'
+   * }
+   * #swagger.parameters['challengeId'] = {
+   *   in: 'path',
+   *   required: true,
+   *   schema: { type: 'string', example: '1' },
+   *   description: '좋아요를 취소할 챌린지 ID'
+   * }
+   * #swagger.responses[200] = {
+   *   description: '좋아요 취소 성공',
+   *   content: {
+   *     'application/json': {
+   *       schema: {
+   *         type: 'object',
+   *         properties: {
+   *           resultType: { type: 'string', example: 'SUCCESS' },
+   *           error: { type: 'object', nullable: true, example: null },
+   *           success: {
+   *             type: 'object',
+   *             properties: {
+   *               id: { type: 'integer', example: 5, description: '좋아요 ID' },
+   *               user_id: { type: 'integer', example: 5, description: '사용자 ID' },
+   *               challenge_id: { type: 'integer', example: 1, description: '챌린지 ID' },
+   *               update_challenge_like: { type: 'integer', example: 5, description: '업데이트된 좋아요 수' }
+   *             }
+   *           }
+   *         }
+   *       }
+   *     }
+   *   }
+   * }
+   * #swagger.responses[400] = {
+   *   description: '잘못된 요청',
+   *   content: {
+   *     'application/json': {
+   *       schema: {
+   *         type: 'object',
+   *         properties: {
+   *           resultType: { type: 'string', example: 'FAIL' },
+   *           error: {
+   *             type: 'object',
+   *             properties: {
+   *               errorCode: { type: 'string', example: 'A100' },
+   *               reason: { type: 'string', example: '잘못된 요청입니다.' }
+   *             }
+   *           },
+   *           success: { type: 'object', nullable: true, example: null }
+   *         }
+   *       }
+   *     }
+   *   }
+   * }
+   * #swagger.responses[401] = {
+   *   description: '인증 실패',
+   *   content: {
+   *     'application/json': {
+   *       schema: {
+   *         type: 'object',
+   *         properties: {
+   *           resultType: { type: 'string', example: 'FAIL' },
+   *           error: { type: 'string', example: 'Unauthorized access.' }
+   *         }
+   *       }
+   *     }
+   *   }
+   * }
+   * #swagger.responses[404] = {
+   *   description: '챌린지를 찾을 수 없음',
+   *   content: {
+   *     'application/json': {
+   *       schema: {
+   *         type: 'object',
+   *         properties: {
+   *           resultType: { type: 'string', example: 'FAIL' },
+   *           error: { type: 'string', example: '챌린지를 찾을 수 없습니다.' }
+   *         }
+   *       }
+   *     }
+   *   }
+   * }
+   * #swagger.responses[500] = {
+   *   description: '서버 오류',
+   *   content: {
+   *     'application/json': {
+   *       schema: {
+   *         type: 'object',
+   *         properties: {
+   *           resultType: { type: 'string', example: 'FAILURE' },
+   *           error: { type: 'string', example: 'Internal server error.' }
+   *         }
+   *       }
+   *     }
+   *   }
+   * }
+   */
+  try {
+    const user_id = req.user.id;
+    const challenge_id = parseInt(req.params.challengeId, 10);
+    const unlike_challenge = await participationService.decreaseChallengeLike(user_id, challenge_id);
+    return res.status(StatusCodes.OK).json(unlike_challenge);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const participateInChallenge = () => {
   /**
   #swagger.summary = '나의 챌린지 인증 현황 조회 API';
@@ -745,6 +880,7 @@ const getChallengeCalendar = () => {
 export default {
   joinChallenge,
   likeChallenge,
+  unlikeChallenge,
   participateInChallenge,
   getChallengeParticipantsList,
   kickChallengeParticipant,

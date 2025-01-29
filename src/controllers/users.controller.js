@@ -1,5 +1,9 @@
+import { StatusCodes } from 'http-status-codes';
+import userService from '../services/users.service.js';
+import userDto from '../dtos/user.dto.js';
+
 const putUserInterests = () => {};
-const getMe = () => {
+const getMe = async (req, res, next) => {
   /**
 #swagger.summary = '사용자 정보 조회 API';
 #swagger.description = '사용자의 기본 정보를 조회합니다.';
@@ -8,7 +12,7 @@ const getMe = () => {
   in: 'header',
   required: true,
   schema: { type: 'string', example: 'Bearer <access_token>' },
-  description: '인증을 위한 액세스 토큰'
+  description: '인증을 위한 액세스 토큰 (Bearer 형태로 전달)'
 };
 #swagger.responses[200] = {
   description: '사용자 정보 조회 성공',
@@ -70,8 +74,16 @@ const getMe = () => {
   }
 };
  */
+  try {
+    const my_email = req.user.email;
+    const my_info = await userService.getUserInfoByEmail(my_email);
+
+    return res.status(StatusCodes.OK).json(my_info);
+  } catch (error) {
+    next(error);
+  }
 };
-const putMe = () => {
+const putMe = async (req, res, next) => {
   /**
 #swagger.summary = '사용자 정보 수정 API';
 #swagger.description = '사용자가 자신의 정보를 수정하는 API입니다.';
@@ -84,18 +96,27 @@ const putMe = () => {
 };
 #swagger.requestBody = {
   required: true,
-  description: '사용자 정보 수정 요청 정보'
+  description: '사용자 정보 수정 요청 정보',
   content: {
     'application/json': {
       schema: {
         type: 'object',
         properties: {
           name: { type: 'string', example: '흐르르' },
-          email: { type: 'string', example: 'updated@example.com' },
-          gender: { type: 'string', example: '남자' },
-          profilePhoto: { type: 'string', example: 'https://example.com/newprofile.jpg' }
+          profilePhoto: { type: 'string', example: 'https://example.com/newprofile.jpg' },
+          badges: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        id1: { type: 'integer', example: 1 },
+                        id2: { type: 'integer', example: 2 },
+                        id3: { type: 'integer', example: 3 }
+                      }
+                    }
+                  }
         },
-        required: ['name', 'email', 'gender', 'profilePhoto']
+        required: ['name', 'profilePhoto', 'badges']
       },
     }
   }
@@ -112,35 +133,17 @@ const putMe = () => {
           success: {
             type: 'object',
             properties: {
-              userInfo: {
-                type: 'object',
-                properties: {
-                  id: { type: 'integer', example: 1 },
-                  phoneNumber: { type: 'string', example: '010-1234-5678' },
-                  level: { type: 'integer', example: 3 },
-                  points: { type: 'integer', example: 2000 },
-                  followerCount: { type: 'integer', example: 100 },
-                  followingCount: { type: 'integer', example: 150 },
-                  badges: {
-                    type: 'array',
-                    items: {
-                      type: 'object',
-                      properties: {
-                        id: { type: 'integer', example: 1 },
-                        name: { type: 'string', example: 'A' },
-                        icon: { type: 'string', example: 'https://example.com/badge1.png' }
-                      }
-                    }
+              name: { type: 'string', example: '흐르르' },
+              profilePhoto: { type: 'string', example: 'https://example.com/newprofile.jpg' },
+              badges: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    id1: { type: 'integer', example: 1 },
+                    id2: { type: 'integer', example: 2 },
+                    id3: { type: 'integer', example: 3 }
                   }
-                }
-              },
-              data: {
-                type: 'object',
-                properties: {
-                  name: { type: 'string', example: '흐르르' },
-                  gender: { type: 'string', example: '남자' },
-                  email: { type: 'string', example: 'updated@example.com' },
-                  profilePhoto: { type: 'string', example: 'https://example.com/newprofile.jpg' }
                 }
               }
             }
@@ -179,8 +182,17 @@ const putMe = () => {
   }
 };
  */
+  try {
+    const email = req.user.email;
+    const my_new_info = await userService.updateUserInfobyEmail(email, userDto.updateUserInfoRequestDto(req.body));
+
+    return res.status(StatusCodes.OK).json(my_new_info);
+  } catch (error) {
+    next(error);
+  }
 };
-const getUserChallengesOngoing = () => {
+
+const getUserChallengesOngoing = async (req, res, next) => {
   /**
 #swagger.summary = '내 챌린지 조회 API';
 #swagger.description = '내가 참여한 챌린지들을 보여주는 API입니다.';
@@ -208,9 +220,11 @@ const getUserChallengesOngoing = () => {
                 items: {
                   type: 'object',
                   properties: {
-                    id: { type: 'integer', example: 1 },
+                    challengeId: { type: 'integer', example: 1 },
                     name: { type: 'string', example: '자잘자잘' },
-                    image: { type: 'string', example: 'https://img1' }
+                    type: { type: 'string', example: '베이직'},
+                    image: { type: 'string', example: 'https://img1' },
+                    verification: { type: 'boolean', example: 'true'}
                   }
                 }
               }
@@ -236,8 +250,16 @@ const getUserChallengesOngoing = () => {
   }
 };
  */
+  try {
+    const id = req.user.id;
+    const ongoing_challenge = await userService.getOngoingChallenge(id);
+
+    return res.status(StatusCodes.OK).json(ongoing_challenge);
+  } catch (error) {
+    next(error);
+  }
 };
-const getUserChallengesCompleted = () => {
+const getUserChallengesCompleted = async (req, res, next) => {
   /**
 #swagger.summary = '완료한 챌린지 조회 API';
 #swagger.description = '내가 완료한 챌린지들을 보여주는 API입니다.';
@@ -265,9 +287,10 @@ const getUserChallengesCompleted = () => {
                 items: {
                   type: 'object',
                   properties: {
-                    id: { type: 'integer', example: 1 },
-                    name: { type: 'string', example: '자잘자잘' },
-                    image: { type: 'string', example: 'https://img1' }
+                    challengeId: { type: 'integer', example: 1 },
+                    name: { type: 'string', example: '런런' },
+                    image: { type: 'string', example: 'https://img1' },
+                    description: { type: 'string', example: '러닝하고 인증하기'}
                   }
                 }
               }
@@ -293,6 +316,14 @@ const getUserChallengesCompleted = () => {
   }
 };
  */
+  try {
+    const id = req.user.id;
+    const completed_challenge = await userService.getCompletedChallenge(id);
+
+    return res.status(StatusCodes.OK).json(completed_challenge);
+  } catch (error) {
+    next(error);
+  }
 };
 const getUserChallengesHistory = () => {
   /**

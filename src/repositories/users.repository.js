@@ -60,8 +60,78 @@ const findCompletedChallenges = async user_id => {
   }
 };
 
+const findTypeBadges = async user_id => {
+  try {
+    const badges = await prisma.userBadge
+      .findMany({
+        where: {
+          user_id,
+          badge: { type: 'type' },
+        },
+        select: {
+          isObtained: true,
+          badge: {
+            select: {
+              id: true,
+              name: true,
+              icon: true,
+            },
+          },
+        },
+      })
+      .then(userBadges =>
+        userBadges.map(ub => ({
+          id: ub.badge.id,
+          name: ub.badge.name,
+          icon: ub.badge.icon,
+          isObtained: ub.isObtained,
+        })),
+      );
+
+    return badges;
+  } catch (error) {
+    throw new authError.DataBaseError('DataBase Error on retrieving badge information');
+  }
+};
+
+const findCategoryBadges = async user_id => {
+  try {
+    const badges = await prisma.userBadge
+      .findMany({
+        where: {
+          user_id,
+          badge: { type: 'category' },
+        },
+        select: {
+          isObtained: true,
+          badge: {
+            select: {
+              id: true,
+              name: true,
+              icon: true,
+            },
+          },
+        },
+      })
+      .then(userBadges =>
+        userBadges.map(ub => ({
+          id: ub.badge.id,
+          name: ub.badge.name,
+          icon: ub.badge.icon,
+          isObtained: ub.isObtained,
+        })),
+      );
+
+    return badges;
+  } catch (error) {
+    throw new authError.DataBaseError('DataBase Error on retrieving badge information');
+  }
+};
+
 export default {
   updateUserInfo,
   findOngoingChallenges,
   findCompletedChallenges,
+  findTypeBadges,
+  findCategoryBadges,
 };

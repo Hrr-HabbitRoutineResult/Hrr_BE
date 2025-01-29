@@ -48,9 +48,25 @@ const userChallengeDto = challenges => {
   }));
 };
 
+const userBadgesDto = (type_badges, category_badges) => {
+  const formatBadges = badges =>
+    badges.map(badge => ({
+      badgeId: badge.id,
+      name: badge.name,
+      icon: badge.icon,
+      isObtained: badge.isObtained,
+    }));
+
+  return {
+    badgesType: formatBadges(type_badges),
+    badgesCategory: formatBadges(category_badges),
+  };
+};
+
 export default {
   serviceToControllerDto,
   updateUserInfoResponseDto,
   updateUserInfoRequestDto,
   userChallengeDto,
+  userBadgesDto,
 };

@@ -165,7 +165,7 @@ model Verification {
   content                String?                 @db.VarChar(200)
   question               Boolean?
   textUrl                String?                 @db.VarChar(255)
-  verificationStatus     VerificationStatus      @map("status")
+  verificationStatus     VerificationStatus      @map("VerificationStatus")
   created_at             DateTime?               @default(now())
   updated_at             DateTime?               @updatedAt
   adoptionComplete       Boolean                 @default(false)

@@ -50,7 +50,7 @@ jobs:
 
             [Service]
             User=${USER}
-            ExecStart=/usr/bin/npm run dev --prefix /opt/app/
+            ExecStart=/usr/bin/npm start --prefix /opt/app/
             Restart=always
 
             [Install]

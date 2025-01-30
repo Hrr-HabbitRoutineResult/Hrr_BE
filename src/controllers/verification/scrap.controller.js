@@ -12,12 +12,6 @@ export const scrapVerification = async (req, res, next) => {
     schema: { type: 'string', example: 'Bearer {token}' },
     description: '인증을 위한 액세스 토큰'
   };
-  #swagger.parameters['challengeId'] = {
-    in: 'path',
-    required: true,
-    schema: { type: 'string', example: '101' },
-    description: '챌린지 ID'
-  };
   #swagger.parameters['verificationId'] = {
     in: 'path',
     required: true,
@@ -48,11 +42,9 @@ export const scrapVerification = async (req, res, next) => {
             success: {
               type: 'object',
               properties: {
-                scrapId: { type: 'string', example: '202' },
-                userId: { type: 'string', example: 'user1' },
-                verificationId: { type: 'string', example: '101' },
-                scrapCount: { type: 'integer', example: 5 },
-                message: { type: 'string', example: 'Scrap added successfully.' }
+                verificationId: { type: 'integer', example: 101 },
+                userId: { type: 'integer', example: 1},
+                likesCount: { type: 'integer', example: 3 },
               }
             }
           }
@@ -144,12 +136,6 @@ export const unscrapVerification = () => {
     schema: { type: 'string', example: 'Bearer {token}' },
     description: '인증을 위한 액세스 토큰'
   };
-  #swagger.parameters['challengeId'] = {
-    in: 'path',
-    required: true,
-    schema: { type: 'string', example: '101' },
-    description: '챌린지 ID'
-  };
   #swagger.parameters['verificationId'] = {
     in: 'path',
     required: true,
@@ -183,11 +169,9 @@ export const unscrapVerification = () => {
             success: {
               type: 'object',
               properties: {
-                scrapId: { type: 'string', example: '202' },
-                userId: { type: 'string', example: 'user1' },
-                verificationId: { type: 'string', example: '101' },
-                scrapCount: { type: 'integer', example: 4 },
-                message: { type: 'string', example: 'Scrap removed successfully.' }
+                verificationId: { type: 'integer', example: 101 },
+                userId: { type: 'integer', example: 1},
+                likesCount: { type: 'integer', example: 3 },
               }
             }
           }

@@ -60,8 +60,53 @@ const findCompletedChallenges = async user_id => {
   }
 };
 
+const findUserChallengeHistory = async user_id => {
+  try {
+    // userchallenge 테이블에서 데이터 가져오기
+    const userChallenges = await prisma.userChallenge.findMany({
+      where: { user_id },
+      include: {
+        challenge: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    return userChallenges;
+  } catch (error) {
+    throw new authError.DataBaseError('DataBase Error on updating user information');
+  }
+};
+
+const findUserVerificationHistory = async user_id => {
+  try {
+    // verification 테이블에서 데이터 가져오기
+    const verifications = await prisma.verification.findMany({
+      where: {
+        user_id,
+      },
+      select: {
+        id: true,
+        created_at: true,
+        title: true,
+        photoUrl: true,
+        textUrl: true,
+        userChallenge_id: true,
+      },
+    });
+
+    return verifications;
+  } catch (error) {
+    throw new authError.DataBaseError('DataBase Error on updating user information');
+  }
+};
+
 export default {
   updateUserInfo,
   findOngoingChallenges,
   findCompletedChallenges,
+  findUserChallengeHistory,
+  findUserVerificationHistory,
 };

@@ -99,8 +99,9 @@ const getChallengeLike = async (user_id, challenge_id) => {
 const getChallengeList = async challenge_id => {
   try {
     const challenger_list = await prisma.userChallenge.findMany({
-      where: { challenge_id }, // 특정 챌린지에 속한 사용자 조회
+      where: { challenge_id },
       select: {
+        owner: true,
         user: {
           select: {
             id: true,
@@ -109,7 +110,16 @@ const getChallengeList = async challenge_id => {
         },
       },
     });
-    return challenger_list.map(challenger => challenger.user);
+
+    // Boolean 값이 true인 항목을 맨 앞으로 정렬
+    challenger_list.sort((a, b) => b.owner - a.owner);
+
+    // owner 값과 함께 반환
+    return challenger_list.map(challenger => ({
+      id: challenger.user.id,
+      nickname: challenger.user.nickname,
+      owner: challenger.owner,
+    }));
   } catch (error) {
     console.error('Error fetching challenge participants:', error);
     throw new Error('Failed to fetch challenge participants');

@@ -10,6 +10,8 @@ router.get('/challenges/ongoing', authMiddleware, usersController.getUserChallen
 router.get('/challenges/completed', authMiddleware, usersController.getUserChallengesCompleted);
 router.get('/challenges/verification/history', authMiddleware, usersController.getUserChallengesHistory);
 router.get('/badges', authMiddleware, usersController.getUserBadges);
+router.post('/:followedUserId/follow', authMiddleware, usersController.postUserFollow);
+router.delete('/:userId/follow', usersController.deleteUserFollow);
 router.post('/:userId/follow', usersController.postUserFollow);
 router.delete('/:unfollowedUserId/unfollow', authMiddleware, usersController.deleteUserFollow);
 router.get('/:userId/scraps', usersController.getUserScraps);

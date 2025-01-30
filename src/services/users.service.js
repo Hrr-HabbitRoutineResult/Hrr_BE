@@ -101,6 +101,15 @@ const getUserBadgesById = async id => {
   return response_data;
 };
 
+const postUserFollowById = async (user_id, followed_user_id) => {
+  if (user_id === followed_user_id) {
+    throw new userError.CannotFollowSelfError('자기 자신은 팔로우할 수 없습니다.');
+  }
+  const user_follow = await userRepository.createUserFollows(user_id, followed_user_id);
+  const response_data = userDto.userFollowDto(user_follow);
+  return response_data;
+};
+
 const deleteUserFollowById = async (user_id, unfollowed_user_id) => {
   if (user_id === unfollowed_user_id) {
     throw new userError.CannotFollowSelfError('자기 자신은 언팔로우할 수 없습니다.');
@@ -117,5 +126,6 @@ export default {
   getCompletedChallenge,
   getUserChallengeHistory,
   getUserBadgesById,
+  postUserFollowById,
   deleteUserFollowById,
 };

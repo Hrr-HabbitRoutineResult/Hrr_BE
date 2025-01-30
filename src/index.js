@@ -34,17 +34,18 @@ app.use((req, res, next) => {
 /*****************공통 응답을 사용할 수 있는 헬퍼 함수 등록*********************/
 
 // /****************전역 오류를 처리하기 위한 미들웨어*******************/
-// app.use((err, req, res, next) => {
-//   if (res.headersSent) {
-//     return next(err);
-//   }
-//   console.log(err);
-//   res.status(err.statusCode || 500).error({
-//     errorCode: err.errorCode || 'unknown',
-//     reason: err.reson || err.message || null,
-//     data: err.data || null,
-//   });
-// });
+app.use((err, req, res, next) => {
+  if (res.headersSent) {
+    return next(err);
+  }
+  logger.error(`Error occurred: ${err.errorCode}, Reason: ${err.reason}`);
+  // res.status(err.statusCode || 500).error({
+  //   errorCode: err.errorCode || 'unknown',
+  //   reason: err.reson || err.message || null,
+  //   data: err.data || null,
+  // });
+  next(err);
+});
 // /****************전역 오류를 처리하기 위한 미들웨어*******************/
 
 app.use(
@@ -81,7 +82,7 @@ app.get('/openapi.json', async (req, res, next) => {
   res.json(result ? result.data : null);
 });
 
-app.use(morganMiddleware);
+// app.use(morganMiddleware);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

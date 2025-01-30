@@ -79,6 +79,14 @@ const userChallengeHistoryDto = (user_challenges, verifications) => {
   });
 };
 
+const userUnfollowDto = unfollowed_user_id => {
+  const response_data = {
+    message: 'User unfollowed successfully',
+    unfollowedUserId: unfollowed_user_id[0].id,
+  };
+  return response_data;
+};
+
 export default {
   serviceToControllerDto,
   updateUserInfoResponseDto,
@@ -86,4 +94,5 @@ export default {
   userChallengeDto,
   userBadgesDto,
   userChallengeHistoryDto,
+  userUnfollowDto,
 };

@@ -48,14 +48,29 @@ const userChallengeDto = challenges => {
   }));
 };
 
+const userBadgesDto = (type_badges, category_badges) => {
+  const formatBadges = badges =>
+    badges.map(badge => ({
+      badgeId: badge.id,
+      name: badge.name,
+      icon: badge.icon,
+      isObtained: badge.isObtained,
+    }));
+
+  return {
+    typeBadges: formatBadges(type_badges),
+    categoryBadges: formatBadges(category_badges),
+  };
+};
+
 const userChallengeHistoryDto = (user_challenges, verifications) => {
   return user_challenges.map(userChallenge => {
     const verification = verifications.find(v => v.userChallenge_id === userChallenge.id);
 
     return {
-      challenge_id: userChallenge.challenge_id,
+      challengeId: userChallenge.challenge_id,
       name: userChallenge.challenge.name,
-      verification_id: verification ? verification.id : null,
+      verificationId: verification ? verification.id : null,
       created_at: verification ? verification.created_at : null,
       title: verification ? verification.title : null,
       photoUrl: verification ? verification.photoUrl : null,
@@ -69,5 +84,6 @@ export default {
   updateUserInfoResponseDto,
   updateUserInfoRequestDto,
   userChallengeDto,
+  userBadgesDto,
   userChallengeHistoryDto,
 };

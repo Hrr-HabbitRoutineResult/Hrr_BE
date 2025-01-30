@@ -90,10 +90,22 @@ const getUserChallengeHistory = async id => {
   return response_data;
 };
 
+const getUserBadgesById = async id => {
+  const type_badges = await userRepository.findUserTypeBadges(id);
+  const category_badges = await userRepository.findUserCategoryBadges(id);
+  const response_data = userDto.userBadgesDto(type_badges, category_badges);
+  if (!response_data) {
+    return null;
+  }
+
+  return response_data;
+};
+
 export default {
   getUserInfoByEmail,
   updateUserInfobyEmail,
   getOngoingChallenge,
   getCompletedChallenge,
   getUserChallengeHistory,
+  getUserBadgesById,
 };

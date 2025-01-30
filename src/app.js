@@ -7,9 +7,12 @@ import messageRoutes from './routes/message.routes.js';
 import postRoutes from './routes/post.routes.js';
 import boardRoutes from './routes/board.routes.js';
 import verificationRoutes from './routes/verification.routes.js';
+import morganMiddleware from './middlewares/morganMiddleware.js';
 dotenv.config();
 
 const app = express();
+
+app.use(morganMiddleware);
 app.use(express.json());
 
 // Auth Routes

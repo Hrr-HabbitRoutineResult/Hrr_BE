@@ -559,11 +559,13 @@ const getChallengerList = async (req, res, next) => {
       example: [
         {
           id: 5,
-          nickname: 'john_doe'
+          nickname: 'john_doe',
+          owner: true
         },
         {
           id: 8,
-          nickname: 'jane_smith'
+          nickname: 'jane_smith',
+          owner: false
         }
       ]
     }

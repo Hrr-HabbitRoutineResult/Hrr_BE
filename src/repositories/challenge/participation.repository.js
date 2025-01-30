@@ -1,5 +1,5 @@
 import { prisma } from '../../db.config.js';
-import participationError from '../../errors/challenge/participation.error.js';
+import participationError, { DataBaseError } from '../../errors/challenge/participation.error.js';
 
 const joinChallenge = async data => {
   try {
@@ -121,8 +121,7 @@ const getChallengeList = async challenge_id => {
       owner: challenger.owner,
     }));
   } catch (error) {
-    console.error('Error fetching challenge participants:', error);
-    throw new Error('Failed to fetch challenge participants');
+    throw new DataBaseError.DataBaseError('Failed to fetch challenge participants');
   }
 };
 

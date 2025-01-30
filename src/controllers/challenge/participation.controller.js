@@ -543,37 +543,33 @@ const getChallengerList = async (req, res, next) => {
     description: '챌린지 ID'
   };
   #swagger.responses[200] = {
-    description: '챌린저 리스트 조회 성공',
-    content: {
-      'application/json': {
-        schema: {
+  description: '챌린저 리스트 조회 성공',
+  content: {
+    'application/json': {
+      schema: {
+        type: 'array',
+        items: {
           type: 'object',
           properties: {
-            resultType: { type: 'string', example: 'SUCCESS' },
-            error: { type: 'object', nullable: true, example: null },
-            success: {
-              type: 'object',
-              properties: {
-                challengerslist: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      userId: { type: 'integer', example: 1 },
-                      name: { type: 'string', example: '홍길동' },
-                      profilePhoto: { type: 'string', example: 'https://profile1.com' },
-                      verifyCount: { type: 'integer', example: 5 },
-                      status: { type: 'string', example: 'verified', description: '인증 상태 (verified, unverified)' }
-                    }
-                  }
-                }
-              }
-            }
+            id: { type: 'integer', example: 5 },
+            nickname: { type: 'string', example: 'john_doe' }
           }
         }
-      }
+      },
+      example: [
+        {
+          id: 5,
+          nickname: 'john_doe'
+        },
+        {
+          id: 8,
+          nickname: 'jane_smith'
+        }
+      ]
     }
-  };
+  }
+};
+
   #swagger.responses[400] = {
     description: '잘못된 요청',
     content: {
@@ -638,6 +634,13 @@ const getChallengerList = async (req, res, next) => {
     }
   };
    */
+  try {
+    const challenge_id = parseInt(req.params.challengeId, 10);
+    const challenger_list = await participationService.getChallengerList(challenge_id);
+    return res.status(StatusCodes.OK).json(challenger_list);
+  } catch (error) {
+    next(error);
+  }
 };
 const kickChallenger = () => {
   /**

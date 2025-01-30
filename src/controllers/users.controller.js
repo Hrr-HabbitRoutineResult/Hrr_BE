@@ -353,13 +353,15 @@ const getUserChallengesHistory = async (req, res, next) => {
                   items: {
                     type: 'object',
                     properties: {
-                      challengeId: { type: 'integer', example: 1 },
-                      title: { type: 'string', example: '30일 걷기 챌린지' },
-                      date: { 
-                        type: 'array', 
-                        items: { type: 'string', example: '2025-01-01' } 
+                      challengeId: { type: 'integer', example: 2 },
+                      name: { type: 'string', example: '영화 봐요' },
+                      verificationId: { type: 'integer', example: '1'},
+                      created_at: { 
+                        type: 'string', example: '2025-01-30T04:28:48.125Z'
                       },
-                      url: { type: 'string', example: 'https://url1.com' }
+                      title: { type: 'string', example: '1일차 챌린지 인증'},
+                      photoUrl: { type: 'string', example: 'https://url1.com' },
+                      textUrl: { type: 'string', example: 'https://url2.com' }
                     }
                   }
                 }
@@ -394,7 +396,7 @@ const getUserChallengesHistory = async (req, res, next) => {
     next(error);
   }
 };
-const getUserBadges = () => {
+const getUserBadges = async (req, res, next) => {
   /**
   #swagger.summary = '사용자 배지 조회 API';
   #swagger.description = '사용자가 획득한 배지 정보를 조회합니다.';
@@ -418,14 +420,31 @@ const getUserBadges = () => {
               type: 'object',
               properties: {
                 data: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      badgeId: { type: 'integer', example: 1 },
-                      name: { type: 'string', example: '걷기 마스터' },
-                      icon: { type: 'string', example: 'https://example.com/badge1.png' },
-                      description: { type: 'string', example: '30일 연속 걷기 챌린지 완료' }
+                  type: 'object',
+                  properties: {
+                    typeBadges: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          badgeId: { type: 'integer', example: 1 },
+                          name: { type: 'string', example: '운동 마스터' },
+                          icon: { type: 'string', example: 'https://example.com/badge1.png' },
+                          isObtained: { type: 'boolean', example: true }
+                        }
+                      }
+                    },
+                    categoryBadges: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          badgeId: { type: 'integer', example: 2 },
+                          name: { type: 'string', example: '학업 스타터' },
+                          icon: { type: 'string', example: 'https://example.com/badge2.png' },
+                          isObtained: { type: 'boolean', example: false }
+                        }
+                      }
                     }
                   }
                 }
@@ -451,6 +470,14 @@ const getUserBadges = () => {
     }
   };
    */
+  try {
+    const id = req.user.id;
+    const all_badges = await userService.getUserBadgesById(id);
+
+    return res.status(StatusCodes.OK).json(all_badges);
+  } catch (error) {
+    next(error);
+  }
 };
 const postUserFollow = () => {
   /**

@@ -96,6 +96,26 @@ const getChallengeLike = async (user_id, challenge_id) => {
   }
 };
 
+const getChallengeList = async challenge_id => {
+  try {
+    const challenger_list = await prisma.userChallenge.findMany({
+      where: { challenge_id }, // 특정 챌린지에 속한 사용자 조회
+      select: {
+        user: {
+          select: {
+            id: true,
+            nickname: true,
+          },
+        },
+      },
+    });
+    return challenger_list.map(challenger => challenger.user);
+  } catch (error) {
+    console.error('Error fetching challenge participants:', error);
+    throw new Error('Failed to fetch challenge participants');
+  }
+};
+
 export default {
   joinChallenge,
   getUserChallengeById,
@@ -104,4 +124,5 @@ export default {
   decreaseChallengeLike,
   getChallengeLike,
   deleteChallengeLike,
+  getChallengeList,
 };

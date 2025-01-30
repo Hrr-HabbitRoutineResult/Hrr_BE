@@ -1,3 +1,7 @@
+import { StatusCodes } from 'http-status-codes';
+import verificationService from '../../services/verification/verification.service.js';
+import verificationDto from '../../dtos/verification/verification.dto.js';
+
 const getChallengeVerificationStatus = () => {
   /**
   #swagger.summary = '챌린지 인증 현황 조회 API';
@@ -360,7 +364,7 @@ const getSpecificVerification = () => {
   };
    */
 };
-const cameraVerification = () => {
+const cameraVerification = async (req, res, next) => {
   /**
   #swagger.summary = '챌린지 사진 인증 등록 API';
   #swagger.description = '특정 챌린지에 사진 인증을 등록하는 API입니다. (사진 업로드, 다시 찍기, 인증하기 등 처리)';
@@ -502,7 +506,18 @@ const cameraVerification = () => {
     }
   };
    */
+  try {
+    const user_id = req.user.id;
+    const challenge_id = req.params.challengeId;
+    const dto = verificationDto.cameraVerificationBodyToServiceDto(user_id, challenge_id, req.body);
+    const completed_challenge = await verificationService.verifyWithCamera(dto);
+
+    return res.status(StatusCodes.OK).json(completed_challenge);
+  } catch (error) {
+    next(error);
+  }
 };
+
 const textVerification = () => {
   /**
   #swagger.summary = '챌린지 글 인증 등록 API';

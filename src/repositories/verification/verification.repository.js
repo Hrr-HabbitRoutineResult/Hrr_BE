@@ -8,7 +8,6 @@ const verifyWithCamera = async dto => {
     });
     return camera_verification;
   } catch (error) {
-    console.log(error);
     throw new databaseError.DataBaseError('Error on creating email verification');
   }
 };

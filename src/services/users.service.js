@@ -110,6 +110,15 @@ const postUserFollowById = async (user_id, followed_user_id) => {
   return response_data;
 };
 
+const deleteUserFollowById = async (user_id, unfollowed_user_id) => {
+  if (user_id === unfollowed_user_id) {
+    throw new userError.CannotFollowSelfError('자기 자신은 언팔로우할 수 없습니다.');
+  }
+  const user_unfollow = await userRepository.userUnfollows(user_id, unfollowed_user_id);
+  const response_data = userDto.userUnfollowDto(user_unfollow);
+  return response_data;
+};
+
 export default {
   getUserInfoByEmail,
   updateUserInfobyEmail,
@@ -118,4 +127,5 @@ export default {
   getUserChallengeHistory,
   getUserBadgesById,
   postUserFollowById,
+  deleteUserFollowById,
 };

@@ -207,6 +207,34 @@ const createUserFollows = async (follower_user_id, followed_user_id) => {
   }
 };
 
+const userUnfollows = async (unfollower_user_id, unfollowed_user_id) => {
+  const result = await prisma.follow.deleteMany({
+    where: {
+      follower_id: unfollower_user_id,
+      following_id: unfollowed_user_id,
+    },
+  });
+
+  // 삭제된 데이터가 없다면 예외 발생
+  if (result.count === 0) {
+    throw new userError.NotFollowingUserError('팔로우하지 않은 사용자입니다.');
+  }
+
+  return await prisma.$transaction([
+    // 상대방의 팔로워 수 감소
+    prisma.user.update({
+      where: { id: unfollowed_user_id },
+      data: { followerCount: { decrement: 1 } },
+    }),
+
+    // 팔로잉 수 감소
+    prisma.user.update({
+      where: { id: unfollower_user_id },
+      data: { followingCount: { decrement: 1 } },
+    }),
+  ]);
+};
+
 export default {
   updateUserInfo,
   findOngoingChallenges,
@@ -216,4 +244,5 @@ export default {
   findUserChallengeHistory,
   findUserVerificationHistory,
   createUserFollows,
+  userUnfollows,
 };

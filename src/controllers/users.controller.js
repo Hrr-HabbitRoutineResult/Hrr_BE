@@ -565,7 +565,7 @@ const postUserFollow = async (req, res, next) => {
     next(error);
   }
 };
-const deleteUserFollow = () => {
+const deleteUserFollow = async (req, res, next) => {
   /**
   #swagger.summary = '사용자 언팔로우 API';
   #swagger.description = '특정 사용자를 언팔로우합니다.';
@@ -641,6 +641,15 @@ const deleteUserFollow = () => {
     }
   };
    */
+  try {
+    const unfollowed_user_id = req.params.unfollowedUserId;
+    const user_id = req.user.id;
+    const response = await userService.deleteUserFollowById(user_id, Number(unfollowed_user_id));
+
+    return res.status(StatusCodes.OK).json(response);
+  } catch (error) {
+    next(error);
+  }
 };
 const getUserScraps = () => {
   /**

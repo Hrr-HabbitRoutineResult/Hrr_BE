@@ -353,13 +353,15 @@ const getUserChallengesHistory = async (req, res, next) => {
                   items: {
                     type: 'object',
                     properties: {
-                      challengeId: { type: 'integer', example: 1 },
-                      title: { type: 'string', example: '30일 걷기 챌린지' },
-                      date: { 
-                        type: 'array', 
-                        items: { type: 'string', example: '2025-01-01' } 
+                      challengeId: { type: 'integer', example: 2 },
+                      name: { type: 'string', example: '영화 봐요' },
+                      verificationId: { type: 'integer', example: '1'},
+                      created_at: { 
+                        type: 'string', example: '2025-01-30T04:28:48.125Z'
                       },
-                      url: { type: 'string', example: 'https://url1.com' }
+                      title: { type: 'string', example: '1일차 챌린지 인증'},
+                      photoUrl: { type: 'string', example: 'https://url1.com' },
+                      textUrl: { type: 'string', example: 'https://url2.com' }
                     }
                   }
                 }
@@ -426,7 +428,7 @@ const getUserBadges = async (req, res, next) => {
                         type: 'object',
                         properties: {
                           badgeId: { type: 'integer', example: 1 },
-                          name: { type: 'string', example: '오늘부터 챌린저' },
+                          name: { type: 'string', example: '운동 마스터' },
                           icon: { type: 'string', example: 'https://example.com/badge1.png' },
                           isObtained: { type: 'boolean', example: true }
                         }
@@ -438,7 +440,7 @@ const getUserBadges = async (req, res, next) => {
                         type: 'object',
                         properties: {
                           badgeId: { type: 'integer', example: 2 },
-                          name: { type: 'string', example: '운동 마스터' },
+                          name: { type: 'string', example: '학업 스타터' },
                           icon: { type: 'string', example: 'https://example.com/badge2.png' },
                           isObtained: { type: 'boolean', example: false }
                         }

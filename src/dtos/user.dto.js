@@ -68,9 +68,9 @@ const userChallengeHistoryDto = (user_challenges, verifications) => {
     const verification = verifications.find(v => v.userChallenge_id === userChallenge.id);
 
     return {
-      challenge_id: userChallenge.challenge_id,
+      challengeId: userChallenge.challenge_id,
       name: userChallenge.challenge.name,
-      verification_id: verification ? verification.id : null,
+      verificationId: verification ? verification.id : null,
       created_at: verification ? verification.created_at : null,
       title: verification ? verification.title : null,
       photoUrl: verification ? verification.photoUrl : null,

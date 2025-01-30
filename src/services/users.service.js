@@ -79,6 +79,17 @@ const getCompletedChallenge = async id => {
   return response_data;
 };
 
+const getUserChallengeHistory = async id => {
+  const challenge_history = await userRepository.findUserChallengeHistory(id);
+  const verification_history = await userRepository.findUserVerificationHistory(id);
+  const response_data = userDto.userChallengeHistoryDto(challenge_history, verification_history);
+  if (!response_data) {
+    return null;
+  }
+
+  return response_data;
+};
+
 const getUserBadgesById = async id => {
   const type_badges = await userRepository.findUserTypeBadges(id);
   const category_badges = await userRepository.findUserCategoryBadges(id);
@@ -95,5 +106,6 @@ export default {
   updateUserInfobyEmail,
   getOngoingChallenge,
   getCompletedChallenge,
+  getUserChallengeHistory,
   getUserBadgesById,
 };

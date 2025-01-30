@@ -325,7 +325,7 @@ const getUserChallengesCompleted = async (req, res, next) => {
     next(error);
   }
 };
-const getUserChallengesHistory = () => {
+const getUserChallengesHistory = async (req, res, next) => {
   /**
   #swagger.summary = '챌린지 기록 조회 API';
   #swagger.description = '사용자가 인증한 챌린지 기록을 조회합니다.';
@@ -385,6 +385,14 @@ const getUserChallengesHistory = () => {
     }
   };
    */
+  try {
+    const id = req.user.id;
+    const challenge_history = await userService.getUserChallengeHistory(id);
+
+    return res.status(StatusCodes.OK).json(challenge_history);
+  } catch (error) {
+    next(error);
+  }
 };
 const getUserBadges = async (req, res, next) => {
   /**

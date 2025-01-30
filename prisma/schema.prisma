@@ -206,10 +206,8 @@ model Badge {
   id            Int         @id @default(autoincrement())
   name          String?     @db.VarChar(50)
   icon          String?     @db.VarChar(255)
-  description   String?     @db.Text
   type          BadgeType?
   obtainedCount Int?
-  profileImage  String?     @db.VarChar(255)
   userBadges    UserBadge[]
   conditions    Condition[]
 

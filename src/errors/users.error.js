@@ -58,16 +58,6 @@ export class NotFollowingUserError extends Error {
   }
 }
 
-export class DataBaseError extends Error {
-  errorCode = 'U003';
-  constructor(reason, data) {
-    super(reason);
-    this.reason = reason;
-    this.statuscode = 400;
-    this.data = data;
-  }
-}
-
 export default {
   BadgeNotExistError,
   CannotFollowSelfError,

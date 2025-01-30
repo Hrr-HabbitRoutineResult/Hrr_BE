@@ -1,8 +1,6 @@
 import { prisma } from '../db.config.js';
 import { Prisma } from '@prisma/client';
-import { Prisma } from '@prisma/client';
 import authError from '../errors/auth.error.js';
-import userError from '../errors/users.error.js';
 import userError from '../errors/users.error.js';
 
 const updateUserInfo = async (email, update_data) => {

@@ -65,5 +65,4 @@ export default {
   UserNotExistError,
   FollowedUserError,
   NotFollowingUserError,
-  DataBaseError,
 };

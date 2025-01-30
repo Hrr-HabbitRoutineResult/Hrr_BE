@@ -1,4 +1,7 @@
-export const scrapVerification = () => {
+import { StatusCodes } from 'http-status-codes';
+import scrapService from '../../services/verification/scrap.service.js';
+
+export const scrapVerification = async (req, res, next) => {
   /**
   #swagger.summary = '특정 인증 스크랩 API';
   #swagger.description = '특정 챌린지 인증을 스크랩하는 API입니다.';
@@ -8,12 +11,6 @@ export const scrapVerification = () => {
     required: true,
     schema: { type: 'string', example: 'Bearer {token}' },
     description: '인증을 위한 액세스 토큰'
-  };
-  #swagger.parameters['challengeId'] = {
-    in: 'path',
-    required: true,
-    schema: { type: 'string', example: '101' },
-    description: '챌린지 ID'
   };
   #swagger.parameters['verificationId'] = {
     in: 'path',
@@ -45,11 +42,9 @@ export const scrapVerification = () => {
             success: {
               type: 'object',
               properties: {
-                scrapId: { type: 'string', example: '202' },
-                userId: { type: 'string', example: 'user1' },
-                verificationId: { type: 'string', example: '101' },
-                scrapCount: { type: 'integer', example: 5 },
-                message: { type: 'string', example: 'Scrap added successfully.' }
+                verificationId: { type: 'integer', example: 101 },
+                userId: { type: 'integer', example: 1},
+                likesCount: { type: 'integer', example: 3 },
               }
             }
           }
@@ -121,8 +116,17 @@ export const scrapVerification = () => {
     }
   };
    */
+  try {
+    const user_id = req.user.id;
+    const verification_id = Number(req.params.verificationId);
+    const scrap_verification = await scrapService.scrapVerification(user_id, verification_id);
+    return res.status(StatusCodes.OK).json(scrap_verification);
+  } catch (error) {
+    next(error);
+  }
 };
-export const unscrapVerification = () => {
+
+export const unscrapVerification = async (req, res, next) => {
   /**
   #swagger.summary = '특정 인증 스크랩 취소 API';
   #swagger.description = '특정 챌린지 인증에 추가된 스크랩을 취소하는 API입니다.';
@@ -132,12 +136,6 @@ export const unscrapVerification = () => {
     required: true,
     schema: { type: 'string', example: 'Bearer {token}' },
     description: '인증을 위한 액세스 토큰'
-  };
-  #swagger.parameters['challengeId'] = {
-    in: 'path',
-    required: true,
-    schema: { type: 'string', example: '101' },
-    description: '챌린지 ID'
   };
   #swagger.parameters['verificationId'] = {
     in: 'path',
@@ -172,11 +170,9 @@ export const unscrapVerification = () => {
             success: {
               type: 'object',
               properties: {
-                scrapId: { type: 'string', example: '202' },
-                userId: { type: 'string', example: 'user1' },
-                verificationId: { type: 'string', example: '101' },
-                scrapCount: { type: 'integer', example: 4 },
-                message: { type: 'string', example: 'Scrap removed successfully.' }
+                verificationId: { type: 'integer', example: 101 },
+                userId: { type: 'integer', example: 1},
+                likesCount: { type: 'integer', example: 3 },
               }
             }
           }
@@ -248,6 +244,14 @@ export const unscrapVerification = () => {
     }
   };
    */
+  try {
+    const user_id = req.user.id;
+    const verification_id = Number(req.params.verificationId);
+    const unscrap_verification = await scrapService.unscrapVerification(user_id, verification_id);
+    return res.status(StatusCodes.OK).json(unscrap_verification);
+  } catch (error) {
+    next(error);
+  }
 };
 
 export default {

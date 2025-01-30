@@ -1,11 +1,11 @@
 import { prisma } from '../../db.config.js';
 import databaseError from '../../errors/database.error.js';
-import likeError from '../../errors/verification/like.error.js';
+import scrapError from '../../errors/verification/scrap.error.js';
 
-const likeVerification = async (user_id, verification_id) => {
+const scrapVerification = async (user_id, verification_id) => {
   try {
     return await prisma.$transaction([
-      prisma.verificationLike.create({
+      prisma.verificationScrap.create({
         data: {
           user_id: user_id,
           verification_id: verification_id,
@@ -13,7 +13,7 @@ const likeVerification = async (user_id, verification_id) => {
       }),
       prisma.verification.update({
         where: { id: verification_id },
-        data: { likesCount: { increment: 1 } },
+        data: { scrapsCount: { increment: 1 } },
       }),
     ]);
   } catch (error) {
@@ -21,10 +21,10 @@ const likeVerification = async (user_id, verification_id) => {
   }
 };
 
-const unlikeVerification = async (user_id, verification_id) => {
+const unscrapVerification = async (user_id, verification_id) => {
   try {
     return await prisma.$transaction([
-      prisma.verificationLike.delete({
+      prisma.verificationScrap.delete({
         where: {
           user_id_verification_id: { user_id, verification_id },
         },
@@ -32,22 +32,22 @@ const unlikeVerification = async (user_id, verification_id) => {
       prisma.verification.update({
         where: {
           id: verification_id,
-          likesCount: { gt: 0 },
+          scrapsCount: { gt: 0 },
         },
-        data: { likesCount: { decrement: 1 } },
+        data: { scrapsCount: { decrement: 1 } },
       }),
     ]);
   } catch (error) {
     if (error.code === 'P2025') {
-      throw new likeError.VerificationLikesUnderZeroError('좋아요 개수가 음수가 되었습니다.');
+      throw new scrapError.VerificationScrapsUnderZeroError('스크랩 수가 음수가 되었습니다.');
     }
-    throw new databaseError.DataBaseError('Database error occurred while unliking verification');
+    throw new databaseError.DataBaseError('Database error occurred while unscraping verifications');
   }
 };
 
-const checkVerificationLiked = async (user_id, verification_id) => {
+const checkVerificationScraped = async (user_id, verification_id) => {
   try {
-    const verification_liked = await prisma.verificationLike.findUnique({
+    const verification_scraped = await prisma.verificationScrap.findUnique({
       where: {
         user_id_verification_id: {
           user_id,
@@ -55,7 +55,7 @@ const checkVerificationLiked = async (user_id, verification_id) => {
         },
       },
     });
-    if (verification_liked) {
+    if (verification_scraped) {
       return true;
     } else {
       return false;
@@ -66,7 +66,7 @@ const checkVerificationLiked = async (user_id, verification_id) => {
 };
 
 export default {
-  likeVerification,
-  unlikeVerification,
-  checkVerificationLiked,
+  scrapVerification,
+  unscrapVerification,
+  checkVerificationScraped,
 };

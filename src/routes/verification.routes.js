@@ -32,7 +32,7 @@ router.post('/:challengeId/verification/:verificationId/comment', commentControl
 router.patch('/:challengeId/verification/:verificationId/comment', commentController.updateVerificationComment);
 
 // Scrap
-router.post('/:challengeId/verification/:verificationId/scrap', scrapController.scrapVerification);
-router.delete('/:challengeId/verification/:verificationId/scrap', scrapController.unscrapVerification);
+router.post('/:verificationId/scrap', authMiddleware, scrapController.scrapVerification);
+router.delete('/:verificationId/unscrap', authMiddleware, scrapController.unscrapVerification);
 
 export default router;

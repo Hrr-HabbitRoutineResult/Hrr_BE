@@ -79,6 +79,14 @@ const userChallengeHistoryDto = (user_challenges, verifications) => {
   });
 };
 
+const userFollowDto = followed_user_id => {
+  const response_data = {
+    message: 'User followed successfully',
+    followedUserId: followed_user_id[0].following_id,
+  };
+  return response_data;
+};
+
 export default {
   serviceToControllerDto,
   updateUserInfoResponseDto,
@@ -86,4 +94,5 @@ export default {
   userChallengeDto,
   userBadgesDto,
   userChallengeHistoryDto,
+  userFollowDto,
 };

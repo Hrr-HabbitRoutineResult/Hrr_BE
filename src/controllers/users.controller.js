@@ -479,7 +479,7 @@ const getUserBadges = async (req, res, next) => {
     next(error);
   }
 };
-const postUserFollow = () => {
+const postUserFollow = async (req, res, next) => {
   /**
 #swagger.summary = '사용자 팔로우 API';
 #swagger.description = '특정 사용자를 팔로우합니다.';
@@ -555,6 +555,15 @@ const postUserFollow = () => {
   }
 };
  */
+  try {
+    const { followedUserId } = req.params;
+    const user_id = req.user.id;
+    const response = await userService.postUserFollowById(user_id, Number(followedUserId));
+
+    return res.status(StatusCodes.OK).json(response);
+  } catch (error) {
+    next(error);
+  }
 };
 const deleteUserFollow = () => {
   /**

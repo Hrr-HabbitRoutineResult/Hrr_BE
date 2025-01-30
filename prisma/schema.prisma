@@ -39,7 +39,7 @@ model User {
   verifications          Verification[]
   userBadges             UserBadge[]
   userCategoryTypes      UserCategoryType[]
-  scraps                 Scrap[]
+  verificationScraps     VerificationScrap[]
   temporaryVerifications TemporaryVerification[]
   challenges             Challenge[]
   userChallenges         UserChallenge[]
@@ -173,10 +173,11 @@ model Verification {
   userChallenge          UserChallenge           @relation(fields: [userChallenge_id], references: [id])
   comments               Comment[]
   temporaryVerifications TemporaryVerification[]
-  scrapTarget1           Scrap[]                 @relation("ScrapTarget1")
-  scrapTarget2           Scrap[]                 @relation("ScrapTarget2")
-  likesCount             Int                     @default(0) // 좋아요 개수 필드 추가
+  likesCount             Int                     @default(0)
+  scrapsCount            Int                     @default(0)
+  commentsCount          Int                     @default(0)
   verificationLikes      VerificationLike[]
+  VerificationScrap      VerificationScrap[]
 
   @@map("Verifications")
 }
@@ -266,18 +267,16 @@ model UserCategoryType {
   @@map("User_CategoryType")
 }
 
-model Scrap {
-  id              Int           @id @default(autoincrement())
+model VerificationScrap {
+  id              Int          @id @default(autoincrement())
   user_id         Int
-  scrapTarget1_id Int
-  scrapTarget2_id Int
-  scrapType       ScrapType
-  created_at      DateTime?     @default(now())
-  user            User          @relation(fields: [user_id], references: [id])
-  scrapTarget1    Verification? @relation("ScrapTarget1", fields: [scrapTarget1_id], references: [id])
-  scrapTarget2    Verification? @relation("ScrapTarget2", fields: [scrapTarget2_id], references: [id])
+  verification_id Int
 
-  @@map("Scraps")
+  user           User          @relation(fields: [user_id], references: [id])
+  verification   Verification  @relation(fields: [verification_id], references: [id])
+
+  @@unique([user_id, verification_id])
+  @@map("VerificationScraps")
 }
 
 model TemporaryVerification {
@@ -486,11 +485,6 @@ enum VerificationType {
 enum VerificationStatus {
   certified
   uncertified
-}
-
-enum ScrapType {
-  post
-  verification
 }
 
 enum ChallengeStatus {

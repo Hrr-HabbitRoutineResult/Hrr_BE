@@ -1,4 +1,7 @@
-export const scrapVerification = () => {
+import { StatusCodes } from 'http-status-codes';
+import scrapService from '../../services/verification/scrap.service.js';
+
+export const scrapVerification = async (req, res, next) => {
   /**
   #swagger.summary = '특정 인증 스크랩 API';
   #swagger.description = '특정 챌린지 인증을 스크랩하는 API입니다.';
@@ -121,6 +124,14 @@ export const scrapVerification = () => {
     }
   };
    */
+  try {
+    const user_id = req.user.id;
+    const verification_id = Number(req.params.verificationId);
+    const scrap_verification = await scrapService.scrapVerification(user_id, verification_id);
+    return res.status(StatusCodes.OK).json(scrap_verification);
+  } catch (error) {
+    next(error);
+  }
 };
 export const unscrapVerification = () => {
   /**

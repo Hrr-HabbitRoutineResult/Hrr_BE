@@ -58,8 +58,8 @@ const userBadgesDto = (type_badges, category_badges) => {
     }));
 
   return {
-    badgesType: formatBadges(type_badges),
-    badgesCategory: formatBadges(category_badges),
+    typeBadges: formatBadges(type_badges),
+    categoryBadges: formatBadges(category_badges),
   };
 };
 

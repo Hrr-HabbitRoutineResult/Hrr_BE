@@ -60,7 +60,7 @@ const findCompletedChallenges = async user_id => {
   }
 };
 
-const findTypeBadges = async user_id => {
+const findUserTypeBadges = async user_id => {
   try {
     const badges = await prisma.userBadge
       .findMany({
@@ -94,7 +94,7 @@ const findTypeBadges = async user_id => {
   }
 };
 
-const findCategoryBadges = async user_id => {
+const findUserCategoryBadges = async user_id => {
   try {
     const badges = await prisma.userBadge
       .findMany({
@@ -132,6 +132,6 @@ export default {
   updateUserInfo,
   findOngoingChallenges,
   findCompletedChallenges,
-  findTypeBadges,
-  findCategoryBadges,
+  findUserTypeBadges,
+  findUserCategoryBadges,
 };

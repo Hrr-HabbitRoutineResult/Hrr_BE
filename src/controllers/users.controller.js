@@ -412,7 +412,7 @@ const getUserBadges = async (req, res, next) => {
                 data: {
                   type: 'object',
                   properties: {
-                    badgesType: {
+                    typeBadges: {
                       type: 'array',
                       items: {
                         type: 'object',
@@ -424,7 +424,7 @@ const getUserBadges = async (req, res, next) => {
                         }
                       }
                     },
-                    badgesCategory: {
+                    categoryBadges: {
                       type: 'array',
                       items: {
                         type: 'object',
@@ -462,7 +462,7 @@ const getUserBadges = async (req, res, next) => {
    */
   try {
     const id = req.user.id;
-    const all_badges = await userService.getBadges(id);
+    const all_badges = await userService.getUserBadgesById(id);
 
     return res.status(StatusCodes.OK).json(all_badges);
   } catch (error) {

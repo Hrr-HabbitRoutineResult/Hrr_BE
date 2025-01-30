@@ -1,4 +1,5 @@
 import { prisma } from '../../db.config.js';
+import databaseError from '../../errors/database.error.js';
 
 const verifyWithCamera = async dto => {
   try {
@@ -7,7 +8,8 @@ const verifyWithCamera = async dto => {
     });
     return camera_verification;
   } catch (error) {
-    throw new authError.DataBaseError('Error on creating email verification');
+    console.log(error);
+    throw new databaseError.DataBaseError('Error on creating email verification');
   }
 };
 

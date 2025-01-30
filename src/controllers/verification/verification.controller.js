@@ -508,7 +508,7 @@ const cameraVerification = async (req, res, next) => {
    */
   try {
     const user_id = req.user.id;
-    const challenge_id = req.params.challengeId;
+    const challenge_id = parseInt(req.params.challengeId, 10);
     const dto = verificationDto.cameraVerificationBodyToServiceDto(user_id, challenge_id, req.body);
     const completed_challenge = await verificationService.verifyWithCamera(dto);
 

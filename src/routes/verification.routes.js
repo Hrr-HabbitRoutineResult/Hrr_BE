@@ -3,6 +3,7 @@ import veriificationController from '../controllers/verification/verification.co
 import likeController from '../controllers/verification/like.controller.js';
 import commentController from '../controllers/verification/comment.controller.js';
 import scrapController from '../controllers/verification/scrap.controller.js';
+import authMiddleware from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ const router = express.Router();
 router.get('/:challengeId/verification-status', veriificationController.getChallengeVerificationStatus);
 router.get('/:challengeId/verification/weekly', veriificationController.getWeeklyVerification);
 router.get('/:challengeId/verifications/:verificationId', veriificationController.getSpecificVerification);
-router.post('/:challengeId/verification/camera', veriificationController.cameraVerification);
+router.post('/:challengeId/verification/camera', authMiddleware, veriificationController.cameraVerification);
 router.post('/:challengeId/verification/text', veriificationController.textVerification);
 router.get(
   '/:challengeId/verification/text/:temporaryVerificationId',

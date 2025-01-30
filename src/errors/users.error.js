@@ -49,7 +49,7 @@ export class FollowedUserError extends Error {
 }
 
 export class NotFollowingUserError extends Error {
-  errorCode = 'P2025';
+  errorCode = 'U004';
   constructor(reason, data) {
     super(reason);
     this.reason = reason;

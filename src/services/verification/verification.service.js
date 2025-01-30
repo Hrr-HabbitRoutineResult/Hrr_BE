@@ -18,7 +18,8 @@ const verifyWithCamera = async (user_id, challenge_id, body) => {
     throw new verificationError.VerificationTypeDoesntMatchError('챌린지가 카메라 인증 타입이 아닙니다.');
   }
   const camera_verification = await verificationRepository.verifyWithCamera(data);
-  return camera_verification;
+  const camera_verification_response = verificationDto.cameraVerificationServiceToController(camera_verification);
+  return camera_verification_response;
 };
 
 export default {

@@ -1,4 +1,15 @@
-const cameraVerificationBodyToServiceDto = (user_id, challenge_id, body) => {};
+const cameraVerificationServiceToController = data => {
+  const response_data = {
+    message: '챌린지 인증이 완료되었습니다.',
+    verification: {
+      verificationId: data.id,
+      verificationType: data.verificationType,
+      title: data.title,
+      photoUrl: data.photoUrl,
+    },
+  };
+  return response_data;
+};
 
 const cameraVerificationServiceToRepositoryDto = (user_id, user_challenge_id, body) => {
   console.log(body);
@@ -20,6 +31,6 @@ const cameraVerificationServiceToRepositoryDto = (user_id, user_challenge_id, bo
 };
 
 export default {
-  cameraVerificationBodyToServiceDto,
+  cameraVerificationServiceToController,
   cameraVerificationServiceToRepositoryDto,
 };

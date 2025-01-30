@@ -125,7 +125,8 @@ export const scrapVerification = async (req, res, next) => {
     next(error);
   }
 };
-export const unscrapVerification = () => {
+
+export const unscrapVerification = async (req, res, next) => {
   /**
   #swagger.summary = '특정 인증 스크랩 취소 API';
   #swagger.description = '특정 챌린지 인증에 추가된 스크랩을 취소하는 API입니다.';
@@ -243,6 +244,14 @@ export const unscrapVerification = () => {
     }
   };
    */
+  try {
+    const user_id = req.user.id;
+    const verification_id = Number(req.params.verificationId);
+    const unscrap_verification = await scrapService.unscrapVerification(user_id, verification_id);
+    return res.status(StatusCodes.OK).json(unscrap_verification);
+  } catch (error) {
+    next(error);
+  }
 };
 
 export default {

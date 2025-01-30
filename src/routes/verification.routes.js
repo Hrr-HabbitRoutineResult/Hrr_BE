@@ -33,6 +33,6 @@ router.patch('/:challengeId/verification/:verificationId/comment', commentContro
 
 // Scrap
 router.post('/:verificationId/scrap', authMiddleware, scrapController.scrapVerification);
-router.delete('/:verificationId/scrap', authMiddleware, scrapController.unscrapVerification);
+router.delete('/:verificationId/unscrap', authMiddleware, scrapController.unscrapVerification);
 
 export default router;

@@ -21,6 +21,30 @@ const scrapVerification = async (user_id, verification_id) => {
   }
 };
 
+const unscrapVerification = async (user_id, verification_id) => {
+  try {
+    return await prisma.$transaction([
+      prisma.verificationScrap.delete({
+        where: {
+          user_id_verification_id: { user_id, verification_id },
+        },
+      }),
+      prisma.verification.update({
+        where: {
+          id: verification_id,
+          scrapsCount: { gt: 0 },
+        },
+        data: { scrapsCount: { decrement: 1 } },
+      }),
+    ]);
+  } catch (error) {
+    if (error.code === 'P2025') {
+      throw new scrapError.VerificationScrapsUnderZeroError('스크랩 수가 음수가 되었습니다.');
+    }
+    throw new databaseError.DataBaseError('Database error occurred while unscraping verifications');
+  }
+};
+
 const checkVerificationScraped = async (user_id, verification_id) => {
   try {
     const verification_scraped = await prisma.verificationScrap.findUnique({
@@ -43,5 +67,6 @@ const checkVerificationScraped = async (user_id, verification_id) => {
 
 export default {
   scrapVerification,
+  unscrapVerification,
   checkVerificationScraped,
 };

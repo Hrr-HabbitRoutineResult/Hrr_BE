@@ -41,7 +41,7 @@ const unlikeVerification = async (user_id, verification_id) => {
     if (error.code === 'P2025') {
       throw new likeError.VerificationLikesUnderZeroError('좋아요 개수가 음수가 되었습니다.');
     }
-    throw new databaseError.DataBaseError('Database error occurred while following user');
+    throw new databaseError.DataBaseError('Database error occurred while unliking verification');
   }
 };
 

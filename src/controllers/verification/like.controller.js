@@ -3,8 +3,8 @@ import likeService from '../../services/verification/like.service.js';
 
 const likeSpecificVerification = async (req, res, next) => {
   /**
-  #swagger.summary = '특정 인증 좋아요 추가/취소 API';
-  #swagger.description = '특정 챌린지 인증에 좋아요를 추가하거나 취소하는 API입니다.';
+  #swagger.summary = '특정 인증 좋아요 추가 API';
+  #swagger.description = '특정 챌린지 인증에 좋아요를 추가하는 API입니다.';
   #swagger.tags = ['Challenge:Verification'];
   #swagger.parameters['Authorization'] = {
     in: 'header',
@@ -45,7 +45,6 @@ const likeSpecificVerification = async (req, res, next) => {
                 verificationId: { type: 'integer', example: 101 },
                 userId: { type: 'integer', example: 1},
                 likesCount: { type: 'integer', example: 3 },
-                message: { type: 'string', example: 'Like added successfully.' }
               }
             }
           }
@@ -126,7 +125,7 @@ const likeSpecificVerification = async (req, res, next) => {
     next(error);
   }
 };
-const unlikeSpecificVerification = () => {
+const unlikeSpecificVerification = async (req, res, next) => {
   /**
 #swagger.summary = '특정 인증 좋아요 취소 API';
 #swagger.description = '특정 인증에 추가된 좋아요를 취소하는 API입니다.';
@@ -136,12 +135,6 @@ const unlikeSpecificVerification = () => {
   required: true,
   schema: { type: 'string', example: 'Bearer {token}' },
   description: '인증을 위한 액세스 토큰'
-};
-#swagger.parameters['challengeId'] = {
-  in: 'path',
-  required: true,
-  schema: { type: 'string', example: '101' },
-  description: '챌린지 ID'
 };
 #swagger.parameters['verificationId'] = {
   in: 'path',
@@ -156,10 +149,7 @@ const unlikeSpecificVerification = () => {
     'application/json': {
       schema: {
         type: 'object',
-        properties: {
-          likeId: { type: 'string', example: 'like12345', description: '취소할 좋아요 ID' }
-        },
-        required: ['likeId']
+        properties: {},
       },
     }
   }
@@ -176,9 +166,9 @@ const unlikeSpecificVerification = () => {
           success: {
             type: 'object',
             properties: {
-              verificationId: { type: 'string', example: '202' },
-              totalLikes: { type: 'integer', example: 2 },
-              message: { type: 'string', example: 'Like removed successfully.' }
+              verificationId: { type: 'integer', example: 101 },
+              userId: { type: 'integer', example: 1},
+              likesCount: { type: 'integer', example: 3 },
             }
           }
         }
@@ -250,6 +240,14 @@ const unlikeSpecificVerification = () => {
   }
 };
  */
+  try {
+    const user_id = req.user.id;
+    const verification_id = Number(req.params.verificationId);
+    const like_verification = await likeService.unlikeVerification(user_id, verification_id);
+    return res.status(StatusCodes.OK).json(like_verification);
+  } catch (error) {
+    next(error);
+  }
 };
 
 export default {

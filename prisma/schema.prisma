@@ -51,6 +51,7 @@ model User {
   sentMessages           Message[]               @relation("SentMessages")
   userBoards             UserBoard[] 
   userAgreements         UserAgreement[]
+  verificationLikes      VerificationLike[]
   @@map("Users")
 }
 
@@ -174,9 +175,25 @@ model Verification {
   temporaryVerifications TemporaryVerification[]
   scrapTarget1           Scrap[]                 @relation("ScrapTarget1")
   scrapTarget2           Scrap[]                 @relation("ScrapTarget2")
+  likesCount             Int                     @default(0) // 좋아요 개수 필드 추가
+  verificationLikes      VerificationLike[]
 
   @@map("Verifications")
 }
+
+model VerificationLike {
+  id              Int          @id @default(autoincrement())
+  user_id         Int
+  verification_id Int
+
+  user           User          @relation(fields: [user_id], references: [id])
+  verification   Verification  @relation(fields: [verification_id], references: [id])
+
+  @@unique([user_id, verification_id])
+  @@map("VerificationLikes")
+}
+
+
 
 model KickOut {
   id               Int           @id @default(autoincrement())

@@ -379,17 +379,17 @@ const cameraVerification = async (req, res, next) => {
     required: true,
     description: '사진 업로드를 위한 multipart/form-data 형식의 요청 데이터',
     content: {
-      'multipart/form-data': {
+      'application/json': {
         schema: {
           type: 'object',
           properties: {
-            photoUrl: {
-              type: 'string',
-              format: 'binary',
-              description: '업로드할 사진 파일'
-            }
+            title: { type: 'string', example: '챌린지 글로 인증하기', description: '인증 글 제목' },
+            content: { type: 'string', example: '인증 글입니다!', description: '인증 글 내용' },
+            photoUrl: { type: 'string', example: 'https://notionverification.com', description: '인증 글의 외부 링크 URL' },
+            textUrl: { type: 'string', example: 'https://notionverification.com', description: '인증 글의 외부 링크 URL' },
+            question: { type: 'boolean', example: false, description: '질문 여부' }
           },
-          required: ['photoUrl']
+          required: ['photoUrl','title', 'content', 'question']
         },
       }
     }
@@ -410,28 +410,10 @@ const cameraVerification = async (req, res, next) => {
                 verifications: {
                   type: 'object',
                   properties: {
-                    UserInfo: {
-                      type: 'object',
-                      properties: {
-                        id: { type: 'string', example: '1' },
-                        name: { type: 'string', example: '홍길동' },
-                        profilePhoto: { type: 'string', example: 'https://image.com' }
-                      }
-                    },
-                    challengeInfo: {
-                      type: 'object',
-                      properties: {
-                        id: { type: 'string', example: '1' },
-                        name: { type: 'string', example: '운동하는 챌린지' },
-                        challengeType: { type: 'string', example: 'basic' }
-                      }
-                    },
-                    verification: {
-                      type: 'object',
-                      properties: {
-                        id: { type: 'integer', example: 1 },
-                        photoUrl: { type: 'string', example: 'https://photoverification.com' }
-                      }
+                      id: { type: 'integer', example: 1 },
+                      verificationType: {type: 'string', example: 'camera'},
+                      title: {type: 'string', example: '첫번째 인증입니다!'},
+                      photoUrl: { type: 'string', example: 'https://photoverification.com' }
                     }
                   }
                 }

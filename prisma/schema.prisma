@@ -158,7 +158,6 @@ model Verification {
   id                     Int                     @id @default(autoincrement())
   user_id                Int
   userChallenge_id       Int
-  challengeType          ChallengeType
   verificationType       VerificationType        @map("type")
   photoUrl               String?                 @db.VarChar(255)
   title                  String?                 @db.VarChar(80)

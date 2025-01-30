@@ -326,6 +326,7 @@ model UserChallenge {
   id                  Int                 @id @default(autoincrement())
   challenge_id        Int
   user_id             Int
+  owner               Boolean             @default(false)
   challengeStatus     ChallengeStatus
   joinDate            DateTime?           @db.DateTime(6)
   endDate             DateTime?           @db.DateTime(6)

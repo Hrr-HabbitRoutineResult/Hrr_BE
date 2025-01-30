@@ -525,7 +525,7 @@ const participateInChallenge = () => {
   };
    */
 };
-const getChallengeParticipantsList = () => {
+const getChallengerList = async (req, res, next) => {
   /**
   #swagger.summary = '챌린저 리스트 조회 API';
   #swagger.description = '특정 챌린지에 참가한 챌린저 리스트를 조회하는 API입니다. 각 챌린저의 인증 횟수와 상태도 함께 표시됩니다.';
@@ -543,37 +543,35 @@ const getChallengeParticipantsList = () => {
     description: '챌린지 ID'
   };
   #swagger.responses[200] = {
-    description: '챌린저 리스트 조회 성공',
-    content: {
-      'application/json': {
-        schema: {
+  description: '챌린저 리스트 조회 성공',
+  content: {
+    'application/json': {
+      schema: {
+        type: 'array',
+        items: {
           type: 'object',
           properties: {
-            resultType: { type: 'string', example: 'SUCCESS' },
-            error: { type: 'object', nullable: true, example: null },
-            success: {
-              type: 'object',
-              properties: {
-                challengerslist: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      userId: { type: 'integer', example: 1 },
-                      name: { type: 'string', example: '홍길동' },
-                      profilePhoto: { type: 'string', example: 'https://profile1.com' },
-                      verifyCount: { type: 'integer', example: 5 },
-                      status: { type: 'string', example: 'verified', description: '인증 상태 (verified, unverified)' }
-                    }
-                  }
-                }
-              }
-            }
+            id: { type: 'integer', example: 5 },
+            nickname: { type: 'string', example: 'john_doe' }
           }
         }
-      }
+      },
+      example: [
+        {
+          id: 5,
+          nickname: 'john_doe',
+          owner: true
+        },
+        {
+          id: 8,
+          nickname: 'jane_smith',
+          owner: false
+        }
+      ]
     }
-  };
+  }
+};
+
   #swagger.responses[400] = {
     description: '잘못된 요청',
     content: {
@@ -638,8 +636,15 @@ const getChallengeParticipantsList = () => {
     }
   };
    */
+  try {
+    const challenge_id = parseInt(req.params.challengeId, 10);
+    const challenger_list = await participationService.getChallengerList(challenge_id);
+    return res.status(StatusCodes.OK).json(challenger_list);
+  } catch (error) {
+    next(error);
+  }
 };
-const kickChallengeParticipant = () => {
+const kickChallenger = () => {
   /**
   #swagger.summary = '챌린저 리스트 내보내기 API';
   #swagger.description = '특정 챌린지에서 3회 미인증한 챌린저를 내보낼 수 있는 API입니다.';
@@ -882,7 +887,7 @@ export default {
   likeChallenge,
   unlikeChallenge,
   participateInChallenge,
-  getChallengeParticipantsList,
-  kickChallengeParticipant,
+  getChallengerList,
+  kickChallenger,
   getChallengeCalendar,
 };

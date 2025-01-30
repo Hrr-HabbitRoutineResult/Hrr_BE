@@ -95,8 +95,14 @@ const decreaseChallengeLike = async (user_id, challenge_id) => {
   return { ...like_challenge, update_challenge_like };
 };
 
+const getChallengerList = async challenge_id => {
+  const challenger_list = await participationRepository.getChallengeList(challenge_id);
+  return challenger_list;
+};
+
 export default {
   joinChallenge,
   increaseChallengeLike,
   decreaseChallengeLike,
+  getChallengerList,
 };

@@ -525,7 +525,7 @@ const participateInChallenge = () => {
   };
    */
 };
-const getChallengeParticipantsList = () => {
+const getChallengerList = async (req, res, next) => {
   /**
   #swagger.summary = '챌린저 리스트 조회 API';
   #swagger.description = '특정 챌린지에 참가한 챌린저 리스트를 조회하는 API입니다. 각 챌린저의 인증 횟수와 상태도 함께 표시됩니다.';
@@ -639,7 +639,7 @@ const getChallengeParticipantsList = () => {
   };
    */
 };
-const kickChallengeParticipant = () => {
+const kickChallenger = () => {
   /**
   #swagger.summary = '챌린저 리스트 내보내기 API';
   #swagger.description = '특정 챌린지에서 3회 미인증한 챌린저를 내보낼 수 있는 API입니다.';
@@ -882,7 +882,7 @@ export default {
   likeChallenge,
   unlikeChallenge,
   participateInChallenge,
-  getChallengeParticipantsList,
-  kickChallengeParticipant,
+  getChallengerList,
+  kickChallenger,
   getChallengeCalendar,
 };

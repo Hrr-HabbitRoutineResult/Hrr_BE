@@ -21,8 +21,8 @@ router.post('/:challengeId/join', authMiddleware, participationController.joinCh
 router.post('/:challengeId/like', authMiddleware, participationController.likeChallenge);
 router.delete('/:challengeId/unlike', authMiddleware, participationController.unlikeChallenge);
 router.post('/:challengeId/participation', participationController.participateInChallenge);
-router.get('/:challengeId/challengerslist', participationController.getChallengeParticipantsList);
-router.get('/:challengeId/challengerslist/kick', participationController.kickChallengeParticipant);
+router.get('/:challengeId/challengerslist', participationController.getChallengerList);
+router.get('/:challengeId/challengerslist/kick', participationController.kickChallenger);
 router.get('/:challengeId/calendar', participationController.getChallengeCalendar);
 
 export default router;

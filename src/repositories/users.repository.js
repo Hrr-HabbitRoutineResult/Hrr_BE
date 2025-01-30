@@ -235,6 +235,30 @@ const userUnfollows = async (unfollower_user_id, unfollowed_user_id) => {
   ]);
 };
 
+const findUserBadgesCondition = async user_id => {
+  try {
+    return await prisma.userBadgeCondition.findMany({
+      where: {
+        userBadge: {
+          user_id: user_id,
+        },
+      },
+      select: {
+        condition: {
+          select: {
+            id: true,
+            badge_id: true,
+            description: true,
+          },
+        },
+        isAchieved: true,
+      },
+    });
+  } catch (error) {
+    throw new userError.DataBaseError('DataBase Error on retrieving badge condition');
+  }
+};
+
 export default {
   updateUserInfo,
   findOngoingChallenges,
@@ -245,4 +269,5 @@ export default {
   findUserVerificationHistory,
   createUserFollows,
   userUnfollows,
+  findUserBadgesCondition,
 };

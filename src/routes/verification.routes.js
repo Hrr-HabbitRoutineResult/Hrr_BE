@@ -23,7 +23,7 @@ router.delete(
 );
 
 // Like
-router.post('/:challengeId/verification/:verificationId/like', likeController.likeSpecificVerification);
+router.post('/:verificationId/like', authMiddleware, likeController.likeSpecificVerification);
 router.delete('/:challengeId/verification/:verificationId/like', likeController.unlikeSpecificVerification);
 
 // Comment

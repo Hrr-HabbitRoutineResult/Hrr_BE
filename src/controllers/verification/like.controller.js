@@ -1,4 +1,7 @@
-const likeSpecificVerification = () => {
+import { StatusCodes } from 'http-status-codes';
+import likeService from '../../services/verification/like.service.js';
+
+const likeSpecificVerification = async (req, res, next) => {
   /**
   #swagger.summary = '특정 인증 좋아요 추가/취소 API';
   #swagger.description = '특정 챌린지 인증에 좋아요를 추가하거나 취소하는 API입니다.';
@@ -8,12 +11,6 @@ const likeSpecificVerification = () => {
     required: true,
     schema: { type: 'string', example: 'Bearer {token}' },
     description: '인증을 위한 액세스 토큰'
-  };
-  #swagger.parameters['challengeId'] = {
-    in: 'path',
-    required: true,
-    schema: { type: 'string', example: '101' },
-    description: '챌린지 ID'
   };
   #swagger.parameters['verificationId'] = {
     in: 'path',
@@ -30,12 +27,11 @@ const likeSpecificVerification = () => {
           type: 'object',
           properties: {},
         },
-
       }
     }
   };
   #swagger.responses[200] = {
-    description: '좋아요 추가/취소 성공',
+    description: '좋아요 추가 성공',
     content: {
       'application/json': {
         schema: {
@@ -46,9 +42,9 @@ const likeSpecificVerification = () => {
             success: {
               type: 'object',
               properties: {
-                verificationId: { type: 'string', example: '101' },
-                likeId: { type: 'string', example: '202' },
-                totalLikes: { type: 'integer', example: 3 },
+                verificationId: { type: 'integer', example: 101 },
+                userId: { type: 'integer', example: 1},
+                likesCount: { type: 'integer', example: 3 },
                 message: { type: 'string', example: 'Like added successfully.' }
               }
             }
@@ -121,6 +117,14 @@ const likeSpecificVerification = () => {
     }
   };
    */
+  try {
+    const user_id = req.user.id;
+    const verification_id = Number(req.params.verificationId);
+    const like_verification = await likeService.likeVerification(user_id, verification_id);
+    return res.status(StatusCodes.OK).json(like_verification);
+  } catch (error) {
+    next(error);
+  }
 };
 const unlikeSpecificVerification = () => {
   /**

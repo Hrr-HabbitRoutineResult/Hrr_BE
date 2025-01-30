@@ -12,7 +12,6 @@ const cameraVerificationServiceToController = data => {
 };
 
 const cameraVerificationServiceToRepositoryDto = (user_id, user_challenge_id, body) => {
-  console.log(body);
   if (!body?.photoUrl) throw new Error('photoUrl is required in body');
   if (!body?.title) throw new Error('title is required in body');
   if (!body?.photoUrl) throw new Error('title is required in body');

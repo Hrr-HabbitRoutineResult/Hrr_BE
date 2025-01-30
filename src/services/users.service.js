@@ -79,9 +79,9 @@ const getCompletedChallenge = async id => {
   return response_data;
 };
 
-const getChallengeHistory = async id => {
-  const challenge_history = await userRepository.findChallengeHistory(id);
-  const verification_history = await userRepository.findVerificationHistory(id);
+const getUserChallengeHistory = async id => {
+  const challenge_history = await userRepository.findUserChallengeHistory(id);
+  const verification_history = await userRepository.findUserVerificationHistory(id);
   const response_data = userDto.userChallengeHistoryDto(challenge_history, verification_history);
   if (!response_data) {
     return null;
@@ -95,5 +95,5 @@ export default {
   updateUserInfobyEmail,
   getOngoingChallenge,
   getCompletedChallenge,
-  getChallengeHistory,
+  getUserChallengeHistory,
 };

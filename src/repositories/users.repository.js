@@ -60,11 +60,11 @@ const findCompletedChallenges = async user_id => {
   }
 };
 
-const findChallengeHistory = async user_id => {
+const findUserChallengeHistory = async user_id => {
   try {
     // userchallenge 테이블에서 데이터 가져오기
     const userChallenges = await prisma.userChallenge.findMany({
-      where: { user_id }, // 특정 유저의 데이터만 조회
+      where: { user_id },
       include: {
         challenge: {
           select: {
@@ -80,7 +80,7 @@ const findChallengeHistory = async user_id => {
   }
 };
 
-const findVerificationHistory = async user_id => {
+const findUserVerificationHistory = async user_id => {
   try {
     // verification 테이블에서 데이터 가져오기
     const verifications = await prisma.verification.findMany({
@@ -107,6 +107,6 @@ export default {
   updateUserInfo,
   findOngoingChallenges,
   findCompletedChallenges,
-  findChallengeHistory,
-  findVerificationHistory,
+  findUserChallengeHistory,
+  findUserVerificationHistory,
 };

@@ -387,7 +387,7 @@ const getUserChallengesHistory = async (req, res, next) => {
    */
   try {
     const id = req.user.id;
-    const challenge_history = await userService.getChallengeHistory(id);
+    const challenge_history = await userService.getUserChallengeHistory(id);
 
     return res.status(StatusCodes.OK).json(challenge_history);
   } catch (error) {

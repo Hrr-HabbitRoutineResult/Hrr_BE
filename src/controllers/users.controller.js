@@ -556,9 +556,9 @@ const postUserFollow = async (req, res, next) => {
 };
  */
   try {
-    const { followedUserId } = req.params;
+    const followed_user_id = req.params.followedUserId;
     const user_id = req.user.id;
-    const response = await userService.postUserFollowById(user_id, Number(followedUserId));
+    const response = await userService.postUserFollowById(user_id, Number(followed_user_id));
 
     return res.status(StatusCodes.OK).json(response);
   } catch (error) {

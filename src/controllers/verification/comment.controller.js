@@ -1,3 +1,8 @@
+import { StatusCodes } from 'http-status-codes';
+import commentService from '../../services/verification/comment.service.js';
+import commentDto from '../../dtos/verification/comment.dto.js';
+import { request } from 'http';
+
 const getVerificationComments = () => {
   /**
 #swagger.summary = '특정 인증 댓글 조회 API';
@@ -118,7 +123,7 @@ const getVerificationComments = () => {
 };
  */
 };
-const postVerificationComment = () => {
+const postVerificationComment = async (req, res, next) => {
   /**
   #swagger.summary = '챌린지 인증 댓글 작성 API';
   #swagger.description = '특정 챌린지 인증에 댓글을 작성하는 API입니다.';
@@ -135,12 +140,6 @@ const postVerificationComment = () => {
     schema: { type: 'string', example: 'application/json' },
     description: '요청 본문의 콘텐츠 타입'
   };
-  #swagger.parameters['challengeId'] = {
-    in: 'path',
-    required: true,
-    schema: { type: 'string', example: '123' },
-    description: '챌린지 ID'
-  };
   #swagger.parameters['verificationId'] = {
     in: 'path',
     required: true,
@@ -156,10 +155,10 @@ const postVerificationComment = () => {
           type: 'object',
           properties: {
             content: { type: 'string', example: '이 인증 정말 좋네요!', description: '댓글 내용' },
-            userId: { type: 'string', example: 'user56789', description: '댓글 작성자 ID' },
-            username: { type: 'string', example: '작성자 닉네임', description: '댓글 작성자 닉네임' }
+            parentId: { type: 'integer', example: 1, description: '상위 댓글 ID' },
+            anonymous: { type: 'boolean', example: false, description: '익명 여부' }
           },
-          required: ['content', 'userId', 'username']
+          required: ['content', 'parentId', 'anonymous']
         },
       }
     }
@@ -177,11 +176,11 @@ const postVerificationComment = () => {
               type: 'object',
               properties: {
                 commentId: { type: 'string', example: 'comment12345' },
+                userId: { type: 'integer', example: '1' },
+                verificationId: { type: 'integer', example: '1' },
+                parentId: { type: 'integer', example: '1' },
                 content: { type: 'string', example: '이 인증 정말 좋네요!' },
-                userId: { type: 'string', example: 'user56789' },
-                username: { type: 'string', example: '작성자 닉네임' },
                 createdAt: { type: 'string', format: 'date-time', example: '2025-01-08T12:34:56Z' },
-                message: { type: 'string', example: '댓글이 성공적으로 작성되었습니다.' }
               }
             }
           }
@@ -253,6 +252,15 @@ const postVerificationComment = () => {
     }
   };
    */
+  try {
+    const user_id = req.user.id;
+    const verification_id = Number(req.params.verificationId);
+    const request_data = commentDto.commentVerificationControllerToService(user_id, verification_id, req.body);
+    const new_comment = await commentService.postVerificationComment(request_data);
+    return res.status(StatusCodes.OK).json(new_comment);
+  } catch (error) {
+    next(error);
+  }
 };
 const updateVerificationComment = () => {
   /**

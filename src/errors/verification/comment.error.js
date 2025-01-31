@@ -1,5 +1,5 @@
-export class DataBaseError extends Error {
-  errorCode = 'D001';
+export class CommentContentEmtpyError extends Error {
+  errorCode = 'C001';
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
@@ -8,8 +8,8 @@ export class DataBaseError extends Error {
   }
 }
 
-export class DataBaseNotExistError extends Error {
-  errorCode = 'D002';
+export class CommentTypeError extends Error {
+  errorCode = 'C002';
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
@@ -19,6 +19,6 @@ export class DataBaseNotExistError extends Error {
 }
 
 export default {
-  DataBaseError,
-  DataBaseNotExistError,
+  CommentContentEmtpyError,
+  CommentTypeError,
 };

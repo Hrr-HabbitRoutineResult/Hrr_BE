@@ -27,9 +27,9 @@ router.post('/:verificationId/like', authMiddleware, likeController.likeSpecific
 router.delete('/:verificationId/unlike', authMiddleware, likeController.unlikeSpecificVerification);
 
 // Comment
-router.get('/:challengeId/verification/:verificationId/comment', commentController.getVerificationComments);
-router.post('/:challengeId/verification/:verificationId/comment', commentController.postVerificationComment);
-router.patch('/:challengeId/verification/:verificationId/comment', commentController.updateVerificationComment);
+router.get('/:verificationId/comment', commentController.getVerificationComments);
+router.post('/:verificationId/comment', authMiddleware, commentController.postVerificationComment);
+router.patch('/:verificationId/comment', commentController.updateVerificationComment);
 
 // Scrap
 router.post('/:verificationId/scrap', authMiddleware, scrapController.scrapVerification);

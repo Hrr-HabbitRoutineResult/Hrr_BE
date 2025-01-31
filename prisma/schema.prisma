@@ -76,16 +76,16 @@ model ChallengeLike {
 model Comment {
   id              Int          @id @default(autoincrement())
   user_id         Int
-  post_id         Int
-  verification_id Int
+  post_id         Int?
+  verification_id Int?
   content         String?      @db.Text
-  parent_id       Int?         //부모 댓글 ID(NULL일 때는 최상위 댓글)
+  parent_id       Int?
   anonymous       Boolean      @default(false)
-  created_at      DateTime?    @db.DateTime(6)
-  updated_at      DateTime?    @db.DateTime(6)
+  created_at      DateTime?    @db.DateTime(6) @default(now())
+  updated_at      DateTime?    @db.DateTime(6) @updatedAt
   user            User         @relation(fields: [user_id], references: [id])
-  post            Post         @relation(fields: [post_id], references: [id])
-  verification    Verification @relation(fields: [verification_id], references: [id])
+  post            Post?        @relation(fields: [post_id], references: [id])
+  verification    Verification? @relation(fields: [verification_id], references: [id])
   parent_comment  Comment?     @relation("CommentReplies", fields:[parent_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   child_comment   Comment[]    @relation("CommentReplies")
 

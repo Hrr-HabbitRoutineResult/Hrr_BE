@@ -27,7 +27,7 @@ router.post('/:verificationId/like', authMiddleware, likeController.likeSpecific
 router.delete('/:verificationId/unlike', authMiddleware, likeController.unlikeSpecificVerification);
 
 // Comment
-router.get('/:verificationId/comment', commentController.getVerificationComments);
+router.get('/:verificationId/comment', authMiddleware, commentController.getVerificationComments);
 router.post('/:verificationId/comment', authMiddleware, commentController.postVerificationComment);
 router.patch('/:verificationId/comment', commentController.updateVerificationComment);
 

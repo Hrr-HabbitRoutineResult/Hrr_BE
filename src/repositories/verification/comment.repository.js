@@ -1,5 +1,6 @@
 import { prisma } from '../../db.config.js';
 import databaseError from '../../errors/database.error.js';
+import commentError from '../../errors/verification/comment.error.js';
 
 const getVerificationComment = async verification_id => {
   try {
@@ -77,7 +78,68 @@ const postVerificationComment = async request_data => {
   }
 };
 
+const updateVerificationComment = async (comment_id, content) => {
+  try {
+    const updated_comment = await prisma.comment.update({
+      where: { id: comment_id },
+      data: { content: content },
+    });
+    return {
+      id: updated_comment.id,
+      user_id: updated_comment.user_id,
+      content: updated_comment.content,
+      parent_id: updated_comment.parent_id,
+      created_at: updated_comment.created_at,
+      updated_at: updated_comment.updated_at,
+      anonymous: updated_comment.anonymous,
+    };
+  } catch (error) {
+    throw new databaseError.DataBaseError('Failed to update comment');
+  }
+};
+
+const getCommentById = async comment_id => {
+  try {
+    const comment = await prisma.comment.findUnique({
+      where: { id: comment_id },
+      select: {
+        id: true,
+        user_id: true,
+        content: true,
+        parent_id: true,
+        created_at: true,
+        updated_at: true,
+        anonymous: true,
+        user: {
+          select: {
+            nickname: true,
+          },
+        },
+      },
+    });
+
+    if (!comment) {
+      throw new commentError.CommentNotExistsError('Comment not found');
+    }
+
+    return {
+      id: comment.id,
+      user_id: comment.user_id,
+      nickname: comment.user.nickname,
+      content: comment.content,
+      parent_id: comment.parent_id,
+      created_at: comment.created_at,
+      updated_at: comment.updated_at,
+      anonymous: comment.anonymous,
+    };
+  } catch (error) {
+    throw new databaseError.DataBaseError('Failed to fetch comment');
+  }
+};
+
 export default {
   getVerificationComment,
   postVerificationComment,
+  updateVerificationComment,
+  getCommentById,
 };

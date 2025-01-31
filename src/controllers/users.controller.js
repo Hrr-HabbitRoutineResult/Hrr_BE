@@ -670,39 +670,53 @@ const getUserVerificationScraps = async (req, res, next) => {
     description: '사용자의 ID'
   };
   #swagger.responses[200] = {
-    description: '스크랩한 글 목록 조회 성공',
-    content: {
-      'application/json': {
-        schema: {
+  description: '배지 조건 조회 성공',
+  content: {
+    'application/json': {
+      schema: {
+        type: 'array',
+        items: {
           type: 'object',
           properties: {
-            resultType: { type: 'string', example: 'SUCCESS' },
-            error: { type: 'object', nullable: true, example: null },
-            success: {
+            id: { type: 'integer', example: 3 },
+            verification: {
               type: 'object',
               properties: {
-                posts: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      postId: { type: 'integer', example: 101 },
-                      title: { type: 'string', example: '안녕하세요' },
-                      content: { type: 'string', example: '1번 게시물입니다.' },
-                      userName: { type: 'string', example: '흐르르' },
-                      userProfilePhoto: { type: 'string', example: 'https://example.com/profiles.jpg' },
-                      scrapsCreated_at: { type: 'string', format: 'date', example: '2025-01-06' },
-                      postCreated_at: { type: 'string', format: 'date', example: '2024-12-31' }
-                    }
-                  }
-                }
+                id: { type: 'integer', example: 1 },
+                title: { type: 'string', example: '1일차 챌린지 인증' },
+                content: { type: 'string', example: 'This is a sample verification content.' },
+                verificationStatus: { type: 'string', example: 'certified' },
+                created_at: { type: 'string', format: 'date-time', example: '2025-01-30T04:28:48.125Z' }
               }
             }
           }
         }
-      }
+      },
+      example: [
+        {
+          id: 3,
+          verification: {
+            id: 1,
+            title: '1일차 챌린지 인증',
+            content: 'This is a sample verification content.',
+            verificationStatus: 'certified',
+            created_at: '2025-01-30T04:28:48.125Z'
+          }
+        },
+        {
+          id: 4,
+          verification: {
+            id: 2,
+            title: '1일차 챌린지 인증',
+            content: 'This is a sample verification content.',
+            verificationStatus: 'certified',
+            created_at: '2025-01-30T06:50:13.568Z'
+          }
+        }
+      ]
     }
-  };
+  }
+};
   #swagger.responses[401] = {
     description: '인증 실패',
     content: {

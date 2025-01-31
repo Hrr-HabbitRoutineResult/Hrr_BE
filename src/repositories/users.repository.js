@@ -260,6 +260,30 @@ const findUserBadgesCondition = async user_id => {
   }
 };
 
+const getUserVerificationScraps = async user_id => {
+  try {
+    const scrapped_verifications = await prisma.verificationScrap.findMany({
+      where: { user_id },
+      select: {
+        id: true,
+        verification: {
+          select: {
+            id: true,
+            title: true,
+            content: true,
+            verificationStatus: true,
+            created_at: true,
+          },
+        },
+      },
+    });
+
+    return scrapped_verifications;
+  } catch (error) {
+    throw new databaseError.DataBaseError('Error on finding scrapped verifications');
+  }
+};
+
 export default {
   updateUserInfo,
   findOngoingChallenges,
@@ -271,4 +295,5 @@ export default {
   createUserFollows,
   userUnfollows,
   findUserBadgesCondition,
+  getUserVerificationScraps,
 };

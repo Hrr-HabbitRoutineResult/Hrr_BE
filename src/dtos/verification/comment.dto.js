@@ -10,7 +10,7 @@ const commentVerificationControllerToService = (user_id, verification_id, body) 
   const data = {
     user_id: user_id,
     verification_id: verification_id,
-    parent_id: body.parent_id ?? null,
+    parent_id: body.parentId ?? null,
     anonymous: body.annonymous ?? false,
     content: body.content,
   };

@@ -41,7 +41,6 @@ const cameraVerificationServiceToRepositoryDto = (user_id, user_challenge_id, bo
 };
 
 const textVerificationServiceToRepositoryDto = (user_id, user_challenge_id, body) => {
-  console.log(body);
   if (!body?.title) throw new Error('title is required in body');
   return {
     user_id: user_id,

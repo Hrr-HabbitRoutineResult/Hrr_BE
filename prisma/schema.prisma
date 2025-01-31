@@ -81,8 +81,8 @@ model Comment {
   content         String?      @db.Text
   parent_id       Int?
   anonymous       Boolean      @default(false)
-  created_at      DateTime?    @db.DateTime(6)
-  updated_at      DateTime?    @db.DateTime(6)
+  created_at      DateTime?    @db.DateTime(6) @default(now())
+  updated_at      DateTime?    @db.DateTime(6) @updatedAt
   user            User         @relation(fields: [user_id], references: [id])
   post            Post?        @relation(fields: [post_id], references: [id])
   verification    Verification? @relation(fields: [verification_id], references: [id])

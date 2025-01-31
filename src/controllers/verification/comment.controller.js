@@ -1,3 +1,8 @@
+import { StatusCodes } from 'http-status-codes';
+import commentService from '../../services/verification/comment.service.js';
+import commentDto from '../../dtos/verification/comment.dto.js';
+import { request } from 'http';
+
 const getVerificationComments = () => {
   /**
 #swagger.summary = '특정 인증 댓글 조회 API';
@@ -118,7 +123,7 @@ const getVerificationComments = () => {
 };
  */
 };
-const postVerificationComment = () => {
+const postVerificationComment = async (req, res, next) => {
   /**
   #swagger.summary = '챌린지 인증 댓글 작성 API';
   #swagger.description = '특정 챌린지 인증에 댓글을 작성하는 API입니다.';
@@ -253,6 +258,15 @@ const postVerificationComment = () => {
     }
   };
    */
+  try {
+    const user_id = req.user.id;
+    const verification_id = Number(req.params.verificationId);
+    const request_data = commentDto.commentVerificationControllerToService(user_id, verification_id, req.body);
+    const new_comment = await commentService.postVerificationComment(request_data);
+    return res.status(StatusCodes.OK).json(new_comment);
+  } catch (error) {
+    next(error);
+  }
 };
 const updateVerificationComment = () => {
   /**

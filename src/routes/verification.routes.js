@@ -29,7 +29,7 @@ router.delete('/:verificationId/unlike', authMiddleware, likeController.unlikeSp
 // Comment
 router.get('/:verificationId/comment', commentController.getVerificationComments);
 router.post('/:verificationId/comment', authMiddleware, commentController.postVerificationComment);
-router.patch('/:verificationId/comment', commentController.updateVerificationComment);
+router.patch('/comment/:commentId', authMiddleware, commentController.updateVerificationComment);
 
 // Scrap
 router.post('/:verificationId/scrap', authMiddleware, scrapController.scrapVerification);

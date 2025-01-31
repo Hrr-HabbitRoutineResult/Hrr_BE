@@ -1,7 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import commentService from '../../services/verification/comment.service.js';
 import commentDto from '../../dtos/verification/comment.dto.js';
-import { request } from 'http';
 
 const getVerificationComments = () => {
   /**
@@ -262,7 +261,7 @@ const postVerificationComment = async (req, res, next) => {
     next(error);
   }
 };
-const updateVerificationComment = () => {
+const updateVerificationComment = async (req, res, next) => {
   /**
   #swagger.summary = '특정 인증 댓글 수정 API';
   #swagger.description = '특정 인증에 작성된 댓글을 수정하는 API입니다.';
@@ -396,6 +395,15 @@ const updateVerificationComment = () => {
     }
   };
    */
+  try {
+    const user_id = req.user.id;
+    const comment_id = Number(req.body.commentId);
+    const content = req.body.content;
+    const new_comment = await commentService.updateVerificationComment(user_id, comment_id, content);
+    return res.status(StatusCodes.OK).json(new_comment);
+  } catch (error) {
+    next(error);
+  }
 };
 
 export default {

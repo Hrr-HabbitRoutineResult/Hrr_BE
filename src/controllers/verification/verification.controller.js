@@ -1,3 +1,7 @@
+import { StatusCodes } from 'http-status-codes';
+import verificationService from '../../services/verification/verification.service.js';
+import verificationDto from '../../dtos/verification/verification.dto.js';
+
 const getChallengeVerificationStatus = () => {
   /**
   #swagger.summary = '챌린지 인증 현황 조회 API';
@@ -360,7 +364,7 @@ const getSpecificVerification = () => {
   };
    */
 };
-const cameraVerification = () => {
+const cameraVerification = async (req, res, next) => {
   /**
   #swagger.summary = '챌린지 사진 인증 등록 API';
   #swagger.description = '특정 챌린지에 사진 인증을 등록하는 API입니다. (사진 업로드, 다시 찍기, 인증하기 등 처리)';
@@ -375,17 +379,17 @@ const cameraVerification = () => {
     required: true,
     description: '사진 업로드를 위한 multipart/form-data 형식의 요청 데이터',
     content: {
-      'multipart/form-data': {
+      'application/json': {
         schema: {
           type: 'object',
           properties: {
-            photoUrl: {
-              type: 'string',
-              format: 'binary',
-              description: '업로드할 사진 파일'
-            }
+            title: { type: 'string', example: '챌린지 글로 인증하기', description: '인증 글 제목' },
+            content: { type: 'string', example: '인증 글입니다!', description: '인증 글 내용' },
+            photoUrl: { type: 'string', example: 'https://notionverification.com', description: '인증 글의 외부 링크 URL' },
+            textUrl: { type: 'string', example: 'https://notionverification.com', description: '인증 글의 외부 링크 URL' },
+            question: { type: 'boolean', example: false, description: '질문 여부' }
           },
-          required: ['photoUrl']
+          required: ['photoUrl','title', 'content', 'question']
         },
       }
     }
@@ -406,28 +410,10 @@ const cameraVerification = () => {
                 verifications: {
                   type: 'object',
                   properties: {
-                    UserInfo: {
-                      type: 'object',
-                      properties: {
-                        id: { type: 'string', example: '1' },
-                        name: { type: 'string', example: '홍길동' },
-                        profilePhoto: { type: 'string', example: 'https://image.com' }
-                      }
-                    },
-                    challengeInfo: {
-                      type: 'object',
-                      properties: {
-                        id: { type: 'string', example: '1' },
-                        name: { type: 'string', example: '운동하는 챌린지' },
-                        challengeType: { type: 'string', example: 'basic' }
-                      }
-                    },
-                    verification: {
-                      type: 'object',
-                      properties: {
-                        id: { type: 'integer', example: 1 },
-                        photoUrl: { type: 'string', example: 'https://photoverification.com' }
-                      }
+                      id: { type: 'integer', example: 1 },
+                      verificationType: {type: 'string', example: 'camera'},
+                      title: {type: 'string', example: '첫번째 인증입니다!'},
+                      photoUrl: { type: 'string', example: 'https://photoverification.com' }
                     }
                   }
                 }
@@ -502,7 +488,17 @@ const cameraVerification = () => {
     }
   };
    */
+  try {
+    const user_id = req.user.id;
+    const challenge_id = parseInt(req.params.challengeId, 10);
+    const completed_challenge = await verificationService.verifyWithCamera(user_id, challenge_id, req.body);
+
+    return res.status(StatusCodes.OK).json(completed_challenge);
+  } catch (error) {
+    next(error);
+  }
 };
+
 const textVerification = () => {
   /**
   #swagger.summary = '챌린지 글 인증 등록 API';

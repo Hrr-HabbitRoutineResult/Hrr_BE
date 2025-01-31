@@ -270,113 +270,113 @@ const likeChallenge = async (req, res, next) => {
 
 const unlikeChallenge = async (req, res, next) => {
   /**
-   * #swagger.summary = '챌린지 좋아요 취소 API'
-   * #swagger.description = '특정 챌린지에 대한 좋아요를 취소하는 API입니다.'
-   * #swagger.tags = ['Challenge']
-   * #swagger.parameters['Authorization'] = {
-   *   in: 'header',
-   *   required: true,
-   *   schema: { type: 'string', example: 'Bearer {token}' },
-   *   description: '인증을 위한 액세스 토큰'
-   * }
-   * #swagger.parameters['Content-Type'] = {
-   *   in: 'header',
-   *   required: true,
-   *   schema: { type: 'string', example: 'application/json' },
-   *   description: '요청 본문의 콘텐츠 타입'
-   * }
-   * #swagger.parameters['challengeId'] = {
-   *   in: 'path',
-   *   required: true,
-   *   schema: { type: 'string', example: '1' },
-   *   description: '좋아요를 취소할 챌린지 ID'
-   * }
-   * #swagger.responses[200] = {
-   *   description: '좋아요 취소 성공',
-   *   content: {
-   *     'application/json': {
-   *       schema: {
-   *         type: 'object',
-   *         properties: {
-   *           resultType: { type: 'string', example: 'SUCCESS' },
-   *           error: { type: 'object', nullable: true, example: null },
-   *           success: {
-   *             type: 'object',
-   *             properties: {
-   *               id: { type: 'integer', example: 5, description: '좋아요 ID' },
-   *               user_id: { type: 'integer', example: 5, description: '사용자 ID' },
-   *               challenge_id: { type: 'integer', example: 1, description: '챌린지 ID' },
-   *               update_challenge_like: { type: 'integer', example: 5, description: '업데이트된 좋아요 수' }
-   *             }
-   *           }
-   *         }
-   *       }
-   *     }
-   *   }
-   * }
-   * #swagger.responses[400] = {
-   *   description: '잘못된 요청',
-   *   content: {
-   *     'application/json': {
-   *       schema: {
-   *         type: 'object',
-   *         properties: {
-   *           resultType: { type: 'string', example: 'FAIL' },
-   *           error: {
-   *             type: 'object',
-   *             properties: {
-   *               errorCode: { type: 'string', example: 'A100' },
-   *               reason: { type: 'string', example: '잘못된 요청입니다.' }
-   *             }
-   *           },
-   *           success: { type: 'object', nullable: true, example: null }
-   *         }
-   *       }
-   *     }
-   *   }
-   * }
-   * #swagger.responses[401] = {
-   *   description: '인증 실패',
-   *   content: {
-   *     'application/json': {
-   *       schema: {
-   *         type: 'object',
-   *         properties: {
-   *           resultType: { type: 'string', example: 'FAIL' },
-   *           error: { type: 'string', example: 'Unauthorized access.' }
-   *         }
-   *       }
-   *     }
-   *   }
-   * }
-   * #swagger.responses[404] = {
-   *   description: '챌린지를 찾을 수 없음',
-   *   content: {
-   *     'application/json': {
-   *       schema: {
-   *         type: 'object',
-   *         properties: {
-   *           resultType: { type: 'string', example: 'FAIL' },
-   *           error: { type: 'string', example: '챌린지를 찾을 수 없습니다.' }
-   *         }
-   *       }
-   *     }
-   *   }
-   * }
-   * #swagger.responses[500] = {
-   *   description: '서버 오류',
-   *   content: {
-   *     'application/json': {
-   *       schema: {
-   *         type: 'object',
-   *         properties: {
-   *           resultType: { type: 'string', example: 'FAILURE' },
-   *           error: { type: 'string', example: 'Internal server error.' }
-   *         }
-   *       }
-   *     }
-   *   }
-   * }
+  #swagger.summary = '챌린지 좋아요 취소 API'
+  #swagger.description = '특정 챌린지에 대한 좋아요를 취소하는 API입니다.'
+  #swagger.tags = ['Challenge']
+  #swagger.parameters['Authorization'] = {
+    in: 'header',
+    required: true,
+    schema: { type: 'string', example: 'Bearer {token}' },
+    description: '인증을 위한 액세스 토큰'
+  }
+  #swagger.parameters['Content-Type'] = {
+    in: 'header',
+    required: true,
+    schema: { type: 'string', example: 'application/json' },
+    description: '요청 본문의 콘텐츠 타입'
+  }
+  #swagger.parameters['challengeId'] = {
+    in: 'path',
+    required: true,
+    schema: { type: 'string', example: '1' },
+    description: '좋아요를 취소할 챌린지 ID'
+  }
+  #swagger.responses[200] = {
+    description: '좋아요 취소 성공',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'SUCCESS' },
+            error: { type: 'object', nullable: true, example: null },
+            success: {
+              type: 'object',
+              properties: {
+                id: { type: 'integer', example: 5, description: '좋아요 ID' },
+                user_id: { type: 'integer', example: 5, description: '사용자 ID' },
+                challenge_id: { type: 'integer', example: 1, description: '챌린지 ID' },
+                update_challenge_like: { type: 'integer', example: 5, description: '업데이트된 좋아요 수' }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  #swagger.responses[400] = {
+    description: '잘못된 요청',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'FAIL' },
+            error: {
+              type: 'object',
+              properties: {
+                errorCode: { type: 'string', example: 'A100' },
+                reason: { type: 'string', example: '잘못된 요청입니다.' }
+              }
+            },
+            success: { type: 'object', nullable: true, example: null }
+          }
+        }
+      }
+    }
+  }
+  #swagger.responses[401] = {
+    description: '인증 실패',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'FAIL' },
+            error: { type: 'string', example: 'Unauthorized access.' }
+          }
+        }
+      }
+    }
+  }
+  #swagger.responses[404] = {
+    description: '챌린지를 찾을 수 없음',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'FAIL' },
+            error: { type: 'string', example: '챌린지를 찾을 수 없습니다.' }
+          }
+        }
+      }
+    }
+  }
+  #swagger.responses[500] = {
+    description: '서버 오류',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'FAILURE' },
+            error: { type: 'string', example: 'Internal server error.' }
+          }
+        }
+      }
+    }
+  }
    */
   try {
     const user_id = req.user.id;
@@ -525,7 +525,7 @@ const participateInChallenge = () => {
   };
    */
 };
-const getChallengeParticipantsList = () => {
+const getChallengerList = async (req, res, next) => {
   /**
   #swagger.summary = '챌린저 리스트 조회 API';
   #swagger.description = '특정 챌린지에 참가한 챌린저 리스트를 조회하는 API입니다. 각 챌린저의 인증 횟수와 상태도 함께 표시됩니다.';
@@ -543,37 +543,35 @@ const getChallengeParticipantsList = () => {
     description: '챌린지 ID'
   };
   #swagger.responses[200] = {
-    description: '챌린저 리스트 조회 성공',
-    content: {
-      'application/json': {
-        schema: {
+  description: '챌린저 리스트 조회 성공',
+  content: {
+    'application/json': {
+      schema: {
+        type: 'array',
+        items: {
           type: 'object',
           properties: {
-            resultType: { type: 'string', example: 'SUCCESS' },
-            error: { type: 'object', nullable: true, example: null },
-            success: {
-              type: 'object',
-              properties: {
-                challengerslist: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      userId: { type: 'integer', example: 1 },
-                      name: { type: 'string', example: '홍길동' },
-                      profilePhoto: { type: 'string', example: 'https://profile1.com' },
-                      verifyCount: { type: 'integer', example: 5 },
-                      status: { type: 'string', example: 'verified', description: '인증 상태 (verified, unverified)' }
-                    }
-                  }
-                }
-              }
-            }
+            id: { type: 'integer', example: 5 },
+            nickname: { type: 'string', example: 'john_doe' }
           }
         }
-      }
+      },
+      example: [
+        {
+          id: 5,
+          nickname: 'john_doe',
+          owner: true
+        },
+        {
+          id: 8,
+          nickname: 'jane_smith',
+          owner: false
+        }
+      ]
     }
-  };
+  }
+};
+
   #swagger.responses[400] = {
     description: '잘못된 요청',
     content: {
@@ -638,8 +636,15 @@ const getChallengeParticipantsList = () => {
     }
   };
    */
+  try {
+    const challenge_id = parseInt(req.params.challengeId, 10);
+    const challenger_list = await participationService.getChallengerList(challenge_id);
+    return res.status(StatusCodes.OK).json(challenger_list);
+  } catch (error) {
+    next(error);
+  }
 };
-const kickChallengeParticipant = () => {
+const kickChallenger = () => {
   /**
   #swagger.summary = '챌린저 리스트 내보내기 API';
   #swagger.description = '특정 챌린지에서 3회 미인증한 챌린저를 내보낼 수 있는 API입니다.';
@@ -882,7 +887,7 @@ export default {
   likeChallenge,
   unlikeChallenge,
   participateInChallenge,
-  getChallengeParticipantsList,
-  kickChallengeParticipant,
+  getChallengerList,
+  kickChallenger,
   getChallengeCalendar,
 };

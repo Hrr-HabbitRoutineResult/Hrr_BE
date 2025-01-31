@@ -1,5 +1,5 @@
 import { prisma } from '../../db.config.js';
-import participationError from '../../errors/challenge/participation.error.js';
+import participationError, { DataBaseError } from '../../errors/challenge/participation.error.js';
 
 const joinChallenge = async data => {
   try {
@@ -96,6 +96,35 @@ const getChallengeLike = async (user_id, challenge_id) => {
   }
 };
 
+const getChallengeList = async challenge_id => {
+  try {
+    const challenger_list = await prisma.userChallenge.findMany({
+      where: { challenge_id },
+      select: {
+        owner: true,
+        user: {
+          select: {
+            id: true,
+            nickname: true,
+          },
+        },
+      },
+    });
+
+    // Boolean 값이 true인 항목을 맨 앞으로 정렬
+    challenger_list.sort((a, b) => b.owner - a.owner);
+
+    // owner 값과 함께 반환
+    return challenger_list.map(challenger => ({
+      id: challenger.user.id,
+      nickname: challenger.user.nickname,
+      owner: challenger.owner,
+    }));
+  } catch (error) {
+    throw new DataBaseError.DataBaseError('Failed to fetch challenge participants');
+  }
+};
+
 export default {
   joinChallenge,
   getUserChallengeById,
@@ -104,4 +133,5 @@ export default {
   decreaseChallengeLike,
   getChallengeLike,
   deleteChallengeLike,
+  getChallengeList,
 };

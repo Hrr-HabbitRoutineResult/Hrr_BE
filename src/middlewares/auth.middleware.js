@@ -7,7 +7,7 @@ export const authMiddleware = async (req, res, next) => {
   const auth_header = req.headers['authorization'];
   const token = auth_header && auth_header.split(' ')[1];
   if (!token) {
-    throw new authError.AccessTokenError('Access token required');
+    next(new authError.AccessTokenError('Access token required'));
   }
 
   try {

@@ -325,7 +325,7 @@ const getUserChallengesCompleted = async (req, res, next) => {
     next(error);
   }
 };
-const getUserChallengesHistory = () => {
+const getUserChallengesHistory = async (req, res, next) => {
   /**
   #swagger.summary = '챌린지 기록 조회 API';
   #swagger.description = '사용자가 인증한 챌린지 기록을 조회합니다.';
@@ -353,13 +353,15 @@ const getUserChallengesHistory = () => {
                   items: {
                     type: 'object',
                     properties: {
-                      challengeId: { type: 'integer', example: 1 },
-                      title: { type: 'string', example: '30일 걷기 챌린지' },
-                      date: { 
-                        type: 'array', 
-                        items: { type: 'string', example: '2025-01-01' } 
+                      challengeId: { type: 'integer', example: 2 },
+                      name: { type: 'string', example: '영화 봐요' },
+                      verificationId: { type: 'integer', example: '1'},
+                      created_at: { 
+                        type: 'string', example: '2025-01-30T04:28:48.125Z'
                       },
-                      url: { type: 'string', example: 'https://url1.com' }
+                      title: { type: 'string', example: '1일차 챌린지 인증'},
+                      photoUrl: { type: 'string', example: 'https://url1.com' },
+                      textUrl: { type: 'string', example: 'https://url2.com' }
                     }
                   }
                 }
@@ -385,8 +387,16 @@ const getUserChallengesHistory = () => {
     }
   };
    */
+  try {
+    const id = req.user.id;
+    const challenge_history = await userService.getUserChallengeHistory(id);
+
+    return res.status(StatusCodes.OK).json(challenge_history);
+  } catch (error) {
+    next(error);
+  }
 };
-const getUserBadges = () => {
+const getUserBadges = async (req, res, next) => {
   /**
   #swagger.summary = '사용자 배지 조회 API';
   #swagger.description = '사용자가 획득한 배지 정보를 조회합니다.';
@@ -410,14 +420,31 @@ const getUserBadges = () => {
               type: 'object',
               properties: {
                 data: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      badgeId: { type: 'integer', example: 1 },
-                      name: { type: 'string', example: '걷기 마스터' },
-                      icon: { type: 'string', example: 'https://example.com/badge1.png' },
-                      description: { type: 'string', example: '30일 연속 걷기 챌린지 완료' }
+                  type: 'object',
+                  properties: {
+                    typeBadges: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          badgeId: { type: 'integer', example: 1 },
+                          name: { type: 'string', example: '운동 마스터' },
+                          icon: { type: 'string', example: 'https://example.com/badge1.png' },
+                          isObtained: { type: 'boolean', example: true }
+                        }
+                      }
+                    },
+                    categoryBadges: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          badgeId: { type: 'integer', example: 2 },
+                          name: { type: 'string', example: '학업 스타터' },
+                          icon: { type: 'string', example: 'https://example.com/badge2.png' },
+                          isObtained: { type: 'boolean', example: false }
+                        }
+                      }
                     }
                   }
                 }
@@ -443,8 +470,16 @@ const getUserBadges = () => {
     }
   };
    */
+  try {
+    const id = req.user.id;
+    const all_badges = await userService.getUserBadgesById(id);
+
+    return res.status(StatusCodes.OK).json(all_badges);
+  } catch (error) {
+    next(error);
+  }
 };
-const postUserFollow = () => {
+const postUserFollow = async (req, res, next) => {
   /**
 #swagger.summary = '사용자 팔로우 API';
 #swagger.description = '특정 사용자를 팔로우합니다.';
@@ -520,8 +555,17 @@ const postUserFollow = () => {
   }
 };
  */
+  try {
+    const followed_user_id = req.params.followedUserId;
+    const user_id = req.user.id;
+    const response = await userService.postUserFollowById(user_id, Number(followed_user_id));
+
+    return res.status(StatusCodes.OK).json(response);
+  } catch (error) {
+    next(error);
+  }
 };
-const deleteUserFollow = () => {
+const deleteUserFollow = async (req, res, next) => {
   /**
   #swagger.summary = '사용자 언팔로우 API';
   #swagger.description = '특정 사용자를 언팔로우합니다.';
@@ -597,6 +641,15 @@ const deleteUserFollow = () => {
     }
   };
    */
+  try {
+    const unfollowed_user_id = req.params.unfollowedUserId;
+    const user_id = req.user.id;
+    const response = await userService.deleteUserFollowById(user_id, Number(unfollowed_user_id));
+
+    return res.status(StatusCodes.OK).json(response);
+  } catch (error) {
+    next(error);
+  }
 };
 const getUserScraps = () => {
   /**
@@ -664,6 +717,86 @@ const getUserScraps = () => {
     }
   };
    */
+};
+const getUserBadgesConditions = async (req, res, next) => {
+  /**
+  #swagger.summary = '배지 조건 조회 API';
+  #swagger.description = '사용자가 획득한 배지 조건을 조회합니다.';
+  #swagger.tags = ['User'];
+  #swagger.parameters['Authorization'] = {
+    in: 'header',
+    required: true,
+    schema: { type: 'string', example: 'Bearer <access_token>' },
+    description: '인증을 위한 액세스 토큰'
+  };
+  #swagger.responses[200] = {
+    description: '배지 조건 조회 성공',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'SUCCESS' },
+            error: { type: 'object', nullable: true, example: null },
+            success: {
+              type: 'object',
+              properties: {
+                data: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      badgeId: { type: 'integer', example: 1 },
+                      conditionId: { type: 'integer', example: 1 },
+                      description: { type: 'string', example: '운동 챌린지 참가 10회' },
+                      isAchieved: { type: 'string', example: 'true' }
+                    }
+                  },
+                  example: [
+                    {
+                      badgeId: 1,
+                      conditionId: 1,
+                      description: '운동 챌린지 참가 10회',
+                      isAchieved: 'true'
+                    },
+                    {
+                      badgeId: 1,
+                      conditionId: 2,
+                      description: '운동 챌린지 5회 완주 성공',
+                      isAchieved: 'true'
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+  #swagger.responses[401] = {
+    description: '인증 실패',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'FAILURE' },
+            error: { type: 'string', example: 'Unauthorized access.' }
+          }
+        }
+      }
+    }
+  };
+   */
+  try {
+    const user_id = req.user.id;
+    const badges_condition = await userService.getUserBadgesConditionById(user_id);
+
+    return res.status(StatusCodes.OK).json(badges_condition);
+  } catch (error) {
+    next(error);
+  }
 };
 const blockUser = () => {
   /**
@@ -759,5 +892,6 @@ export default {
   postUserFollow,
   deleteUserFollow,
   getUserScraps,
+  getUserBadgesConditions,
   blockUser,
 };

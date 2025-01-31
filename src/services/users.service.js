@@ -79,9 +79,61 @@ const getCompletedChallenge = async id => {
   return response_data;
 };
 
+const getUserChallengeHistory = async id => {
+  const challenge_history = await userRepository.findUserChallengeHistory(id);
+  const verification_history = await userRepository.findUserVerificationHistory(id);
+  const response_data = userDto.userChallengeHistoryDto(challenge_history, verification_history);
+  if (!response_data) {
+    return null;
+  }
+
+  return response_data;
+};
+
+const getUserBadgesById = async id => {
+  const type_badges = await userRepository.findUserTypeBadges(id);
+  const category_badges = await userRepository.findUserCategoryBadges(id);
+  const response_data = userDto.userBadgesDto(type_badges, category_badges);
+  if (!response_data) {
+    return null;
+  }
+
+  return response_data;
+};
+
+const postUserFollowById = async (user_id, followed_user_id) => {
+  if (user_id === followed_user_id) {
+    throw new userError.CannotFollowSelfError('자기 자신은 팔로우할 수 없습니다.');
+  }
+  const user_follow = await userRepository.createUserFollows(user_id, followed_user_id);
+  const response_data = userDto.userFollowDto(user_follow);
+  return response_data;
+};
+
+const deleteUserFollowById = async (user_id, unfollowed_user_id) => {
+  if (user_id === unfollowed_user_id) {
+    throw new userError.CannotFollowSelfError('자기 자신은 언팔로우할 수 없습니다.');
+  }
+  const user_unfollow = await userRepository.userUnfollows(user_id, unfollowed_user_id);
+  const response_data = userDto.userUnfollowDto(user_unfollow);
+  return response_data;
+};
+
+const getUserBadgesConditionById = async id => {
+  const badges_condition = await userRepository.findUserBadgesCondition(id);
+  const response_data = userDto.userBadgesConditionDto(badges_condition);
+
+  return response_data;
+};
+
 export default {
   getUserInfoByEmail,
   updateUserInfobyEmail,
   getOngoingChallenge,
   getCompletedChallenge,
+  getUserChallengeHistory,
+  getUserBadgesById,
+  postUserFollowById,
+  deleteUserFollowById,
+  getUserBadgesConditionById,
 };

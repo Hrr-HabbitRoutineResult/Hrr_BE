@@ -14,12 +14,6 @@ const getVerificationComments = async (req, res, next) => {
   schema: { type: 'string', example: 'Bearer {token}' },
   description: '인증을 위한 액세스 토큰'
 };
-#swagger.parameters['challengeId'] = {
-  in: 'path',
-  required: true,
-  schema: { type: 'string', example: '101' },
-  description: '챌린지 ID'
-};
 #swagger.parameters['verificationId'] = {
   in: 'path',
   required: true,
@@ -27,7 +21,7 @@ const getVerificationComments = async (req, res, next) => {
   description: '인증 ID'
 };
 #swagger.responses[200] = {
-  description: '댓글 조회 성공',
+  description: '댓글 목록 조회 성공',
   content: {
     'application/json': {
       schema: {
@@ -36,22 +30,103 @@ const getVerificationComments = async (req, res, next) => {
           resultType: { type: 'string', example: 'SUCCESS' },
           error: { type: 'object', nullable: true, example: null },
           success: {
-            type: 'object',
-            properties: {
-              comments: {
-                type: 'array',
-                items: {
-                  type: 'object',
-                  properties: {
-                    commentId: { type: 'string', example: 'cmt001' },
-                    userId: { type: 'string', example: 'user456' },
-                    username: { type: 'string', example: 'RunningBuddy' },
-                    content: { type: 'string', example: '대단해요! 꾸준함이 정말 멋집니다.' },
-                    createdAt: { type: 'string', format: 'date-time', example: '2025-01-06T16:00:00Z' }
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                id: { type: 'integer', example: 10 },
+                user_id: { type: 'integer', example: 1 },
+                nickname: { type: 'string', example: '김흐르' },
+                content: { type: 'string', example: '이 인증 정말 좋네요!' },
+                parent_id: { type: 'integer', example: 0 },
+                created_at: { type: 'string', format: 'date-time', example: '2025-01-31T08:44:46.065Z' },
+                updated_at: { type: 'string', format: 'date-time', example: '2025-01-31T08:44:46.065Z' },
+                selected: { type: 'boolean', example: false },
+                anonymous: { type: 'boolean', example: false },
+                replies: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'integer', example: 11 },
+                      user_id: { type: 'integer', example: 1 },
+                      nickname: { type: 'string', example: '김흐르' },
+                      content: { type: 'string', example: '이 인증 정말 좋네요!' },
+                      parent_id: { type: 'integer', example: 10 },
+                      created_at: { type: 'string', format: 'date-time', example: '2025-01-31T08:45:43.210Z' },
+                      updated_at: { type: 'string', format: 'date-time', example: '2025-01-31T08:45:43.210Z' },
+                      selected: { type: 'boolean', example: false },
+                      anonymous: { type: 'boolean', example: false },
+                      replies: { type: 'array', items: {} }
+                    }
                   }
                 }
               }
-            }
+            },
+            example: [
+              {
+                "id": 10,
+                "user_id": 1,
+                "nickname": "김흐르",
+                "content": "이 인증 정말 좋네요!",
+                "parent_id": 0,
+                "created_at": "2025-01-31T08:44:46.065Z",
+                "updated_at": "2025-01-31T08:44:46.065Z",
+                "selected": false,
+                "anonymous": false,
+                "replies": [
+                  {
+                    "id": 11,
+                    "user_id": 1,
+                    "nickname": "김흐르",
+                    "content": "이 인증 정말 좋네요!",
+                    "parent_id": 10,
+                    "created_at": "2025-01-31T08:45:43.210Z",
+                    "updated_at": "2025-01-31T08:45:43.210Z",
+                    "selected": false,
+                    "anonymous": false,
+                    "replies": []
+                  }
+                ]
+              },
+              {
+                "id": 12,
+                "user_id": 1,
+                "nickname": "김흐르",
+                "content": "이 인증 정말 좋네요!",
+                "parent_id": 0,
+                "created_at": "2025-01-31T08:47:57.366Z",
+                "updated_at": "2025-01-31T08:47:57.366Z",
+                "selected": false,
+                "anonymous": false,
+                "replies": [
+                  {
+                    "id": 13,
+                    "user_id": 1,
+                    "nickname": "김흐르",
+                    "content": "이 인증 정말 좋네요!",
+                    "parent_id": 12,
+                    "created_at": "2025-01-31T08:48:59.878Z",
+                    "updated_at": "2025-01-31T08:48:59.878Z",
+                    "selected": false,
+                    "anonymous": false,
+                    "replies": []
+                  },
+                  {
+                    "id": 14,
+                    "user_id": 1,
+                    "nickname": "김흐르",
+                    "content": "이 인증 정말 좋네요!",
+                    "parent_id": 12,
+                    "created_at": "2025-01-31T08:50:14.563Z",
+                    "updated_at": "2025-01-31T08:50:14.563Z",
+                    "selected": false,
+                    "anonymous": false,
+                    "replies": []
+                  }
+                ]
+              }
+            ]
           }
         }
       }

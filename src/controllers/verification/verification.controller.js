@@ -523,7 +523,7 @@ const textVerification = async (req, res, next) => {
             textUrl: { type: 'string', example: 'https://notionverification.com', description: '인증 글의 외부 링크 URL' },
             question: { type: 'boolean', example: false, description: '질문 여부' }
           },
-          required: ['title', 'content', 'textUrl', 'question']
+          required: ['title', 'content', 'question']
         },
       }
     }
@@ -544,33 +544,9 @@ const textVerification = async (req, res, next) => {
                 verifications: {
                   type: 'object',
                   properties: {
-                    UserInfo: {
-                      type: 'object',
-                      properties: {
-                        id: { type: 'string', example: '2' },
-                        name: { type: 'string', example: '유엠씨' },
-                        profilePhoto: { type: 'string', example: 'https://profile.com' }
-                      }
-                    },
-                    challengeInfo: {
-                      type: 'object',
-                      properties: {
-                        id: { type: 'string', example: '2' },
-                        name: { type: 'string', example: '책 읽는 챌린지' },
-                        challengeType: { type: 'string', example: 'basic' }
-                      }
-                    },
-                    verification: {
-                      type: 'object',
-                      properties: {
-                        id: { type: 'string', example: '2' },
-                        title: { type: 'string', example: '챌린지 글로 인증하기' },
-                        content: { type: 'string', example: '인증 글입니다!' },
-                        textUrl: { type: 'string', example: 'https://notionverification.com' },
-                        question: { type: 'boolean', example: false },
-                        created_at: { type: 'string', format: 'date-time', example: '2025-01-07' }
-                      }
-                    }
+                    verificationId: { type: 'integer', example: 2 },
+                    VerificationType: { type: 'string', example: 'text' },
+                    title: { type: 'string', example: '1일차 챌린지 인증' }
                   }
                 }
               }

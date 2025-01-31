@@ -95,6 +95,15 @@ const userUnfollowDto = unfollowed_user_id => {
   return response_data;
 };
 
+const userBadgesConditionDto = condition => {
+  return condition.map(condition => ({
+    badgeId: condition.condition.badge_id,
+    conditionId: condition.condition.id,
+    description: condition.condition.description,
+    isAchieved: condition.isAchieved,
+  }));
+};
+
 export default {
   serviceToControllerDto,
   updateUserInfoResponseDto,
@@ -104,4 +113,5 @@ export default {
   userChallengeHistoryDto,
   userFollowDto,
   userUnfollowDto,
+  userBadgesConditionDto,
 };

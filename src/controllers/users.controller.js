@@ -718,6 +718,86 @@ const getUserScraps = () => {
   };
    */
 };
+const getUserBadgesConditions = async (req, res, next) => {
+  /**
+  #swagger.summary = '배지 조건 조회 API';
+  #swagger.description = '사용자가 획득한 배지 조건을 조회합니다.';
+  #swagger.tags = ['User'];
+  #swagger.parameters['Authorization'] = {
+    in: 'header',
+    required: true,
+    schema: { type: 'string', example: 'Bearer <access_token>' },
+    description: '인증을 위한 액세스 토큰'
+  };
+  #swagger.responses[200] = {
+    description: '배지 조건 조회 성공',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'SUCCESS' },
+            error: { type: 'object', nullable: true, example: null },
+            success: {
+              type: 'object',
+              properties: {
+                data: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      badgeId: { type: 'integer', example: 1 },
+                      conditionId: { type: 'integer', example: 1 },
+                      description: { type: 'string', example: '운동 챌린지 참가 10회' },
+                      isAchieved: { type: 'string', example: 'true' }
+                    }
+                  },
+                  example: [
+                    {
+                      badgeId: 1,
+                      conditionId: 1,
+                      description: '운동 챌린지 참가 10회',
+                      isAchieved: 'true'
+                    },
+                    {
+                      badgeId: 1,
+                      conditionId: 2,
+                      description: '운동 챌린지 5회 완주 성공',
+                      isAchieved: 'true'
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+  #swagger.responses[401] = {
+    description: '인증 실패',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'FAILURE' },
+            error: { type: 'string', example: 'Unauthorized access.' }
+          }
+        }
+      }
+    }
+  };
+   */
+  try {
+    const user_id = req.user.id;
+    const badges_condition = await userService.getUserBadgesConditionById(user_id);
+
+    return res.status(StatusCodes.OK).json(badges_condition);
+  } catch (error) {
+    next(error);
+  }
+};
 const blockUser = () => {
   /**
   #swagger.summary = '이용자 차단 API';
@@ -812,5 +892,6 @@ export default {
   postUserFollow,
   deleteUserFollow,
   getUserScraps,
+  getUserBadgesConditions,
   blockUser,
 };

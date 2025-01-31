@@ -2,6 +2,7 @@ import { prisma } from '../db.config.js';
 import { Prisma } from '@prisma/client';
 import authError from '../errors/auth.error.js';
 import userError from '../errors/users.error.js';
+import databaseError from '../errors/database.error.js';
 
 const updateUserInfo = async (email, update_data) => {
   try {
@@ -235,6 +236,30 @@ const userUnfollows = async (unfollower_user_id, unfollowed_user_id) => {
   ]);
 };
 
+const findUserBadgesCondition = async user_id => {
+  try {
+    return await prisma.userBadgeCondition.findMany({
+      where: {
+        userBadge: {
+          user_id: user_id,
+        },
+      },
+      select: {
+        condition: {
+          select: {
+            id: true,
+            badge_id: true,
+            description: true,
+          },
+        },
+        isAchieved: true,
+      },
+    });
+  } catch (error) {
+    throw new databaseError.DataBaseError('DataBase Error on retrieving badge condition');
+  }
+};
+
 export default {
   updateUserInfo,
   findOngoingChallenges,
@@ -245,4 +270,5 @@ export default {
   findUserVerificationHistory,
   createUserFollows,
   userUnfollows,
+  findUserBadgesCondition,
 };

@@ -13,5 +13,6 @@ router.get('/badges', authMiddleware, usersController.getUserBadges);
 router.post('/:followedUserId/follow', authMiddleware, usersController.postUserFollow);
 router.delete('/:unfollowedUserId/unfollow', authMiddleware, usersController.deleteUserFollow);
 router.get('/:userId/scraps', usersController.getUserScraps);
+router.get('/badges/conditions', authMiddleware, usersController.getUserBadgesConditions);
 router.post('/block', usersController.blockUser);
 export default router;

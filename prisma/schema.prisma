@@ -80,6 +80,7 @@ model Comment {
   verification_id Int?
   content         String?      @db.Text
   parent_id       Int?
+  selected        Boolean      @default(false)
   anonymous       Boolean      @default(false)
   created_at      DateTime?    @db.DateTime(6) @default(now())
   updated_at      DateTime?    @db.DateTime(6) @updatedAt

@@ -651,7 +651,8 @@ const deleteUserFollow = async (req, res, next) => {
     next(error);
   }
 };
-const getUserScraps = () => {
+
+const getUserVerificationScraps = async (req, res, next) => {
   /**
   #swagger.summary = '스크랩한 글 목록 조회 API';
   #swagger.description = '내가 스크랩한 글들의 목록을 불러오는 API입니다.';
@@ -717,6 +718,13 @@ const getUserScraps = () => {
     }
   };
    */
+  try {
+    const user_id = req.user.id;
+    const response = await userService.getUserVerificationScraps(user_id);
+    return res.status(StatusCodes.OK).json(response);
+  } catch (error) {
+    next(error);
+  }
 };
 const getUserBadgesConditions = async (req, res, next) => {
   /**
@@ -891,7 +899,7 @@ export default {
   getUserBadges,
   postUserFollow,
   deleteUserFollow,
-  getUserScraps,
+  getUserVerificationScraps,
   getUserBadgesConditions,
   blockUser,
 };

@@ -126,6 +126,11 @@ const getUserBadgesConditionById = async id => {
   return response_data;
 };
 
+const getUserVerificationScraps = async user_id => {
+  const scrapped_verifications = await userRepository.getUserVerificationScraps(user_id);
+  return scrapped_verifications;
+};
+
 export default {
   getUserInfoByEmail,
   updateUserInfobyEmail,
@@ -136,4 +141,5 @@ export default {
   postUserFollowById,
   deleteUserFollowById,
   getUserBadgesConditionById,
+  getUserVerificationScraps,
 };

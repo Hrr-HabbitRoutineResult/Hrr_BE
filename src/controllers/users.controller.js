@@ -670,7 +670,7 @@ const getUserVerificationScraps = async (req, res, next) => {
     description: '사용자의 ID'
   };
   #swagger.responses[200] = {
-  description: '배지 조건 조회 성공',
+  description: '스크랩된 인증 조회 성공',
   content: {
     'application/json': {
       schema: {

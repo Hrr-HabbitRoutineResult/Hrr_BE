@@ -8,8 +8,22 @@ const verifyWithCamera = async dto => {
     });
     return camera_verification;
   } catch (error) {
-    throw new databaseError.DataBaseError('Error on creating email verification');
+    throw new databaseError.DataBaseError('Error on creating camera verification');
   }
 };
 
-export default { verifyWithCamera };
+const verifyWithText = async dto => {
+  try {
+    const text_verification = await prisma.verification.create({
+      data: dto,
+    });
+    return text_verification;
+  } catch (error) {
+    throw new databaseError.DataBaseError('Error on creating text verification');
+  }
+};
+
+export default {
+  verifyWithCamera,
+  verifyWithText,
+};

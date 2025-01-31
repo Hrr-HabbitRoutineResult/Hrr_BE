@@ -29,6 +29,7 @@ const updateVerificationComment = async (user_id, comment_id, content) => {
 };
 
 export default {
+  getVerificationComment,
   postVerificationComment,
   updateVerificationComment,
 };

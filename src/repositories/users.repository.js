@@ -2,6 +2,7 @@ import { prisma } from '../db.config.js';
 import { Prisma } from '@prisma/client';
 import authError from '../errors/auth.error.js';
 import userError from '../errors/users.error.js';
+import databaseError from '../errors/database.error.js';
 
 const updateUserInfo = async (email, update_data) => {
   try {
@@ -255,7 +256,7 @@ const findUserBadgesCondition = async user_id => {
       },
     });
   } catch (error) {
-    throw new userError.DataBaseError('DataBase Error on retrieving badge condition');
+    throw new databaseError.DataBaseError('DataBase Error on retrieving badge condition');
   }
 };
 

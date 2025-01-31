@@ -790,8 +790,8 @@ const getUserBadgesConditions = async (req, res, next) => {
   };
    */
   try {
-    const id = req.user.id;
-    const badges_condition = await userService.getUserBadgesConditionById(id);
+    const user_id = req.user.id;
+    const badges_condition = await userService.getUserBadgesConditionById(user_id);
 
     return res.status(StatusCodes.OK).json(badges_condition);
   } catch (error) {

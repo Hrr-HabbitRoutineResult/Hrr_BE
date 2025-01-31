@@ -80,11 +80,19 @@ const postVerificationComment = async request_data => {
 
 const updateVerificationComment = async (comment_id, content) => {
   try {
-    const updatedComment = await prisma.comment.update({
+    const updated_comment = await prisma.comment.update({
       where: { id: comment_id },
       data: { content: content },
     });
-    return updatedComment;
+    return {
+      id: updated_comment.id,
+      user_id: updated_comment.user_id,
+      content: updated_comment.content,
+      parent_id: updated_comment.parent_id,
+      created_at: updated_comment.created_at,
+      updated_at: updated_comment.updated_at,
+      anonymous: updated_comment.anonymous,
+    };
   } catch (error) {
     throw new databaseError.DataBaseError('Failed to update comment');
   }

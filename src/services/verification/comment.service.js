@@ -25,7 +25,7 @@ const updateVerificationComment = async (user_id, comment_id, content) => {
     throw new commentError.CommentUpdatePermissionDeniedError('Cannot update comment : Permission denied');
   }
   const updated_comment = await commentRepository.updateVerificationComment(comment_id, content);
-  return updated_comment;
+  return { ...updated_comment, nickname: comment.nickname };
 };
 
 export default {

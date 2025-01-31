@@ -360,17 +360,11 @@ const updateVerificationComment = async (req, res, next) => {
     schema: { type: 'string', example: 'application/json' },
     description: '요청 본문의 콘텐츠 타입'
   };
-  #swagger.parameters['challengeId'] = {
-    in: 'path',
-    required: true,
-    schema: { type: 'string', example: '101' },
-    description: '챌린지 ID'
-  };
-  #swagger.parameters['verificationId'] = {
+  #swagger.parameters['commentId'] = {
     in: 'path',
     required: true,
     schema: { type: 'string', example: '456' },
-    description: '인증 ID'
+    description: '댓글 ID'
   };
   #swagger.requestBody = {
     required: true,
@@ -399,13 +393,13 @@ const updateVerificationComment = async (req, res, next) => {
             data: {
               type: 'object',
               properties: {
-                commentId: { type: 'string', example: 'comment12345' },
+                id: { type: 'integer', example: 1 },
+                userId: { type: 'integer', example: 23 },
                 content: { type: 'string', example: '이 인증은 정말 멋집니다!' },
-                userId: { type: 'string', example: 'user56789' },
-                username: { type: 'string', example: '작성자 닉네임' },
+                nickname: { type: 'string', example: '작성자 닉네임' },
                 createdAt: { type: 'string', format: 'date-time', example: '2025-01-08T12:34:56Z' },
                 updatedAt: { type: 'string', format: 'date-time', example: '2025-01-08T13:00:00Z' },
-                message: { type: 'string', example: '댓글이 성공적으로 수정되었습니다.' }
+                anonymous: { type: 'boolean', example: false }
               }
             }
           }
@@ -479,7 +473,7 @@ const updateVerificationComment = async (req, res, next) => {
    */
   try {
     const user_id = req.user.id;
-    const comment_id = Number(req.body.commentId);
+    const comment_id = Number(req.params.commentId);
     const content = req.body.content;
     const new_comment = await commentService.updateVerificationComment(user_id, comment_id, content);
     return res.status(StatusCodes.OK).json(new_comment);

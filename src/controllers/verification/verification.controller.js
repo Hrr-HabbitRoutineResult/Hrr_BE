@@ -499,7 +499,7 @@ const cameraVerification = async (req, res, next) => {
   }
 };
 
-const textVerification = () => {
+const textVerification = async (req, res, next) => {
   /**
   #swagger.summary = '챌린지 글 인증 등록 API';
   #swagger.description = '사용자가 챌린지 글로 인증을 등록하는 API입니다. 제목, 내용, 링크, 질문 여부 등을 포함합니다.';
@@ -644,6 +644,15 @@ const textVerification = () => {
     }
   };
    */
+  try {
+    const user_id = req.user.id;
+    const challenge_id = parseInt(req.params.challengeId, 10);
+    const completed_challenge = await verificationService.verifyWithText(user_id, challenge_id, req.body);
+
+    return res.status(StatusCodes.OK).json(completed_challenge);
+  } catch (error) {
+    next(error);
+  }
 };
 const getTemporaryVerification = () => {
   /**

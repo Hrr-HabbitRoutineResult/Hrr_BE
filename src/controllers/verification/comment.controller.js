@@ -3,7 +3,7 @@ import commentService from '../../services/verification/comment.service.js';
 import commentDto from '../../dtos/verification/comment.dto.js';
 import { request } from 'http';
 
-const getVerificationComments = () => {
+const getVerificationComments = async (req, res, next) => {
   /**
 #swagger.summary = '특정 인증 댓글 조회 API';
 #swagger.description = '특정 챌린지 인증에 작성된 댓글들을 조회하는 API입니다.';
@@ -122,6 +122,13 @@ const getVerificationComments = () => {
   }
 };
  */
+  try {
+    const verification_id = Number(req.params.verificationId);
+    const comments = await commentService.getVerificationComment(verification_id);
+    return res.status(StatusCodes.OK).json(comments);
+  } catch (error) {
+    next(error);
+  }
 };
 const postVerificationComment = async (req, res, next) => {
   /**

@@ -280,7 +280,6 @@ const getUserVerificationScraps = async user_id => {
 
     return scrapped_verifications;
   } catch (error) {
-    console.error('Error on finding scrapped verifications:', error);
     throw new databaseError.DataBaseError('Error on finding scrapped verifications');
   }
 };

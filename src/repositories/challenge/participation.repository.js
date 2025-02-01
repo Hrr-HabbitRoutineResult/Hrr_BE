@@ -125,6 +125,63 @@ const getChallengeList = async challenge_id => {
   }
 };
 
+const findUserVerificationStatus = async (user_id, challenge_id) => {
+  try {
+    return await prisma.$transaction(async prisma => {
+      // User Info 조회
+      const user_info = await prisma.user.findUnique({
+        where: { id: user_id },
+        select: {
+          id: true,
+          nickname: true,
+          profilePhoto: true,
+        },
+      });
+
+      // 인증 횟수, 경고 횟수, 달성률 조회
+      const user_challenge = await prisma.userChallenge.findFirst({
+        where: { user_id, challenge_id },
+        select: {
+          id: true,
+          verifyCount: true,
+          warn: true,
+        },
+      });
+
+      // 달성률
+      const achievement_rate = await prisma.challenge.findUnique({
+        where: { id: challenge_id },
+        select: {
+          joinDate: true,
+          endDate: true,
+        },
+      });
+
+      if (!user_challenge) {
+        return { user_info, achievement_rate: 0, user_challenge: null, verifications: [] };
+      }
+
+      // 인증 기록 조회 (userChallenge의 id 활용)
+      const verifications = await prisma.verification.findMany({
+        where: { userChallenge_id: user_challenge.id },
+        select: {
+          id: true,
+          verificationType: true,
+          created_at: true,
+          photoUrl: true,
+          textUrl: true,
+          title: true,
+        },
+      });
+
+      return { user_info, achievement_rate, user_challenge, verifications };
+    });
+  } catch (error) {
+    console.error(error);
+    throw new participationError.DataBaseError('Database error occurred while fetching user verification status');
+  }
+};
+
 export default {
   joinChallenge,
   getUserChallengeById,
@@ -134,4 +191,5 @@ export default {
   getChallengeLike,
   deleteChallengeLike,
   getChallengeList,
+  findUserVerificationStatus,
 };

@@ -100,9 +100,16 @@ const getChallengerList = async challenge_id => {
   return challenger_list;
 };
 
+const getUserChallengeVerificationbyId = async (user_id, challenge_id) => {
+  const user_verification = await participationRepository.findUserVerificationStatus(user_id, challenge_id);
+  const response_data = participationDto.userVerificationDto(user_verification);
+  return response_data;
+};
+
 export default {
   joinChallenge,
   increaseChallengeLike,
   decreaseChallengeLike,
   getChallengerList,
+  getUserChallengeVerificationbyId,
 };

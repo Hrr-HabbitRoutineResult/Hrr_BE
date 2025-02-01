@@ -388,7 +388,7 @@ const unlikeChallenge = async (req, res, next) => {
   }
 };
 
-const participateInChallenge = () => {
+const getUserChallengeVerification = async (req, res, next) => {
   /**
   #swagger.summary = '나의 챌린지 인증 현황 조회 API';
   #swagger.description = '특정 챌린지에서 사용자의 인증 현황(이름, 사진, 인증 횟수, 미인증 횟수, 인증 상세 목록)을 조회하는 API입니다.';
@@ -424,7 +424,7 @@ const participateInChallenge = () => {
                     UserInfo: {
                       type: 'object',
                       properties: {
-                        id: { type: 'string', example: '1' },
+                        id: { type: 'integer', example: '1' },
                         name: { type: 'string', example: '홍길동' },
                         profilePhoto: { type: 'string', example: 'https://image.com' }
                       }
@@ -432,8 +432,9 @@ const participateInChallenge = () => {
                     Verifications: {
                       type: 'object',
                       properties: {
-                        verifyCount: { type: 'string', example: '25' },
-                        unverifyCount: { type: 'string', example: '0' }
+                        verifyCount: { type: 'integer', example: '25' },
+                        warnCount: { type: 'integer', example: '0' },
+                        achievement_rate: { type: 'integer', example: '100'}
                       }
                     },
                     VerificationList: {
@@ -441,13 +442,12 @@ const participateInChallenge = () => {
                       items: {
                         type: 'object',
                         properties: {
-                          id: { type: 'string', example: '1' },
+                          verificationId: { type: 'integer', example: '1' },
                           type: { type: 'string', example: 'camera' },
                           created_at: { type: 'string', format: 'date', example: '2025-01-07' },
                           photoUrl: { type: 'string', example: 'https://image.com', nullable: true },
                           textUrl: { type: 'string', example: 'https://notion.com', nullable: true },
-                          title: { type: 'string', example: '해피뉴이어~! 올해 첫번째 인증합니다.' },
-                          content: { type: 'string', example: '인증 올립니다.', nullable: true }
+                          title: { type: 'string', example: '해피뉴이어~! 올해 첫번째 인증합니다.' }
                         }
                       }
                     }
@@ -524,7 +524,17 @@ const participateInChallenge = () => {
     }
   };
    */
+  try {
+    const challenge_id = req.params.challengeId;
+    const user_id = req.user.id;
+    const response = await participationService.getUserChallengeVerificationbyId(user_id, Number(challenge_id));
+
+    return res.status(StatusCodes.OK).json(response);
+  } catch (error) {
+    next(error);
+  }
 };
+
 const getChallengerList = async (req, res, next) => {
   /**
   #swagger.summary = '챌린저 리스트 조회 API';
@@ -886,7 +896,7 @@ export default {
   joinChallenge,
   likeChallenge,
   unlikeChallenge,
-  participateInChallenge,
+  getUserChallengeVerification,
   getChallengerList,
   kickChallenger,
   getChallengeCalendar,

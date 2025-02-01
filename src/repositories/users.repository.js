@@ -260,6 +260,33 @@ const findUserBadgesCondition = async user_id => {
   }
 };
 
+const findUserLevel = async userId => {
+  try {
+    const result = await prisma.userLevel.findMany({
+      where: { userId },
+      select: {
+        userId: true,
+        levelConditionId: true,
+        achieved: true,
+        user: {
+          select: {
+            level: true,
+            points: true,
+          },
+        },
+        levelCondition: {
+          select: {
+            condition: true,
+          },
+        },
+      },
+    });
+    return result;
+  } catch (error) {
+    throw new databaseError.DataBaseError('DataBase Error on retrieving level');
+  }
+};
+
 export default {
   updateUserInfo,
   findOngoingChallenges,
@@ -271,4 +298,5 @@ export default {
   createUserFollows,
   userUnfollows,
   findUserBadgesCondition,
+  findUserLevel,
 };

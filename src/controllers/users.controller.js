@@ -740,6 +740,96 @@ const getUserVerificationScraps = async (req, res, next) => {
     next(error);
   }
 };
+
+const getUserVerificationLikes = async (req, res, next) => {
+  /**
+  #swagger.summary = '좋아요 누른 인증 목록 조회 API';
+  #swagger.description = '내가 좋아요 누른 인증들의 목록을 불러오는 API입니다.';
+  #swagger.tags = ['User'];
+  #swagger.parameters['Authorization'] = {
+    in: 'header',
+    required: true,
+    schema: { type: 'string', example: 'Bearer <JWT_TOKEN>' },
+    description: '인증을 위한 액세스 토큰'
+  };
+  #swagger.parameters['userId'] = {
+    in: 'path',
+    required: true,
+    schema: { type: 'integer', example: 1 },
+    description: '사용자의 ID'
+  };
+  #swagger.responses[200] = {
+  description: '좋아요 누른 인증 조회 성공',
+  content: {
+    'application/json': {
+      schema: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            id: { type: 'integer', example: 3 },
+            verification: {
+              type: 'object',
+              properties: {
+                id: { type: 'integer', example: 1 },
+                title: { type: 'string', example: '1일차 챌린지 인증' },
+                content: { type: 'string', example: 'This is a sample verification content.' },
+                verificationStatus: { type: 'string', example: 'certified' },
+                created_at: { type: 'string', format: 'date-time', example: '2025-01-30T04:28:48.125Z' }
+              }
+            }
+          }
+        }
+      },
+      example: [
+        {
+          id: 3,
+          verification: {
+            id: 1,
+            title: '1일차 챌린지 인증',
+            content: 'This is a sample verification content.',
+            verificationStatus: 'certified',
+            created_at: '2025-01-30T04:28:48.125Z'
+          }
+        },
+        {
+          id: 4,
+          verification: {
+            id: 2,
+            title: '1일차 챌린지 인증',
+            content: 'This is a sample verification content.',
+            verificationStatus: 'certified',
+            created_at: '2025-01-30T06:50:13.568Z'
+          }
+        }
+      ]
+    }
+  }
+};
+  #swagger.responses[401] = {
+    description: '인증 실패',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            resultType: { type: 'string', example: 'FAILURE' },
+            error: { type: 'string', example: 'Unauthorized access.' }
+          }
+        }
+      }
+    }
+  };
+   */
+  try {
+    const user_id = req.user.id;
+    const response = await userService.getUserVerificationLikes(user_id);
+    return res.status(StatusCodes.OK).json(response);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getUserBadgesConditions = async (req, res, next) => {
   /**
   #swagger.summary = '배지 조건 조회 API';
@@ -914,6 +1004,7 @@ export default {
   postUserFollow,
   deleteUserFollow,
   getUserVerificationScraps,
+  getUserVerificationLikes,
   getUserBadgesConditions,
   blockUser,
 };

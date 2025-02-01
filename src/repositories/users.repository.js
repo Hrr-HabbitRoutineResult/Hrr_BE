@@ -284,6 +284,30 @@ const getUserVerificationScraps = async user_id => {
   }
 };
 
+const getUserVerificationLikes = async user_id => {
+  try {
+    const liked_verifications = await prisma.verificationLike.findMany({
+      where: { user_id },
+      select: {
+        id: true,
+        verification: {
+          select: {
+            id: true,
+            title: true,
+            content: true,
+            verificationStatus: true,
+            created_at: true,
+          },
+        },
+      },
+    });
+
+    return liked_verifications;
+  } catch (error) {
+    throw new databaseError.DataBaseError('Error on finding liked verifications');
+  }
+};
+
 export default {
   updateUserInfo,
   findOngoingChallenges,
@@ -296,4 +320,5 @@ export default {
   userUnfollows,
   findUserBadgesCondition,
   getUserVerificationScraps,
+  getUserVerificationLikes,
 };

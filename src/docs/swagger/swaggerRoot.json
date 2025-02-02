@@ -1,0 +1,12 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Hrr API",
+    "version": "1.0.0",
+    "description": "Hrr API 문서"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {}
+  }
+}

@@ -1,0 +1,377 @@
+{
+  "paths": {
+    "/api/v1/challenges": {
+      "get": {
+        "summary": "챌린지 리스트 조회 API",
+        "description": "챌린지 이름, 종류, 인원 제한, 참가 인원, 인증 방식, 한 줄 설명, 인증 빈도가 포함된 챌린지 리스트를 조회하는 API입니다.",
+        "tags": ["Challenge"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "챌린지 리스트 조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "object",
+                      "properties": {
+                        "challenges": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "challengeId": { "type": "string", "example": "101" },
+                              "name": { "type": "string", "example": "알고리즘 스터디 챌린지" },
+                              "type": { "type": "string", "example": "study" },
+                              "memberLimit": { "type": "integer", "example": 20 },
+                              "currentMembers": { "type": "integer", "example": 15 },
+                              "verificationMethod": { "type": "string", "example": "사진 인증" },
+                              "description": { "type": "string", "example": "매일 알고리즘 문제를 풀고 인증하세요." },
+                              "frequency": { "type": "string", "example": "매일" }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "FAILURE" },
+                    "error": { "type": "string", "example": "Unauthorized access." }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "서버 오류",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "FAILURE" },
+                    "error": { "type": "string", "example": "Internal server error." }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "챌린지 개설 API",
+        "description": "사용자가 새로운 챌린지를 개설하는 API입니다. 카테고리, 유형, 사진, 기간, 제한 인원, 인증 수단, 규칙, 키워드를 포함합니다.",
+        "tags": ["Challenge"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "description": "챌린지 개설 요청 본문",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "category": { "type": "string", "example": "2", "description": "카테고리 ID" },
+                  "type": { "type": "string", "example": "1", "description": "챌린지 유형" },
+                  "profileImage": {
+                    "type": "string",
+                    "example": "https://image.com",
+                    "description": "챌린지 대표 이미지 URL"
+                  },
+                  "duration": {
+                    "type": "object",
+                    "properties": {
+                      "startDate": { "type": "string", "format": "date", "example": "2025-01-06" },
+                      "finishDate": { "type": "string", "format": "date", "example": "2026-01-06" }
+                    },
+                    "description": "챌린지 기간"
+                  },
+                  "maxParticipants": { "type": "integer", "example": 20, "description": "제한 인원" },
+                  "verificationMethod": { "type": "string", "example": "camera", "description": "인증 방법" },
+                  "rule": { "type": "string", "example": "매주 인증하세요", "description": "챌린지 규칙" },
+                  "keywords": {
+                    "type": "array",
+                    "items": { "type": "string", "example": "운동" },
+                    "description": "챌린지 키워드"
+                  }
+                },
+                "required": [
+                  "category",
+                  "type",
+                  "profileImage",
+                  "duration",
+                  "maxParticipants",
+                  "verificationMethod",
+                  "rule",
+                  "keywords"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "챌린지 개설 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "object",
+                      "properties": {
+                        "message": { "type": "string", "example": "챌린지가 성공적으로 개설되었습니다." },
+                        "challenge": {
+                          "type": "object",
+                          "properties": {
+                            "id": { "type": "string", "example": "101" },
+                            "category": { "type": "string", "example": "운동" },
+                            "type": { "type": "string", "example": "카메라" },
+                            "profileImage": { "type": "string", "example": "https://image.com" },
+                            "duration": {
+                              "type": "object",
+                              "properties": {
+                                "startDate": { "type": "string", "format": "date", "example": "2025-01-06" },
+                                "finishDate": { "type": "string", "format": "date", "example": "2026-01-06" }
+                              }
+                            },
+                            "maxParticipants": { "type": "integer", "example": 20 },
+                            "verificationMethod": { "type": "string", "example": "camera" },
+                            "rule": { "type": "string", "example": "매주 인증하세요" },
+                            "keywords": {
+                              "type": "array",
+                              "items": { "type": "string", "example": "운동" }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 요청",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "FAIL" },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "errorCode": { "type": "string", "example": "A100" },
+                        "reason": { "type": "string", "example": "오류 원인" }
+                      }
+                    },
+                    "success": { "type": "object", "nullable": true, "example": null }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/challenges/search": {
+      "get": {
+        "summary": "챌린지 검색 API",
+        "description": "사용자가 특정 조건에 따라 챌린지를 검색하는 API입니다.",
+        "tags": ["Challenge"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "keyword",
+            "required": false,
+            "schema": { "type": "string", "example": "운동" },
+            "description": "검색 키워드"
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": { "type": "string", "example": "2" },
+            "description": "챌린지 카테고리 ID"
+          },
+          {
+            "in": "query",
+            "name": "duration",
+            "required": false,
+            "schema": { "type": "string", "example": "6m" },
+            "description": "챌린지 기간 (예: 6m - 6개월)"
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": { "type": "string", "example": "1" },
+            "description": "챌린지 유형 ID"
+          },
+          {
+            "in": "query",
+            "name": "frequency",
+            "required": false,
+            "schema": { "type": "string", "example": "2W" },
+            "description": "챌린지 빈도 (예: 2W - 2주마다)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "챌린지 검색 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "object",
+                      "properties": {
+                        "challenges": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": { "type": "string", "example": "1" },
+                              "name": { "type": "string", "example": "운동을 해보아요" },
+                              "category": { "type": "string", "example": "2" },
+                              "duration": { "type": "string", "example": "1y" },
+                              "keyword": { "type": "string", "example": "운동" },
+                              "type": { "type": "string", "example": "1" },
+                              "frequency": { "type": "string", "example": "2W" }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 요청",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "FAILURE" },
+                    "error": { "type": "string", "example": "Invalid query parameters." }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "FAILURE" },
+                    "error": { "type": "string", "example": "Unauthorized access." }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "서버 오류",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "FAILURE" },
+                    "error": { "type": "string", "example": "Internal server error." }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/challenges/{challengeId}": {
+      "get": {
+        "summary": "챌린지 상세 조회 API",
+        "description": "특정 챌린지의 상세 정보를 조회하는 API입니다.",
+        "tags": ["Challenge"],
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "challengeId",
+            "required": true,
+            "schema": { "type": "integer", "example": 101 },
+            "description": "조회할 챌린지의 ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "챌린지 상세 조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "object",
+                      "properties": {
+                        "challengeId": { "type": "integer", "example": 101 },
+                        "name": { "type": "string", "example": "운동 챌린지" },
+                        "category": { "type": "string", "example": "운동" },
+                        "duration": { "type": "string", "example": "3개월" },
+                        "participants": { "type": "integer", "example": 50 },
+                        "verificationMethod": { "type": "string", "example": "사진 인증" },
+                        "description": { "type": "string", "example": "매일 운동 인증을 하는 챌린지입니다." }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "챌린지를 찾을 수 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "NOT_FOUND" },
+                    "error": { "type": "string", "example": "Challenge not found." }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

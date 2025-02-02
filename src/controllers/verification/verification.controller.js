@@ -243,7 +243,7 @@ const getWeeklyVerification = () => {
 };
  */
 };
-const getSpecificVerification = () => {
+const getSpecificVerification = async (req, res, next) => {
   /**
   #swagger.summary = '특정 인증 상세 조회 API';
   #swagger.description = '특정 챌린지 인증의 상세 정보를 조회하는 API입니다. 본인 또는 다른 챌린저의 인증 정보를 확인할 수 있습니다.';
@@ -363,6 +363,13 @@ const getSpecificVerification = () => {
     }
   };
    */
+  try {
+    const verification_id = parseInt(req.params.verificationId, 10);
+    const verification = await verificationService.getSpecificVerification(verification_id);
+    return res.status(StatusCodes.OK).json(verification);
+  } catch (error) {
+    next(error);
+  }
 };
 const cameraVerification = async (req, res, next) => {
   /**

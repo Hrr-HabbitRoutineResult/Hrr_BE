@@ -4,6 +4,7 @@ import listError from '../../errors/challenge/list.error.js';
 import verificationError from '../../errors/verification/verification.error.js';
 import participationRepository from '../../repositories/challenge/participation.repository.js';
 import verificationDto from '../../dtos/verification/verification.dto.js';
+import commentRepository from '../../repositories/verification/comment.repository.js';
 
 const verifyWithCamera = async (user_id, challenge_id, body) => {
   const challenge = await listRepository.getChallengeDetailById(challenge_id);
@@ -41,7 +42,17 @@ const verifyWithText = async (user_id, challenge_id, body) => {
   return text_verification_response;
 };
 
+const getSpecificVerification = async verification_id => {
+  const verification = await verificationRepository.getSpecificVerification(verification_id);
+  if (!verification) {
+    throw new verificationError.VerificationNotExistsError('해당 ID를 가진 인증이 존재하지 않습니다.');
+  }
+  const comment = await commentRepository.getVerificationComment(verification.id);
+  return { ...verification, comment: comment };
+};
+
 export default {
   verifyWithCamera,
   verifyWithText,
+  getSpecificVerification,
 };

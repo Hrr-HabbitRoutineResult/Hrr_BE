@@ -278,20 +278,57 @@ const getSpecificVerification = async (req, res, next) => {
             success: {
               type: 'object',
               properties: {
-                verificationId: { type: 'string', example: '202' },
-                challengeId: { type: 'string', example: '101' },
-                userId: { type: 'string', example: 'user123' },
-                checkedAt: { type: 'string', format: 'date-time', example: '2025-01-06T15:00:00Z' },
-                imageUrl: { type: 'string', example: 'https://example.com/uploads/checkin202.jpg' },
-                description: { type: 'string', example: '오늘의 인증: 5km 러닝 완료!' },
-                link: { type: 'string', example: 'https://example.com/workout-log' },
-                likes: { type: 'integer', example: 42 },
-                scraps: { type: 'integer', example: 10 },
-                comments: { type: 'integer', example: 5 },
-                isLiked: { type: 'boolean', example: true },
-                isScrapped: { type: 'boolean', example: false },
-                hasQuestion: { type: 'boolean', example: true },
-                isFollowingAuthor: { type: 'boolean', example: true }
+                id: { type: 'integer', example: 1 },
+                user_id: { type: 'integer', example: 1 },
+                userChallenge_id: { type: 'integer', example: 1 },
+                verificationType: { type: 'string', example: 'text' },
+                photoUrl: { type: 'string', example: 'https://example.com/images' },
+                title: { type: 'string', example: '인증합니다' },
+                content: { type: 'string', nullable: true, example: null },
+                question: { type: 'string', nullable: true, example: null },
+                textUrl: { type: 'string', example: 'https://example.com/text' },
+                verificationStatus: { type: 'string', example: 'certified' },
+                created_at: { type: 'string', format: 'date-time', example: '2025-02-02T02:08:14.000Z' },
+                updated_at: { type: 'string', format: 'date-time', example: '2025-02-02T07:33:48.765Z' },
+                adoptionComplete: { type: 'boolean', example: false },
+                likesCount: { type: 'integer', example: 0 },
+                scrapsCount: { type: 'integer', example: 0 },
+                commentsCount: { type: 'integer', example: 1 },
+                comment: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'integer', example: 1 },
+                      user_id: { type: 'integer', example: 1 },
+                      nickname: { type: 'string', example: '김흐르' },
+                      content: { type: 'string', example: '댓글입니다' },
+                      parent_id: { type: 'integer', nullable: true, example: null },
+                      created_at: { type: 'string', format: 'date-time', example: '2025-02-02T16:33:29.435Z' },
+                      updated_at: { type: 'string', format: 'date-time', nullable: true, example: null },
+                      selected: { type: 'boolean', example: false },
+                      anonymous: { type: 'boolean', example: false },
+                      replies: {
+                        type: 'array',
+                        items: {
+                          type: 'object',
+                          properties: {
+                            id: { type: 'integer', example: 2 },
+                            user_id: { type: 'integer', example: 1 },
+                            nickname: { type: 'string', example: '김흐르' },
+                            content: { type: 'string', example: '댓글입니다2' },
+                            parent_id: { type: 'integer', example: 1 },
+                            created_at: { type: 'string', format: 'date-time', example: '2025-02-02T16:33:45.497Z' },
+                            updated_at: { type: 'string', format: 'date-time', nullable: true, example: null },
+                            selected: { type: 'boolean', example: false },
+                            anonymous: { type: 'boolean', example: false },
+                            replies: { type: 'array', items: {} }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           }

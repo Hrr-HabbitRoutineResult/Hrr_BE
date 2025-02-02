@@ -1,6 +1,6 @@
 {
   "paths": {
-    "/api/v1/verifications/{verificationId}/comments": {
+    "/api/v1/verifications/{verificationId}/comment": {
       "post": {
         "summary": "챌린지 인증 댓글 작성 API",
         "description": "특정 챌린지 인증에 댓글을 작성하는 API입니다.",
@@ -105,8 +105,8 @@
         }
       }
     },
-    "/api/v1/comments/{commentId}": {
-      "put": {
+    "/api/v1/comment/{commentId}": {
+      "patch": {
         "summary": "특정 인증 댓글 수정 API",
         "description": "특정 인증에 작성된 댓글을 수정하는 API입니다.",
         "tags": ["Challenge:Verification"],

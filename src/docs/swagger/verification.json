@@ -1,6 +1,6 @@
 {
   "paths": {
-    "/api/v1/challenges/{challengeId}/verification/status": {
+    "/api/v1/verification/{challengeId}/verification-status": {
       "get": {
         "summary": "챌린지 인증 현황 조회 API",
         "description": "현재 참가 중인 챌린지의 인증 현황(총 인원, 인증 완료 인원, 미인증 인원)을 조회하는 API입니다.",
@@ -55,7 +55,7 @@
         }
       }
     },
-    "/api/v1/challenges/{challengeId}/verification/weekly": {
+    "/api/v1/verification/{challengeId}/verification/weekly": {
       "get": {
         "summary": "이번 주 인증 현황 조회 API",
         "description": "특정 챌린지에서 사용자가 이번 주 어떤 요일에 인증했는지를 조회하는 API입니다.",
@@ -100,7 +100,7 @@
         }
       }
     },
-    "/api/v1/challenges/{challengeId}/verification/{verificationId}": {
+    "/api/v1/verification/{challengeId}/verifications/{verificationId}": {
       "get": {
         "summary": "특정 인증 상세 조회 API",
         "description": "특정 챌린지 인증의 상세 정보를 조회하는 API입니다.",
@@ -146,7 +146,7 @@
         }
       }
     },
-    "/api/v1/challenges/{challengeId}/verification/camera": {
+    "/api/v1/verification/{challengeId}/verification/camera": {
       "post": {
         "summary": "챌린지 사진 인증 등록 API",
         "description": "특정 챌린지에 사진 인증을 등록하는 API입니다.",
@@ -173,7 +173,7 @@
         }
       }
     },
-    "/api/v1/challenges/{challengeId}/verification/text": {
+    "/api/v1/verification/{challengeId}/verification/text": {
       "post": {
         "summary": "챌린지 글 인증 등록 API",
         "description": "사용자가 챌린지 글로 인증을 등록하는 API입니다.",
@@ -201,7 +201,7 @@
         }
       }
     },
-    "/api/v1/challenges/{challengeId}/verification/temp": {
+    "/api/v1/verification/{challengeId}/verification/text/{temporaryVerficationId}": {
       "get": {
         "summary": "챌린지 글 인증 임시저장 조회 API",
         "description": "챌린지 글 인증 작성 중 임시 저장된 내용을 조회하는 API입니다.",
@@ -212,9 +212,7 @@
             "description": "임시 저장된 인증 조회 성공"
           }
         }
-      }
-    },
-    "/api/v1/challenges/{challengeId}/verification/temp/{tempId}": {
+      },
       "delete": {
         "summary": "임시 저장된 글 삭제 API",
         "description": "챌린지 글 인증 작성 중 임시 저장된 내용을 삭제하는 API입니다.",

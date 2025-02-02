@@ -48,7 +48,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/v1/verifications/{verificationId}/unlike": {
       "delete": {
         "summary": "특정 인증 좋아요 취소 API",
         "description": "특정 인증에 추가된 좋아요를 취소하는 API입니다.",

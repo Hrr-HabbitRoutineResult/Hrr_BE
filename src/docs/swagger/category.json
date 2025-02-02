@@ -1,6 +1,6 @@
 {
   "paths": {
-    "/api/v1/challenges/categories": {
+    "/api/v1/challenge/category": {
       "get": {
         "summary": "챌린지 카테고리 불러오기 API",
         "description": "사용 가능한 챌린지 카테고리 목록을 불러옵니다.",
@@ -59,7 +59,7 @@
         }
       }
     },
-    "/api/v1/challenges/weekly-hot": {
+    "/api/v1/challenge/hotness": {
       "get": {
         "summary": "이번 주 인기 챌린지 API",
         "description": "이번 주에 인기 있었던 챌린지 5개를 가져옵니다. 메인 화면에서 사용됩니다.",

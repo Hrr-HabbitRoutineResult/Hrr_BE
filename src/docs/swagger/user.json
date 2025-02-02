@@ -176,7 +176,7 @@
         }
       }
     },
-    "/api/v1/users/challenges/history": {
+    "/api/v1/users/challenges/verification/history": {
       "get": {
         "summary": "챌린지 기록 조회 API",
         "description": "사용자가 인증한 챌린지 기록을 조회합니다.",
@@ -238,7 +238,7 @@
         }
       }
     },
-    "/api/v1/users/{userId}/follow": {
+    "/api/v1/users/{followedUserId}/follow": {
       "post": {
         "summary": "사용자 팔로우 API",
         "description": "특정 사용자를 팔로우합니다.",
@@ -270,7 +270,7 @@
         }
       }
     },
-    "/api/v1/users/{userId}/unfollow": {
+    "/api/v1/users/{unfollowedUserId}/unfollow": {
       "delete": {
         "summary": "사용자 언팔로우 API",
         "description": "특정 사용자를 언팔로우합니다.",
@@ -302,7 +302,7 @@
         }
       }
     },
-    "/api/v1/users/scraps": {
+    "/api/v1/users/verification/scraps": {
       "get": {
         "summary": "스크랩한 글 목록 조회 API",
         "description": "내가 스크랩한 글들의 목록을 불러오는 API입니다.",

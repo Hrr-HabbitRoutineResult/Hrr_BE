@@ -1,6 +1,6 @@
 {
   "paths": {
-    "/api/v1/challenges": {
+    "/api/v1/challenge": {
       "get": {
         "summary": "챌린지 리스트 조회 API",
         "description": "챌린지 이름, 종류, 인원 제한, 참가 인원, 인증 방식, 한 줄 설명, 인증 빈도가 포함된 챌린지 리스트를 조회하는 API입니다.",
@@ -191,7 +191,7 @@
         }
       }
     },
-    "/api/v1/challenges/search": {
+    "/api/v1/challenge/search": {
       "get": {
         "summary": "챌린지 검색 API",
         "description": "사용자가 특정 조건에 따라 챌린지를 검색하는 API입니다.",
@@ -314,7 +314,7 @@
         }
       }
     },
-    "/api/v1/challenges/{challengeId}": {
+    "/api/v1/challenge/{challengeId}": {
       "get": {
         "summary": "챌린지 상세 조회 API",
         "description": "특정 챌린지의 상세 정보를 조회하는 API입니다.",

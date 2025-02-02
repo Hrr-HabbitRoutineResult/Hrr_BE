@@ -1,6 +1,6 @@
 {
   "paths": {
-    "/api/v1/boards/popular-posts": {
+    "/api/v1/post/hotness": {
       "get": {
         "summary": "게시판 인기 글 조회 API",
         "description": "게시판 별로 좋아요 순으로 인기 있는 게시글을 보여주는 API입니다.",
@@ -89,7 +89,7 @@
         }
       }
     },
-    "/api/v1/posts/my": {
+    "/api/v1/post/my": {
       "get": {
         "summary": "내가 작성한 글 목록 조회 API",
         "description": "사용자가 작성한 글 목록을 조회하는 API입니다.",
@@ -159,7 +159,7 @@
         }
       }
     },
-    "/api/v1/posts/commented": {
+    "/api/v1/post/commented": {
       "get": {
         "summary": "내가 댓글을 단 글 목록 조회 API",
         "description": "사용자가 댓글을 단 글 목록을 조회하는 API입니다.",
@@ -229,7 +229,7 @@
         }
       }
     },
-    "/api/v1/posts/saved": {
+    "/api/v1/post/saved": {
       "get": {
         "summary": "저장한 글 목록 조회 API",
         "description": "사용자가 저장한 글 목록을 조회하는 API입니다.",
@@ -299,7 +299,7 @@
         }
       }
     },
-    "/api/v1/posts": {
+    "/api/v1/post/{boardId}/posts": {
       "post": {
         "summary": "새 게시글 작성 API",
         "description": "새로운 게시글을 작성하는 API입니다.",
@@ -391,7 +391,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/v1/post": {
       "get": {
         "summary": "전체 게시글 목록 조회 API",
         "description": "전체 게시글 목록을 조회하는 API입니다.",
@@ -462,7 +464,7 @@
         }
       }
     },
-    "/api/v1/posts/{postId}": {
+    "/api/v1/post/{postId}": {
       "get": {
         "summary": "게시글 상세 정보 조회 API",
         "description": "특정 게시글의 상세 정보를 조회하는 API입니다.",
@@ -565,7 +567,7 @@
         }
       }
     },
-    "/api/v1/posts/{postId}/like": {
+    "/api/v1/post/{postId}/like": {
       "post": {
         "summary": "게시글 좋아요 추가 API",
         "description": "특정 게시글에 좋아요를 추가하는 API입니다.",
@@ -646,7 +648,7 @@
         }
       }
     },
-    "/api/v1/posts/{postId}/comment": {
+    "/api/v1/post/{postId}/comment": {
       "post": {
         "summary": "게시글 댓글 추가 API",
         "description": "특정 게시글에 댓글을 추가하는 API입니다.",
@@ -757,7 +759,7 @@
         }
       }
     },
-    "/api/v1/posts/{postId}/save": {
+    "/api/v1/post/{postId}/save": {
       "post": {
         "summary": "게시글 저장(스크랩) API",
         "description": "특정 게시글을 저장(스크랩)하는 API입니다.",

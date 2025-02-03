@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Comments` MODIFY `created_at` DATETIME(6) NULL DEFAULT CURRENT_TIMESTAMP(6);

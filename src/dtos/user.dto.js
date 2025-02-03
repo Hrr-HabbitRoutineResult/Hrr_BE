@@ -48,9 +48,70 @@ const userChallengeDto = challenges => {
   }));
 };
 
+const userBadgesDto = (type_badges, category_badges) => {
+  const formatBadges = badges =>
+    badges.map(badge => ({
+      badgeId: badge.id,
+      name: badge.name,
+      icon: badge.icon,
+      isObtained: badge.isObtained,
+    }));
+
+  return {
+    typeBadges: formatBadges(type_badges),
+    categoryBadges: formatBadges(category_badges),
+  };
+};
+
+const userChallengeHistoryDto = (user_challenges, verifications) => {
+  return user_challenges.map(userChallenge => {
+    const verification = verifications.find(v => v.userChallenge_id === userChallenge.id);
+
+    return {
+      challengeId: userChallenge.challenge_id,
+      name: userChallenge.challenge.name,
+      verificationId: verification ? verification.id : null,
+      created_at: verification ? verification.created_at : null,
+      title: verification ? verification.title : null,
+      photoUrl: verification ? verification.photoUrl : null,
+      textUrl: verification ? verification.textUrl : null,
+    };
+  });
+};
+
+const userFollowDto = followed_user_id => {
+  const response_data = {
+    message: 'User followed successfully',
+    followedUserId: followed_user_id[0].following_id,
+  };
+  return response_data;
+};
+
+const userUnfollowDto = unfollowed_user_id => {
+  const response_data = {
+    message: 'User unfollowed successfully',
+    unfollowedUserId: unfollowed_user_id[0].id,
+  };
+  return response_data;
+};
+
+const userBadgesConditionDto = condition => {
+  return condition.map(condition => ({
+    badgeId: condition.condition.badge_id,
+    conditionId: condition.condition.id,
+    description: condition.condition.description,
+    isAchieved: condition.isAchieved,
+  }));
+};
+
 export default {
   serviceToControllerDto,
   updateUserInfoResponseDto,
   updateUserInfoRequestDto,
   userChallengeDto,
+  userBadgesDto,
+  userChallengeHistoryDto,
+  userFollowDto,
+  userUnfollowDto,
+  userBadgesConditionDto,
 };

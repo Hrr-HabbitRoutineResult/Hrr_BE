@@ -9,17 +9,21 @@ const joinChallengeRequest = (user_id, challenge_id, challenge_status, challenge
   return data;
 };
 
-const userVerificationDto = verifications => {
+const userChallengeVerificationDto = info => {
   // User 정보
   const user_info = {
-    id: verifications.user_info.id,
-    name: verifications.user_info.nickname,
-    profilePhoto: verifications.user_info.profilePhoto,
+    id: info.id,
+    name: info.nickname,
+    profilePhoto: info.profilePhoto,
   };
 
+  return { UserInfo: user_info };
+};
+
+const userChallengeProgressDto = (user_challenge, achievement_rate) => {
   // 달성률 계산
-  const join_date = new Date(verifications.achievement_rate.joinDate);
-  const end_date = new Date(verifications.achievement_rate.endDate);
+  const join_date = new Date(achievement_rate.joinDate);
+  const end_date = new Date(achievement_rate.endDate);
   const now = new Date();
 
   const total_days = Math.ceil((end_date - join_date) / (1000 * 60 * 60 * 24));
@@ -28,13 +32,17 @@ const userVerificationDto = verifications => {
 
   // 인증 현황
   const verifications_info = {
-    verifyCount: verifications.user_challenge.verifyCount,
-    warnCount: verifications.user_challenge.warn,
+    verifyCount: user_challenge.verifyCount,
+    warnCount: user_challenge.warn,
     achievement_rate: Math.round(progress),
   };
 
-  // 인증 리스트 변환
-  const verification_list = verifications.verifications.map(v => ({
+  return { Verifications: verifications_info };
+};
+
+const userChallengeVerificationListDto = verification_list => {
+  // 인증 리스트
+  const verification = verification_list.map(v => ({
     verificationId: v.id,
     type: v.type,
     created_at: v.created_at.toISOString().split('T')[0], // 날짜만 추출
@@ -43,14 +51,12 @@ const userVerificationDto = verifications => {
     title: v.title,
   }));
 
-  return {
-    UserInfo: user_info,
-    Verifications: verifications_info,
-    VerificationList: verification_list,
-  };
+  return { VerificationList: verification };
 };
 
 export default {
   joinChallengeRequest,
-  userVerificationDto,
+  userChallengeVerificationDto,
+  userChallengeProgressDto,
+  userChallengeVerificationListDto,
 };

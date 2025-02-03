@@ -424,7 +424,7 @@ const getUserChallengeVerification = async (req, res, next) => {
                     UserInfo: {
                       type: 'object',
                       properties: {
-                        id: { type: 'integer', example: '1' },
+                        id: { type: 'integer', example: 1 },
                         name: { type: 'string', example: '홍길동' },
                         profilePhoto: { type: 'string', example: 'https://image.com' }
                       }
@@ -432,9 +432,9 @@ const getUserChallengeVerification = async (req, res, next) => {
                     Verifications: {
                       type: 'object',
                       properties: {
-                        verifyCount: { type: 'integer', example: '25' },
-                        warnCount: { type: 'integer', example: '0' },
-                        achievement_rate: { type: 'integer', example: '100'}
+                        verifyCount: { type: 'integer', example: 25 },
+                        warnCount: { type: 'integer', example: 0 },
+                        achievement_rate: { type: 'integer', example: 100 }
                       }
                     },
                     VerificationList: {
@@ -442,7 +442,7 @@ const getUserChallengeVerification = async (req, res, next) => {
                       items: {
                         type: 'object',
                         properties: {
-                          verificationId: { type: 'integer', example: '1' },
+                          verificationId: { type: 'integer', example: 1 },
                           type: { type: 'string', example: 'camera' },
                           created_at: { type: 'string', format: 'date', example: '2025-01-07' },
                           photoUrl: { type: 'string', example: 'https://image.com', nullable: true },

@@ -2,6 +2,7 @@ import listRepository from '../../repositories/challenge/list.repository.js';
 import participationRepository from '../../repositories/challenge/participation.repository.js';
 import participationDto from '../../dtos/challenge/participation.dto.js';
 import participationError from '../../errors/challenge/participation.error.js';
+import usersRepository from '../../repositories/users.repository.js';
 
 const joinChallenge = async (user_id, challenge_id) => {
   // 챌린지 가입 여부 확인
@@ -101,9 +102,19 @@ const getChallengerList = async challenge_id => {
 };
 
 const getUserChallengeVerificationbyId = async (user_id, challenge_id) => {
-  const user_verification = await participationRepository.findUserVerificationStatus(user_id, challenge_id);
-  const response_data = participationDto.userVerificationDto(user_verification);
-  return response_data;
+  const user = await participationRepository.findUserInfoForVerification(user_id);
+  const user_challenge = await participationRepository.findUserVerificationCount(user_id, challenge_id);
+  const achievement_rate = await participationRepository.findUserChallengeProgress(challenge_id);
+  const verification_list = await usersRepository.findUserVerificationHistory(user_id);
+  if (!user_challenge) {
+    return { user, achievement_rate: 0, user_challenge, verifications: [] };
+  }
+
+  const user_info = participationDto.userChallengeVerificationDto(user);
+  const verification_info = participationDto.userChallengeProgressDto(user_challenge, achievement_rate);
+  const challenge_verification_list = participationDto.userChallengeVerificationListDto(verification_list);
+
+  return [user_info, verification_info, challenge_verification_list];
 };
 
 export default {

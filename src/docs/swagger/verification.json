@@ -145,6 +145,15 @@
         "description": "특정 챌린지에 사진 인증을 등록하는 API입니다.",
         "tags": ["Challenge:Verification"],
         "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "challengeId",
+            "required": true,
+            "schema": { "type": "string", "example": "1" },
+            "description": "챌린지 ID"
+          }
+        ],
         "requestBody": {
           "required": true,
           "description": "사진 인증 등록 데이터",
@@ -153,7 +162,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "photoUrl": { "type": "string", "example": "https://photo.com" }
+                  "photoUrl": { "type": "string", "example": "https://example.com/photo.jpg" },
+                  "title": { "type": "string", "example": "1일차 챌린지 인증" },
+                  "content": { "type": "string", "example": "This is a sample verification content." },
+                  "textUrl": { "type": "string", "example": "https://example.com/text" },
+                  "question": { "type": "boolean", "example": true }
                 }
               }
             }
@@ -161,7 +174,26 @@
         },
         "responses": {
           "200": {
-            "description": "사진 인증 등록 성공"
+            "description": "사진 인증 등록 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "챌린지 인증이 완료되었습니다." },
+                    "verification": {
+                      "type": "object",
+                      "properties": {
+                        "verificationId": { "type": "integer", "example": 10 },
+                        "verificationType": { "type": "string", "example": "camera" },
+                        "title": { "type": "string", "example": "1일차 챌린지 인증" },
+                        "photoUrl": { "type": "string", "example": "https://example.com/photo.jpg" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

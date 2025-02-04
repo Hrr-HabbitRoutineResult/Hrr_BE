@@ -52,6 +52,7 @@ model User {
   userBoards             UserBoard[] 
   userAgreements         UserAgreement[]
   verificationLikes      VerificationLike[]
+  userLevels             UserLevel[]
   @@map("Users")
 }
 
@@ -450,6 +451,26 @@ model UserAgreement {
   @@map("UserAgreements")
 }
 
+model LevelCondition {
+  id         Int    @id @default(autoincrement())
+  level      Level
+  condition  String
+  userLevels UserLevel[] 
+
+  @@map("Level_Condition") 
+}
+
+model UserLevel {
+  id              Int  @id @default(autoincrement())
+  userId          Int  
+  levelConditionId Int 
+  achieved        Boolean @default(false)
+
+  user           User           @relation(fields: [userId], references: [id])
+  levelCondition LevelCondition @relation(fields: [levelConditionId], references: [id])
+}
+
+
 enum AlarmType {
   follow
   verificationComment
@@ -505,6 +526,7 @@ enum Status {
 }
 
 enum Level {
+  general
   bronze
   silver
   gold

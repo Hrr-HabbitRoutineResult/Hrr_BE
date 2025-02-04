@@ -260,6 +260,33 @@ const findUserBadgesCondition = async user_id => {
   }
 };
 
+const findUserLevel = async userId => {
+  try {
+    const result = await prisma.userLevel.findMany({
+      where: { userId },
+      select: {
+        userId: true,
+        levelConditionId: true,
+        achieved: true,
+        user: {
+          select: {
+            level: true,
+            points: true,
+          },
+        },
+        levelCondition: {
+          select: {
+            condition: true,
+          },
+        },
+      },
+    });
+    return result;
+  } catch (error) {
+    throw new databaseError.DataBaseError('DataBase Error on retrieving level');
+  }
+};
+
 const getUserVerificationScraps = async user_id => {
   try {
     const scrapped_verifications = await prisma.verificationScrap.findMany({
@@ -284,6 +311,30 @@ const getUserVerificationScraps = async user_id => {
   }
 };
 
+const getUserVerificationLikes = async user_id => {
+  try {
+    const liked_verifications = await prisma.verificationLike.findMany({
+      where: { user_id },
+      select: {
+        id: true,
+        verification: {
+          select: {
+            id: true,
+            title: true,
+            content: true,
+            verificationStatus: true,
+            created_at: true,
+          },
+        },
+      },
+    });
+
+    return liked_verifications;
+  } catch (error) {
+    throw new databaseError.DataBaseError('Error on finding liked verifications');
+  }
+};
+
 export default {
   updateUserInfo,
   findOngoingChallenges,
@@ -295,5 +346,7 @@ export default {
   createUserFollows,
   userUnfollows,
   findUserBadgesCondition,
+  findUserLevel,
   getUserVerificationScraps,
+  getUserVerificationLikes,
 };

@@ -33,7 +33,18 @@ const unlikeChallenge = async (req, res, next) => {
   }
 };
 
-const participateInChallenge = () => {};
+const getUserChallengeVerification = async (req, res, next) => {
+  try {
+    const challenge_id = req.params.challengeId;
+    const user_id = req.user.id;
+    const response = await participationService.getUserChallengeVerificationbyId(user_id, Number(challenge_id));
+
+    return res.status(StatusCodes.OK).json(response);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getChallengerList = async (req, res, next) => {
   try {
     const challenge_id = parseInt(req.params.challengeId, 10);
@@ -50,7 +61,7 @@ export default {
   joinChallenge,
   likeChallenge,
   unlikeChallenge,
-  participateInChallenge,
+  getUserChallengeVerification,
   getChallengerList,
   kickChallenger,
   getChallengeCalendar,

@@ -125,6 +125,56 @@ const getChallengeList = async challenge_id => {
   }
 };
 
+const findUserInfoForVerification = async user_id => {
+  try {
+    // User Info 조회
+    const user_info = await prisma.user.findUnique({
+      where: { id: user_id },
+      select: {
+        id: true,
+        nickname: true,
+        profilePhoto: true,
+      },
+    });
+    return user_info;
+  } catch (error) {
+    throw new participationError.DataBaseError('Database error occurred while fetching user verification status');
+  }
+};
+
+const findUserVerificationCount = async (user_id, challenge_id) => {
+  try {
+    // 인증 횟수, 경고 횟수, 달성률 조회
+    const user_challenge = await prisma.userChallenge.findFirst({
+      where: { user_id, challenge_id },
+      select: {
+        id: true,
+        verifyCount: true,
+        warn: true,
+      },
+    });
+    return user_challenge;
+  } catch (error) {
+    throw new participationError.DataBaseError('Database error occurred while fetching user verification status');
+  }
+};
+
+const findUserChallengeProgress = async challenge_id => {
+  try {
+    // 달성률
+    const achievement_rate = await prisma.challenge.findUnique({
+      where: { id: challenge_id },
+      select: {
+        joinDate: true,
+        endDate: true,
+      },
+    });
+    return achievement_rate;
+  } catch (error) {
+    throw new participationError.DataBaseError('Database error occurred while fetching user verification status');
+  }
+};
+
 export default {
   joinChallenge,
   getUserChallengeById,
@@ -134,4 +184,7 @@ export default {
   getChallengeLike,
   deleteChallengeLike,
   getChallengeList,
+  findUserInfoForVerification,
+  findUserVerificationCount,
+  findUserChallengeProgress,
 };

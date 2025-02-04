@@ -17,10 +17,10 @@ router.get('/:challengeId', authMiddleware, listController.getChallengeDetail);
 router.post('/', authMiddleware, listController.createChallenge);
 
 // Participation
+router.get('/:challengeId/verification/my', authMiddleware, participationController.getUserChallengeVerification);
 router.post('/:challengeId/join', authMiddleware, participationController.joinChallenge);
 router.post('/:challengeId/like', authMiddleware, participationController.likeChallenge);
 router.delete('/:challengeId/unlike', authMiddleware, participationController.unlikeChallenge);
-router.post('/:challengeId/participation', participationController.participateInChallenge);
 router.get('/:challengeId/challengerslist', participationController.getChallengerList);
 router.get('/:challengeId/challengerslist/kick', participationController.kickChallenger);
 router.get('/:challengeId/calendar', participationController.getChallengeCalendar);

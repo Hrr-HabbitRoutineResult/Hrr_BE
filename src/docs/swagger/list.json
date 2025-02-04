@@ -76,7 +76,7 @@
         "summary": "챌린지 개설 API",
         "description": "사용자가 새로운 챌린지를 개설하는 API입니다. 카테고리, 유형, 사진, 기간, 제한 인원, 인증 수단, 규칙, 키워드를 포함합니다.",
         "tags": ["Challenge"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
           "description": "챌린지 개설 요청 본문",
@@ -319,7 +319,7 @@
         "summary": "챌린지 상세 조회 API",
         "description": "특정 챌린지의 상세 정보를 조회하는 API입니다.",
         "tags": ["Challenge"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "in": "path",

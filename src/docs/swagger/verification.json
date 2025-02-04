@@ -5,7 +5,7 @@
         "summary": "챌린지 인증 현황 조회 API",
         "description": "현재 참가 중인 챌린지의 인증 현황(총 인원, 인증 완료 인원, 미인증 인원)을 조회하는 API입니다.",
         "tags": ["Challenge:Verification"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "in": "path",
@@ -60,7 +60,7 @@
         "summary": "이번 주 인증 현황 조회 API",
         "description": "특정 챌린지에서 사용자가 이번 주 어떤 요일에 인증했는지를 조회하는 API입니다.",
         "tags": ["Challenge:Verification"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "in": "path",
@@ -100,25 +100,18 @@
         }
       }
     },
-    "/api/v1/verification/{challengeId}/verifications/{verificationId}": {
+    "/api/v1/verification/{verificationId}": {
       "get": {
         "summary": "특정 인증 상세 조회 API",
         "description": "특정 챌린지 인증의 상세 정보를 조회하는 API입니다.",
         "tags": ["Challenge:Verification"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
-          {
-            "in": "path",
-            "name": "challengeId",
-            "required": true,
-            "schema": { "type": "string", "example": "101" },
-            "description": "챌린지 ID"
-          },
           {
             "in": "path",
             "name": "verificationId",
             "required": true,
-            "schema": { "type": "string", "example": "202" },
+            "schema": { "type": "string", "example": 1 },
             "description": "인증 ID"
           }
         ],
@@ -151,7 +144,7 @@
         "summary": "챌린지 사진 인증 등록 API",
         "description": "특정 챌린지에 사진 인증을 등록하는 API입니다.",
         "tags": ["Challenge:Verification"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
           "description": "사진 인증 등록 데이터",
@@ -178,7 +171,7 @@
         "summary": "챌린지 글 인증 등록 API",
         "description": "사용자가 챌린지 글로 인증을 등록하는 API입니다.",
         "tags": ["Challenge:Verification"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
           "description": "챌린지 글 인증 요청 데이터",
@@ -206,7 +199,7 @@
         "summary": "챌린지 글 인증 임시저장 조회 API",
         "description": "챌린지 글 인증 작성 중 임시 저장된 내용을 조회하는 API입니다.",
         "tags": ["Challenge:Verification"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
             "description": "임시 저장된 인증 조회 성공"
@@ -217,7 +210,7 @@
         "summary": "임시 저장된 글 삭제 API",
         "description": "챌린지 글 인증 작성 중 임시 저장된 내용을 삭제하는 API입니다.",
         "tags": ["Challenge:Verification"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
             "description": "임시 저장된 인증 삭제 성공"

@@ -5,7 +5,7 @@
         "summary": "특정 챌린지 참가 API",
         "description": "사용자가 특정 챌린지에 참가하는 API입니다.",
         "tags": ["Challenge"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "in": "path",
@@ -131,7 +131,7 @@
         "summary": "챌린지 좋아요 기능 API",
         "description": "사용자가 특정 챌린지에 좋아요를 추가하는 API입니다.",
         "tags": ["Challenge"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "in": "path",
@@ -235,7 +235,7 @@
         "summary": "챌린지 좋아요 취소 API",
         "description": "사용자가 특정 챌린지에 대한 좋아요를 취소하는 API입니다.",
         "tags": ["Challenge"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "in": "path",
@@ -318,7 +318,7 @@
         "summary": "나의 챌린지 인증 현황 조회 API",
         "description": "특정 챌린지에서 사용자의 인증 현황(이름, 사진, 인증 횟수, 미인증 횟수, 인증 상세 목록)을 조회하는 API입니다.",
         "tags": ["Challenge"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "in": "path",
@@ -428,7 +428,7 @@
         "summary": "챌린저 리스트 조회 API",
         "description": "특정 챌린지에 참가한 챌린저 리스트를 조회하는 API입니다. 각 챌린저의 인증 횟수와 상태도 함께 표시됩니다.",
         "tags": ["Challenge"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "in": "path",
@@ -479,7 +479,7 @@
         "summary": "챌린저 리스트 내보내기 API",
         "description": "특정 챌린지에서 3회 미인증한 챌린저를 내보낼 수 있는 API입니다.",
         "tags": ["Challenge"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "in": "path",
@@ -530,7 +530,7 @@
         "summary": "챌린지 인증 달력 조회 API",
         "description": "특정 챌린지에서 사용자가 인증한 날과 인증하지 않은 날들이 표시된 달력을 조회하는 API입니다.",
         "tags": ["Challenge"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "in": "path",

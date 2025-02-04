@@ -23,7 +23,17 @@ const verifyWithText = async dto => {
   }
 };
 
+const getSpecificVerification = async verification_id => {
+  const verification = await prisma.verification.findUnique({
+    where: {
+      id: verification_id,
+    },
+  });
+  return verification;
+};
+
 export default {
   verifyWithCamera,
   verifyWithText,
+  getSpecificVerification,
 };

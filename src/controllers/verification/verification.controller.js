@@ -4,7 +4,15 @@ import verificationDto from '../../dtos/verification/verification.dto.js';
 
 const getChallengeVerificationStatus = () => {};
 const getWeeklyVerification = () => {};
-const getSpecificVerification = () => {};
+const getSpecificVerification = async (req, res, next) => {
+  try {
+    const verification_id = parseInt(req.params.verificationId, 10);
+    const verification = await verificationService.getSpecificVerification(verification_id);
+    return res.status(StatusCodes.OK).json(verification);
+  } catch (error) {
+    next(error);
+  }
+};
 const cameraVerification = async (req, res, next) => {
   try {
     const user_id = req.user.id;

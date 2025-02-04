@@ -71,7 +71,7 @@
         "summary": "게시판 생성 API",
         "description": "사용자가 새로운 게시판을 생성하는 API입니다.",
         "tags": ["Board"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
           "description": "새로운 게시판 생성 요청 데이터",
@@ -100,7 +100,7 @@
         "summary": "게시판 상단 고정 API",
         "description": "특정 게시판을 게시판 상단에 고정하는 API입니다.",
         "tags": ["Board"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "in": "path",
@@ -122,7 +122,7 @@
         "summary": "게시판 상단 고정 해제 API",
         "description": "특정 게시판을 게시판 상단에서 고정 해제하는 API입니다.",
         "tags": ["Board"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "in": "path",

@@ -5,7 +5,7 @@
         "summary": "사용자 관심사 수정 API",
         "description": "사용자가 자신의 관심사를 수정하는 API입니다.",
         "tags": ["User"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -71,7 +71,7 @@
         "summary": "사용자 정보 수정 API",
         "description": "사용자가 자신의 정보를 수정하는 API입니다.",
         "tags": ["User"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [],
         "requestBody": {
           "required": true,

@@ -5,7 +5,7 @@
         "summary": "특정 인증 좋아요 추가 API",
         "description": "특정 챌린지 인증에 좋아요를 추가하는 API입니다.",
         "tags": ["Challenge:Verification"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "in": "path",
@@ -55,7 +55,7 @@
         "summary": "특정 인증 좋아요 취소 API",
         "description": "특정 인증에 추가된 좋아요를 취소하는 API입니다.",
         "tags": ["Challenge:Verification"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "in": "path",

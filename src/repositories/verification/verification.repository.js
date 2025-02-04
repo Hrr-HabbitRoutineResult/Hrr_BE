@@ -3,10 +3,26 @@ import databaseError from '../../errors/database.error.js';
 
 const verifyWithCamera = async dto => {
   try {
-    const camera_verification = await prisma.verification.create({
-      data: dto,
+    const result = await prisma.$transaction(async prisma => {
+      const camera_verification = await prisma.verification.create({
+        data: dto,
+      });
+
+      await prisma.userChallenge.update({
+        where: {
+          id: dto.userChallenge_id,
+        },
+        data: {
+          verifyCount: {
+            increment: 1,
+          },
+        },
+      });
+
+      return camera_verification;
     });
-    return camera_verification;
+
+    return result;
   } catch (error) {
     throw new databaseError.DataBaseError('Error on creating camera verification');
   }

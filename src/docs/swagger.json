@@ -2318,7 +2318,7 @@
         }
       }
     },
-    "/api/v1/challenge/{challengeId}/participation": {
+    "/api/v1/challenge/{challengeId}/verification/my": {
       "get": {
         "summary": "나의 챌린지 인증 현황 조회 API",
         "description": "특정 챌린지에서 사용자의 인증 현황(이름, 사진, 인증 횟수, 미인증 횟수, 인증 상세 목록)을 조회하는 API입니다.",
@@ -2362,28 +2362,77 @@
                     "success": {
                       "type": "object",
                       "properties": {
-                        "userId": {
-                          "type": "string",
-                          "example": "123"
-                        },
-                        "challengeId": {
-                          "type": "string",
-                          "example": "101"
-                        },
-                        "verificationSummary": {
+                        "UserInfo": {
                           "type": "array",
                           "items": {
                             "type": "object",
                             "properties": {
-                              "date": {
+                              "id": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "홍길동"
+                              },
+                              "profilePhoto": {
+                                "type": "string",
+                                "example": "https://profileImage1.com"
+                              }
+                            }
+                          }
+                        },
+                        "Verifications": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "verifyCount": {
+                                "type": "integer",
+                                "example": 25
+                              },
+                              "warnCount": {
+                                "type": "integer",
+                                "example": 0
+                              },
+                              "achievement_rate": {
+                                "type": "integer",
+                                "example": 100
+                              }
+                            }
+                          }
+                        },
+                        "VerificationList": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "verificationId": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "type": {
+                                "type": "string",
+                                "example": "camera"
+                              },
+                              "created_at": {
                                 "type": "string",
                                 "format": "date",
                                 "example": "2025-01-01"
                               },
-                              "status": {
+                              "photoUrl": {
                                 "type": "string",
-                                "example": "verified",
-                                "description": "인증 상태 (verified, unverified)"
+                                "example": "https://image1.com",
+                                "nullable": true
+                              },
+                              "textUrl": {
+                                "type": "string",
+                                "example": "https://text1.com",
+                                "nullable": true
+                              },
+                              "title": {
+                                "type": "string",
+                                "example": "첫 번째 인증합니다"
                               }
                             }
                           }

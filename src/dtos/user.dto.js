@@ -104,6 +104,16 @@ const userBadgesConditionDto = condition => {
   }));
 };
 
+const userLevelDto = level => {
+  return level.map(level => ({
+    level: level.user.level,
+    points: level.user.points,
+    levelConditionId: level.levelConditionId,
+    condition: level.levelCondition.condition,
+    isAchieved: level.achieved,
+  }));
+};
+
 export default {
   serviceToControllerDto,
   updateUserInfoResponseDto,
@@ -114,4 +124,5 @@ export default {
   userFollowDto,
   userUnfollowDto,
   userBadgesConditionDto,
+  userLevelDto,
 };

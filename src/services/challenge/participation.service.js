@@ -104,11 +104,11 @@ const getChallengerList = async challenge_id => {
 const getUserChallengeVerificationbyId = async (user_id, challenge_id) => {
   const user = await participationRepository.findUserInfoForVerification(user_id);
   const user_challenge = await participationRepository.findUserVerificationCount(user_id, challenge_id);
-  const achievement_rate = await participationRepository.findUserChallengeProgress(challenge_id);
-  const verification_list = await usersRepository.findUserVerificationHistory(user_id);
   if (!user_challenge) {
     return { user, achievement_rate: 0, user_challenge, verifications: [] };
   }
+  const achievement_rate = await participationRepository.findUserChallengeProgress(challenge_id);
+  const verification_list = await usersRepository.findUserVerificationHistory(user_id);
 
   const user_info = participationDto.userChallengeVerificationDto(user);
   const verification_info = participationDto.userChallengeProgressDto(user_challenge, achievement_rate);

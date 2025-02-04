@@ -108,59 +108,6 @@ const getUserBadgesConditions = async (req, res, next) => {
 };
 
 const getUserLevel = async (req, res, next) => {
-  /**
-#swagger.summary = '사용자 레벨 조회 API';
-#swagger.description = '사용자의 레벨과 포인트를 조회합니다.';
-#swagger.tags = ['User'];
-#swagger.parameters['Authorization'] = {
-  in: 'header',
-  required: true,
-  schema: { type: 'string', example: 'Bearer <access_token>' },
-  description: '인증을 위한 액세스 토큰 (Bearer 형태로 전달)'
-};
-#swagger.responses[200] = {
-  description: '사용자 레벨 조회 성공',
-  content: {
-    'application/json': {
-      schema: {
-        type: 'object',
-        properties: {
-          resultType: { type: 'string', example: 'SUCCESS' },
-          error: { type: 'object', nullable: true, example: null },
-          success: {
-            type: 'object',
-            properties: {
-              data: {
-                type: 'object',
-                properties: {
-                  userId: { type: 'integer', example: 1 },
-                  level: { type: 'string', example: 'gold' },
-                  points: { type: 'integer', example: 150 },
-                  achieved: { type: 'boolean', example: 'true'}
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-};
-#swagger.responses[401] = {
-  description: '인증 실패',
-  content: {
-    'application/json': {
-      schema: {
-        type: 'object',
-        properties: {
-          resultType: { type: 'string', example: 'FAILURE' },
-          error: { type: 'string', example: 'Unauthorized access.' }
-        }
-      }
-    }
-  }
-};
- */
   try {
     const user_id = req.user.id;
     const user_level = await userService.getUserLevelById(user_id);

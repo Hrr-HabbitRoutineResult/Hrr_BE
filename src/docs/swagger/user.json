@@ -366,6 +366,37 @@
         }
       }
     },
+    "/api/v1/users/level": {
+      "get": {
+        "summary": "레벨 조회 API",
+        "description": "사용자가 획득한 레벨을 조회합니다.",
+        "tags": ["User"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "레벨 조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "level": { "type": "string", "example": "gold" },
+                      "points": { "type": "integer", "example": 150 },
+                      "levelConditionId": { "type": "integer", "example": 1 },
+                      "condition": { "type": "string", "example": "포인트 150p 달성 : Gold 획득 !" },
+                      "isAchieved": { "type": "boolean", "example": true }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/users/block": {
       "post": {
         "summary": "이용자 차단 API",

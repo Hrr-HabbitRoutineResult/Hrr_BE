@@ -36,17 +36,15 @@ const signInKakao = async kakao_token => {
   const { data } = result;
   const name = data.properties.nickname;
   const email = data.kakao_account.email;
-  const kakao_id = data.id;
-  const profile_image = data.properties.profile_image;
 
-  if (!name || !email || !kakao_id) {
-    throw new Error('KEY_ERROR');
+  if (!name || !email) {
+    throw new authError.UserNotExistError('존재하지 않는 이메일입니다.');
   }
 
   const user = await authRepository.getUserById(kakao_id);
 
   if (!user) {
-    await authRepository.signUp(email, name, kakao_id, profile_image);
+    await authRepository.signUp(email, name);
   }
 
   return jwt.sign({ kakao_id: kakao_id }, process.env.TOKKENSECRET);
@@ -56,5 +54,5 @@ export default {
   generateTokens,
   verifyRefreshToken,
   login,
-  signInKakao
+  signInKakao,
 };

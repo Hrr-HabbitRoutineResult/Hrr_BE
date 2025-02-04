@@ -11,7 +11,7 @@ const findUserPassword = async email => {
   return user.password;
 };
 
-const getUserById = async (kakao_id) => {
+const getUserById = async kakao_id => {
   return await prisma.user.findUnique({
     where: {
       kakao_id: kakao_id,
@@ -25,13 +25,11 @@ const getUserById = async (kakao_id) => {
   });
 };
 
-const signUp = async (email, name, kakao_id, profile_image) => {
+const signUp = async (email, name) => {
   return await prisma.user.create({
     data: {
       account_email: email,
       name: name,
-      kakao_id: kakao_id,
-      profile_image: profile_image,
     },
   });
 };

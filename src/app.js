@@ -15,7 +15,7 @@ const app = express();
 
 // 공통 응답 헬퍼 함수 등록
 app.use((req, res, next) => {
-  res.success = (success, status_code) => res.status(201).json({ resultType: 'SUCCESS', error: null, success });
+  res.success = (success, status_code) => res.status(status_code).json({ resultType: 'SUCCESS', error: null, success });
 
   res.error = ({ errorCode = 'unknown', reason = null, data = null }) => {
     logger.error(`Error occurred: ${errorCode}, Reason: ${reason}`);

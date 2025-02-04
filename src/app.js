@@ -8,14 +8,14 @@ import postRoutes from './routes/post.routes.js';
 import boardRoutes from './routes/board.routes.js';
 import verificationRoutes from './routes/verification.routes.js';
 import morganMiddleware from './middlewares/morganMiddleware.js';
-dotenv.config();
 
+dotenv.config();
 const app = express();
 
 app.use(morganMiddleware);
 app.use(express.json());
 
-// Auth Routes
+// API 라우트 설정
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/challenge', challengeRoutes);

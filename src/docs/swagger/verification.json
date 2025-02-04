@@ -145,6 +145,15 @@
         "description": "특정 챌린지에 사진 인증을 등록하는 API입니다.",
         "tags": ["Challenge:Verification"],
         "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "challengeId",
+            "required": true,
+            "schema": { "type": "string", "example": "1" },
+            "description": "챌린지 ID"
+          }
+        ],
         "requestBody": {
           "required": true,
           "description": "사진 인증 등록 데이터",
@@ -153,7 +162,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "photoUrl": { "type": "string", "example": "https://photo.com" }
+                  "photoUrl": { "type": "string", "example": "https://example.com/photo.jpg" },
+                  "title": { "type": "string", "example": "1일차 챌린지 인증" },
+                  "content": { "type": "string", "example": "This is a sample verification content." },
+                  "textUrl": { "type": "string", "example": "https://example.com/text" },
+                  "question": { "type": "boolean", "example": true }
                 }
               }
             }

@@ -5,7 +5,7 @@ const getBoardCategories = async (req, res, next) => {
   try {
     const user_email = req.user.email;
     const user_board = await boardService.getBoardCategories(user_email);
-    return res.status(StatusCodes.OK).json(user_board);
+    return res.success(user_board, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -14,7 +14,7 @@ const getBoardCategories = async (req, res, next) => {
 const createBoard = async (req, res, next) => {
   try {
     const new_board = await boardService.createBoard(boardDto.createBoardResponseDto(req.body));
-    return res.status(StatusCodes.OK).json(new_board);
+    return res.success(new_board, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -24,7 +24,7 @@ const pinBoard = async (req, res, next) => {
   try {
     const board_id = parseInt(req.params.boardId, 10);
     const board = await boardService.patchBoardPinStatus(board_id, true);
-    return res.status(StatusCodes.OK).json(board);
+    return res.success(board, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -34,7 +34,7 @@ const unpinBoard = async (req, res, next) => {
   try {
     const board_id = parseInt(req.params.boardId, 10);
     const board = await boardService.patchBoardPinStatus(board_id, false);
-    return res.status(StatusCodes.OK).json(board);
+    return res.success(board, StatusCodes.OK);
   } catch (error) {
     next(error);
   }

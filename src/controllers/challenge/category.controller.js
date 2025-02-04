@@ -6,7 +6,7 @@ const getChallengeCategory = async (req, res, next) => {
   try {
     logger.debug('카테고리를 불러옵니다!');
     const category = await categoryService.getChallengeCategories();
-    res.status(StatusCodes.OK).json(category);
+    return res.success({ category: category }, StatusCodes.OK);
   } catch (error) {
     next(error);
   }

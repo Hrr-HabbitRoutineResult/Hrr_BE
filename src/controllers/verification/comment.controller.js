@@ -6,7 +6,7 @@ const getVerificationComments = async (req, res, next) => {
   try {
     const verification_id = Number(req.params.verificationId);
     const comments = await commentService.getVerificationComment(verification_id);
-    return res.status(StatusCodes.OK).json(comments);
+    return res.success(comments, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -17,7 +17,7 @@ const postVerificationComment = async (req, res, next) => {
     const verification_id = Number(req.params.verificationId);
     const request_data = commentDto.commentVerificationControllerToService(user_id, verification_id, req.body);
     const new_comment = await commentService.postVerificationComment(request_data);
-    return res.status(StatusCodes.OK).json(new_comment);
+    return res.success(new_comment, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -28,7 +28,7 @@ const updateVerificationComment = async (req, res, next) => {
     const comment_id = Number(req.params.commentId);
     const content = req.body.content;
     const new_comment = await commentService.updateVerificationComment(user_id, comment_id, content);
-    return res.status(StatusCodes.OK).json(new_comment);
+    return res.success(new_comment, StatusCodes.OK);
   } catch (error) {
     next(error);
   }

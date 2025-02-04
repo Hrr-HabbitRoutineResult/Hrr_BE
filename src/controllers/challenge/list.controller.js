@@ -9,7 +9,7 @@ const getChallengeDetail = async (req, res, next) => {
     const challenge_id = parseInt(req.params.challengeId, 10);
     const challenge_info = await listService.getChallengeDetailById(challenge_id);
 
-    return res.status(StatusCodes.OK).json(challenge_info);
+    return res.success(challenge_info, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -20,7 +20,7 @@ const createChallenge = async (req, res, next) => {
     logger.debug('챌린지를 개설했습니다!');
 
     const challenge = await listService.createChallenge(listDto.bodyToChallenge(req.body));
-    res.status(StatusCodes.OK).json({ result: challenge });
+    return res.success({ result: challenge }, StatusCodes.OK);
   } catch (error) {
     next(error);
   }

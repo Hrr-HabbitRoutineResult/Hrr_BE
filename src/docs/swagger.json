@@ -1781,33 +1781,77 @@
                     "success": {
                       "type": "object",
                       "properties": {
-                        "challengeId": {
+                        "id": {
                           "type": "integer",
-                          "example": 101
+                          "example": 1
+                        },
+                        "owner_id": {
+                          "type": "integer",
+                          "example": 1
                         },
                         "name": {
                           "type": "string",
-                          "example": "운동 챌린지"
+                          "example": "코딩공부"
                         },
-                        "category": {
+                        "type": {
                           "type": "string",
-                          "example": "운동"
-                        },
-                        "duration": {
-                          "type": "string",
-                          "example": "3개월"
-                        },
-                        "participants": {
-                          "type": "integer",
-                          "example": 50
-                        },
-                        "verificationMethod": {
-                          "type": "string",
-                          "example": "사진 인증"
+                          "example": "study"
                         },
                         "description": {
                           "type": "string",
-                          "example": "매일 운동 인증을 하는 챌린지입니다."
+                          "example": "공부합니다"
+                        },
+                        "challengeImage": {
+                          "type": "string",
+                          "example": "image1@example.com"
+                        },
+                        "challengeStatus": {
+                          "type": "string",
+                          "example": "ongoing"
+                        },
+                        "maxParticipants": {
+                          "type": "integer",
+                          "example": 30
+                        },
+                        "verificationType": {
+                          "type": "string",
+                          "example": "camera"
+                        },
+                        "rule": {
+                          "type": "string",
+                          "example": "3"
+                        },
+                        "joinDate": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-02-02T18:44:31.000Z"
+                        },
+                        "endDate": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-02-07T18:50:09.000Z"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-02-02T18:43:39.000Z"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-02-02T18:43:54.000Z"
+                        },
+                        "duration": {
+                          "type": "string",
+                          "example": "month_1"
+                        },
+                        "category": {
+                          "type": "string",
+                          "example": "study"
+                        },
+                        "likesCount": {
+                          "type": "integer",
+                          "example": 3
                         }
                       }
                     }
@@ -5182,7 +5226,7 @@
                       "type": "object",
                       "properties": {
                         "verificationId": {
-                          "type": "string",
+                          "type": "integer",
                           "example": 10
                         },
                         "verificationType": {

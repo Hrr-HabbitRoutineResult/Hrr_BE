@@ -174,7 +174,26 @@
         },
         "responses": {
           "200": {
-            "description": "사진 인증 등록 성공"
+            "description": "사진 인증 등록 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "챌린지 인증이 완료되었습니다." },
+                    "verification": {
+                      "type": "object",
+                      "properties": {
+                        "verificationId": { "type": "string", "example": 10 },
+                        "verificationType": { "type": "string", "example": "camera" },
+                        "title": { "type": "string", "example": "1일차 챌린지 인증" },
+                        "photoUrl": { "type": "string", "example": "https://example.com/photo.jpg" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

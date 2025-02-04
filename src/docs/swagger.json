@@ -319,6 +319,11 @@
         "tags": [
           "Board"
         ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "게시판 카테고리 목록 조회 성공",
@@ -4352,13 +4357,93 @@
                       "type": "integer",
                       "example": 1
                     },
-                    "name": {
+                    "nickname": {
                       "type": "string",
-                      "example": "홍길동"
+                      "example": "김흐르"
+                    },
+                    "gender": {
+                      "type": "string",
+                      "example": "male"
                     },
                     "email": {
                       "type": "string",
-                      "example": "example@gmail.com"
+                      "example": "user@example.com"
+                    },
+                    "level": {
+                      "type": "string",
+                      "example": "bronze"
+                    },
+                    "points": {
+                      "type": "integer",
+                      "example": 300
+                    },
+                    "followerCount": {
+                      "type": "integer",
+                      "example": 100
+                    },
+                    "followingCount": {
+                      "type": "integer",
+                      "example": 50
+                    },
+                    "user_badge_1": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "운동 마스터"
+                          },
+                          "icon": {
+                            "type": "string",
+                            "example": "https://icon1.png"
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "category"
+                          },
+                          "obtainedCount": {
+                            "type": "integer",
+                            "example": 30
+                          }
+                        }
+                      }
+                    },
+                    "user_badge_2": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 2
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "올라운더"
+                          },
+                          "icon": {
+                            "type": "string",
+                            "example": "https://icon2.png"
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "type"
+                          },
+                          "obtainedCount": {
+                            "type": "integer",
+                            "example": 30
+                          }
+                        }
+                      }
+                    },
+                    "user_badge_3": {
+                      "type": "null",
+                      "example": null
                     }
                   }
                 }
@@ -4394,11 +4479,26 @@
                   "profilePhoto": {
                     "type": "string",
                     "example": "https://example.com/newprofile.jpg"
+                  },
+                  "badges": {
+                    "type": "array",
+                    "items": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "example": [
+                        2,
+                        1,
+                        null
+                      ]
+                    }
                   }
                 },
                 "required": [
                   "name",
-                  "profilePhoto"
+                  "profilePhoto",
+                  "badges"
                 ]
               }
             }
@@ -4419,6 +4519,20 @@
                     "profilePhoto": {
                       "type": "string",
                       "example": "https://example.com/newprofile.jpg"
+                    },
+                    "badges": {
+                      "type": "array",
+                      "items": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ],
+                        "example": [
+                          2,
+                          1,
+                          null
+                        ]
+                      }
                     }
                   }
                 }
@@ -4451,7 +4565,7 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "challengeId": {
+                      "challenge_id": {
                         "type": "integer",
                         "example": 1
                       },
@@ -4459,13 +4573,13 @@
                         "type": "string",
                         "example": "자잘자잘"
                       },
-                      "type": {
-                        "type": "string",
-                        "example": "베이직"
-                      },
-                      "image": {
+                      "challengeImage": {
                         "type": "string",
                         "example": "https://img1"
+                      },
+                      "type": {
+                        "type": "string",
+                        "example": "basic"
                       },
                       "verification": {
                         "type": "boolean",
@@ -4503,7 +4617,7 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "challengeId": {
+                      "challenge_id": {
                         "type": "integer",
                         "example": 1
                       },
@@ -4511,7 +4625,7 @@
                         "type": "string",
                         "example": "런런"
                       },
-                      "image": {
+                      "challengeImage": {
                         "type": "string",
                         "example": "https://img1"
                       },
@@ -4551,20 +4665,21 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "challengeId": {
+                      "challenge_id": {
                         "type": "integer",
-                        "example": 2
+                        "example": 1
                       },
                       "name": {
                         "type": "string",
                         "example": "영화 봐요"
                       },
-                      "verificationId": {
+                      "verification_id": {
                         "type": "integer",
                         "example": 1
                       },
                       "created_at": {
                         "type": "string",
+                        "format": "date-time",
                         "example": "2025-01-30T04:28:48.125Z"
                       },
                       "title": {
@@ -4573,11 +4688,15 @@
                       },
                       "photoUrl": {
                         "type": "string",
+                        "format": "uri",
                         "example": "https://url1.com"
                       },
                       "textUrl": {
-                        "type": "string",
-                        "example": "https://url2.com"
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "example": null
                       }
                     }
                   }
@@ -4611,17 +4730,53 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "badgeId": {
-                        "type": "integer",
-                        "example": 1
+                      "typeBadges": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "badgeId": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "운동 마스터"
+                            },
+                            "icon": {
+                              "type": "string",
+                              "example": "https://icon1.png"
+                            },
+                            "isObtained": {
+                              "type": "boolean",
+                              "example": true
+                            }
+                          }
+                        }
                       },
-                      "name": {
-                        "type": "string",
-                        "example": "운동 마스터"
-                      },
-                      "icon": {
-                        "type": "string",
-                        "example": "https://example.com/badge1.png"
+                      "categoryBadges": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "badgeId": {
+                              "type": "integer",
+                              "example": 2
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "학업 스타터"
+                            },
+                            "icon": {
+                              "type": "string",
+                              "example": "https://icon2.png"
+                            },
+                            "isObtained": {
+                              "type": "boolean",
+                              "example": true
+                            }
+                          }
+                        }
                       }
                     }
                   }
@@ -4667,6 +4822,10 @@
                     "message": {
                       "type": "string",
                       "example": "User followed successfully"
+                    },
+                    "followedUserId": {
+                      "type": "integer",
+                      "example": 123
                     }
                   }
                 }
@@ -4711,6 +4870,10 @@
                     "message": {
                       "type": "string",
                       "example": "User unfollowed successfully"
+                    },
+                    "unfollowedUserId": {
+                      "type": "integer",
+                      "example": 123
                     }
                   }
                 }
@@ -4808,6 +4971,10 @@
                     "type": "object",
                     "properties": {
                       "badgeId": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "conditionId": {
                         "type": "integer",
                         "example": 1
                       },

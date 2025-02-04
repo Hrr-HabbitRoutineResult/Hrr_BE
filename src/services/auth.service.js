@@ -26,28 +26,34 @@ const login = async (email, password) => {
 };
 
 const signInKakao = async kakao_token => {
-  const result = await axios.get('https://kapi.kakao.com/v2/user/me', {
-    headers: {
-      Authorization: `Bearer ${kakao_token}`,
-      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-    },
-  });
+  try {
+    // 1. 카카오 API를 호출하여 사용자 정보 가져오기
+    const result = await axios.get('https://kapi.kakao.com/v2/user/me', {
+      headers: {
+        Authorization: `Bearer ${kakao_token}`,
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+      },
+    });
 
-  const { data } = result;
-  const name = data.properties.nickname;
-  const email = data.kakao_account.email;
+    const { data } = result;
+    const kakao_id = data.id; // 카카오 유저의 고유 ID
+    const email = data.kakao_account?.email;
 
-  if (!name || !email) {
-    throw new authError.UserNotExistError('존재하지 않는 이메일입니다.');
+    if (!email) {
+      throw new authError.UserNotExistError('존재하지 않는 이메일입니다.');
+    }
+
+    // 2. DB에서 사용자 조회
+    const user = await authRepository.getUserByKakaoId(kakao_id);
+
+    // 3. JWT 발급
+    const token = jwt.sign({ kakao_id, email }, process.env.TOKEN_SECRET);
+
+    return { token, user };
+  } catch (error) {
+    console.error('카카오 로그인 오류:', error);
+    throw new Error('카카오 로그인 실패');
   }
-
-  const user = await authRepository.getUserById(kakao_id);
-
-  if (!user) {
-    await authRepository.signUp(email, name);
-  }
-
-  return jwt.sign({ kakao_id: kakao_id }, process.env.TOKKENSECRET);
 };
 
 export default {

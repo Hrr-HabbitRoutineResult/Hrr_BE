@@ -6,32 +6,25 @@ const findUserPassword = async email => {
     where: { email },
   });
   if (!user) {
-    throw new authError.userNotExistError('존재하지 않는 이메일입니다.', { email });
+    throw new authError.UserNotExistError('존재하지 않는 이메일입니다.', { email });
   }
   return user.password;
 };
 
-const getUserById = async kakao_id => {
-  return await prisma.user.findUnique({
-    where: {
-      kakao_id: kakao_id,
-    },
-    select: {
-      kakao_id: true,
-      account_email: true,
-      name: true,
-      profile_image: true,
-    },
-  });
+const getUserByKakaoId = async kakao_id => {
+  try {
+    return await prisma.user.findUnique({
+      where: {
+        kakao_id: kakao_id,
+      },
+      select: {
+        kakao_id: true,
+        account_email: true,
+      },
+    });
+  } catch (error) {
+    throw new databaseError.DataBaseError('DataBase Error on login kakao');
+  }
 };
 
-const signUp = async (email, name) => {
-  return await prisma.user.create({
-    data: {
-      account_email: email,
-      name: name,
-    },
-  });
-};
-
-export default { findUserPassword, getUserById, signUp };
+export default { findUserPassword, getUserByKakaoId };

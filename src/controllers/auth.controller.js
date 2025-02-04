@@ -88,7 +88,7 @@ export const refreshToken = (req, res) => {
   }
 };
 
-const kakaoLogin = async(req, res, next) => {
+const kakaoLogin = async (req, res, next) => {
   /**
   #swagger.summary = '카카오 로그인 API';
   #swagger.description = '카카오 OAuth 토큰을 사용하여 사용자를 인증합니다.';
@@ -154,12 +154,12 @@ const kakaoLogin = async(req, res, next) => {
   try {
     const headers = req.headers['authorization'];
     if (!headers) {
-      throw new authError.MissingAuthorizationHeader();
+      throw new authError.MissingAuthorizationHeader('Missing Authorization Header');
     }
 
     const kakao_token = headers.split(' ')[1];
     if (!kakao_token) {
-      throw new authError.InvalidAuthorizationFormat();
+      throw new authError.InvalidAuthorizationFormat('Invalid Authorization Format');
     }
 
     const access_token = await authService.signInKakao(kakao_token);

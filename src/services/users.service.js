@@ -138,6 +138,11 @@ const getUserVerificationScraps = async user_id => {
   return scrapped_verifications;
 };
 
+const getUserVerificationLikes = async user_id => {
+  const liked_verifications = await userRepository.getUserVerificationLikes(user_id);
+  return liked_verifications;
+};
+
 export default {
   getUserInfoByEmail,
   updateUserInfobyEmail,
@@ -150,4 +155,5 @@ export default {
   getUserBadgesConditionById,
   getUserLevelById,
   getUserVerificationScraps,
+  getUserVerificationLikes,
 };

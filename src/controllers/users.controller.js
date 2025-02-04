@@ -96,6 +96,17 @@ const getUserVerificationScraps = async (req, res, next) => {
     next(error);
   }
 };
+
+const getUserVerificationLikes = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const response = await userService.getUserVerificationLikes(user_id);
+    return res.status(StatusCodes.OK).json(response);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getUserBadgesConditions = async (req, res, next) => {
   try {
     const user_id = req.user.id;
@@ -265,6 +276,7 @@ export default {
   postUserFollow,
   deleteUserFollow,
   getUserVerificationScraps,
+  getUserVerificationLikes,
   getUserBadgesConditions,
   getUserLevel,
   blockUser,

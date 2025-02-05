@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import authError from '../errors/auth.error.js';
 import authDTO from '../dtos/auth.dto.js';
 import logger from '../logger.js';
+
 export const emailLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -30,87 +31,13 @@ export const refreshToken = (req, res) => {
   }
 };
 
-const kakaoLogin = () => {};
-const naverLogin = () => {};
-const findEmail = () => {};
-const ressetPasswordByPhone = () => {};
-const ressetPasswordByEmail = () => {};
-const register = async (req, res, next) => {
-  try {
-    const dto = authDTO.registerDto(req.body);
-    const new_user = await authService.register(dto);
-    return res.status(StatusCodes.OK).json(new_user);
-  } catch (error) {
-    next(error);
 const kakaoLogin = async (req, res, next) => {
-  /**
-  #swagger.summary = '카카오 로그인 API';
-  #swagger.description = '카카오 OAuth 토큰을 사용하여 사용자를 인증합니다.';
-  #swagger.tags = ['Auth'];
-  #swagger.requestBody = {
-    required: true,
-    description: '카카오 OAuth 토큰 인증 요청 정보',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            kakaoAccessToken: { type: 'string', example: 'kakao_token_here' }
-          },
-          required: ['kakaoAccessToken']
-        },
-      }
-    }
-  };
-  #swagger.responses[200] = {
-    description: '로그인 성공',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            token: { type: 'string', example: 'jwt_token_here' },
-            refreshToken: { type: 'string', example: 'refresh_token_here' }
-          }
-        }
-      }
-    }
-  };
-  #swagger.responses[400] = {
-    description: '잘못된 요청',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            resultType: { type: 'string', example: 'FAILURE' },
-            error: { type: 'string', example: 'Invalid Kakao token.' }
-          }
-        }
-      }
-    }
-  };
-  #swagger.responses[401] = {
-    description: '인증 실패',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            resultType: { type: 'string', example: 'FAILURE' },
-            error: { type: 'string', example: 'Authentication failed.' }
-          }
-        }
-      }
-    }
-  };
-   */
   try {
     const { kakao_token } = req.body;
 
     // 토큰 유효성 검증
     if (!kakao_token) {
-      throw new authError.MissingTokenError('카카오 토큰이 없습니다.');
+      throw new authError.MissingKakaoTokenError('카카오 토큰이 없습니다.');
     }
 
     // 카카오 로그인 처리
@@ -122,66 +49,19 @@ const kakaoLogin = async (req, res, next) => {
     next(error);
   }
 };
-const naverLogin = () => {
-  /**
-#swagger.summary = '네이버 로그인 API';
-#swagger.description = '네이버 OAuth 토큰을 사용하여 사용자를 인증합니다.';
-#swagger.tags = ['Auth'];
-#swagger.requestBody = {
-  required: true,
-  description: '네이버 OAuth 토큰 인증 요청 정보',
-  content: {
-    'application/json': {
-      schema: {
-        type: 'object',
-        properties: {
-          naverAccessToken: { type: 'string', example: 'naver_token_here' }
-        },
-        required: ['naverAccessToken']
-      },
-    }
-  }
-};
-#swagger.responses[200] = {
-  description: '로그인 성공',
-  content: {
-    'application/json': {
-      schema: {
-        type: 'object',
-        properties: {
-          token: { type: 'string', example: 'jwt_token_here' },
-          refreshToken: { type: 'string', example: 'refresh_token_here' }
-        }
-      }
-    }
-  }
-};
-#swagger.responses[400] = {
-  description: '잘못된 요청',
-  content: {
-    'application/json': {
-      schema: {
-        type: 'object',
-        properties: {
-          resultType: { type: 'string', example: 'FAILURE' },
-          error: { type: 'string', example: 'Invalid Naver token.' }
-        }
-      }
-    }
-  }
-};
-#swagger.responses[401] = {
-  description: '인증 실패',
-  content: {
-    'application/json': {
-      schema: {
-        type: 'object',
-        properties: {
-          resultType: { type: 'string', example: 'FAILURE' },
-          error: { type: 'string', example: 'Authentication failed.' }
-        }
-      }
-    }
+
+const naverLogin = () => {};
+const findEmail = () => {};
+const ressetPasswordByPhone = () => {};
+const ressetPasswordByEmail = () => {};
+
+const register = async (req, res, next) => {
+  try {
+    const dto = authDTO.registerDto(req.body);
+    const new_user = await authService.register(dto);
+    return res.status(StatusCodes.OK).json(new_user);
+  } catch (error) {
+    next(error);
   }
 };
 

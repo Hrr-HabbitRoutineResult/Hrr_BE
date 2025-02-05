@@ -94,31 +94,6 @@ const findEmailVerificationById = async id => {
   return email_verification;
 };
 
-export default {
-  findUserByEmail,
-  findEmailVerification,
-  deleteEmailVerification,
-  createEmailVerification,
-  deleteExpiredEmailVerifications,
-  setEmailVerifiedTrue,
-  createUser,
-  findEmailVerificationById,
-};
-const getUserByEmail = async email => {
-  try {
-    return await prisma.user.findUnique({
-      where: {
-        email,
-      },
-      select: {
-        email: true,
-      },
-    });
-  } catch (error) {
-    throw new databaseError.DataBaseError('DataBase Error on Kakao login');
-  }
-};
-
 const signUpKakao = async email => {
   try {
     const dummy_password = await bcrypt.hash('kakao_dummy_password', 10); // 더미 비밀번호 해시화
@@ -138,4 +113,14 @@ const signUpKakao = async email => {
   }
 };
 
-export default { findUserPassword, getUserByEmail, signUpKakao };
+export default {
+  findUserByEmail,
+  findEmailVerification,
+  deleteEmailVerification,
+  createEmailVerification,
+  deleteExpiredEmailVerifications,
+  setEmailVerifiedTrue,
+  createUser,
+  findEmailVerificationById,
+  signUpKakao,
+};

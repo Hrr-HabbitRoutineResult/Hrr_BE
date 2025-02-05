@@ -14,7 +14,7 @@ const getBoardCategories = async (req, res, next) => {
 const createBoard = async (req, res, next) => {
   try {
     const new_board = await boardService.createBoard(boardDto.createBoardResponseDto(req.body));
-    return res.success(new_board, StatusCodes.OK);
+    return res.success(new_board, StatusCodes.CREATED);
   } catch (error) {
     next(error);
   }

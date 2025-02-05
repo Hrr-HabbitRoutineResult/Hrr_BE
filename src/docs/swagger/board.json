@@ -83,7 +83,7 @@
                 "properties": {
                   "name": { "type": "string", "example": "새로운 게시판 이름" },
                   "description": { "type": "string", "example": "새로운 게시판 설명" },
-                  "category": { "type": "string", "example": "운동" }
+                  "category": { "type": "string", "example": "exercise" }
                 }
               }
             }
@@ -91,7 +91,28 @@
         },
         "responses": {
           "201": {
-            "description": "게시판 생성 성공"
+            "description": "게시판 생성 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer", "example": 8 },
+                        "name": { "type": "string", "example": "새로운 게시판 이름" },
+                        "description": { "type": "string", "example": "새로운 게시판 설명" },
+                        "status": { "type": "boolean", "example": false },
+                        "category": { "type": "string", "example": "exercise" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

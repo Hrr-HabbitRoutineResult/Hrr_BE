@@ -1,12 +1,13 @@
 import jwt from 'jsonwebtoken';
 import authService from '../services/auth.service.js';
 import authError from '../errors/auth.error.js';
+import { StatusCodes } from 'http-status-codes';
 
 export const authMiddleware = async (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const auth_header = req.headers['authorization'];
+  const token = auth_header && auth_header.split(' ')[1];
   if (!token) {
-    throw new authError.AccessTokenError('Access token required');
+    next(new authError.AccessTokenError('Access token required'));
   }
 
   try {
@@ -16,34 +17,34 @@ export const authMiddleware = async (req, res, next) => {
   } catch (err) {
     // Token expired
     if (err.name === 'TokenExpiredError') {
-      const refreshToken = req.body.refreshToken;
+      const refresh_token = req.body.refreshToken;
 
-      if (!refreshToken) {
-        throw new authError.TokenExpiredError('Refresh token required');
+      if (!refresh_token) {
+        next(new authError.TokenExpiredError('Refresh token required'));
       }
 
       try {
         // Verify refresh token
-        const user = authService.verifyRefreshToken(refreshToken);
-        const { accessToken, refreshToken: newRefreshToken } = authService.generateTokens({
+        const user = authService.verifyRefreshToken(refresh_token);
+        const { access_token, refresh_token: new_refresh_token } = authService.generateTokens({
           id: user.id,
           email: user.email,
         });
 
         // Optionally update refresh token storage
-        authService.updateRefreshToken(user.id, newRefreshToken);
+        authService.updateRefreshToken(user.id, new_refresh_token);
 
         // Send new tokens in response header or body
-        res.setHeader('Authorization', `Bearer ${accessToken}`);
-        return res.status(200).json({
-          accessToken,
-          refreshToken: newRefreshToken,
+        res.setHeader('Authorization', `Bearer ${access_token}`);
+        return res.status(StatusCodes.OK).json({
+          access_token,
+          refreshToken: new_refresh_token,
         });
       } catch (refreshError) {
-        throw new authError.RefreshTokenError('Invalid refresh token');
+        next(new authError.RefreshTokenError('Invalid refresh token'));
       }
     } else {
-      throw new authError.InvalidTokenError('Invalid token');
+      next(new authError.InvalidTokenError('Invalid token'));
     }
   }
 };

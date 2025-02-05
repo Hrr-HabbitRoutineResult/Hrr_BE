@@ -152,17 +152,17 @@ const kakaoLogin = async (req, res, next) => {
   };
    */
   try {
-    const headers = req.headers['authorization'];
-    if (!headers) {
-      throw new authError.MissingAuthorizationHeader('Missing Authorization Header');
-    }
+    const { kakao_token } = req.body;
 
-    const kakao_token = headers.split(' ')[1];
+    // 토큰 유효성 검증
     if (!kakao_token) {
-      throw new authError.InvalidAuthorizationFormat('Invalid Authorization Format');
+      throw new authError.MissingTokenError('카카오 토큰이 없습니다.');
     }
 
+    // 카카오 로그인 처리
     const access_token = await authService.signInKakao(kakao_token);
+
+    // 로그인 성공 시 액세스 토큰 반환
     return res.status(StatusCodes.OK).json({ access_token });
   } catch (error) {
     next(error);

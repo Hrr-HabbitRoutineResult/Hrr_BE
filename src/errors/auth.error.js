@@ -88,6 +88,16 @@ export class InvalidAuthorizationFormat extends Error {
   }
 }
 
+export class KakaoLoginError extends Error {
+  errorCode = 'A010';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 500;
+    this.data = data;
+  }
+}
+
 export default {
   UserNotExistError,
   PasswordMismatchError,
@@ -98,4 +108,5 @@ export default {
   RefreshTokenMissingError,
   MissingAuthorizationHeader,
   InvalidAuthorizationFormat,
+  KakaoLoginError,
 };

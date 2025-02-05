@@ -44,15 +44,19 @@ const signInKakao = async kakao_token => {
     }
 
     // 2. DB에서 사용자 조회
-    const user = await authRepository.getUserByKakaoId(kakao_id);
+    let user = await authRepository.getUserByEmail(email);
+
+    // 3. 신규 사용자라면 회원가입 처리
+    if (!user) {
+      user = await authRepository.signUpKakao(email);
+    }
 
     // 3. JWT 발급
-    const token = jwt.sign({ kakao_id, email }, process.env.TOKEN_SECRET);
+    const token = jwt.sign({ kakao_id, email }, process.env.ACCESS_TOKEN_SECRET);
 
     return { token, user };
   } catch (error) {
-    console.error('카카오 로그인 오류:', error);
-    throw new Error('카카오 로그인 실패');
+    throw new authError.KakaoLoginError('카카오 로그인 실패');
   }
 };
 

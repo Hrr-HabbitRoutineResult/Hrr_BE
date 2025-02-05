@@ -52,9 +52,10 @@ const signInKakao = async kakao_token => {
     }
 
     // 3. JWT 발급
-    const token = jwt.sign({ kakao_id, email }, process.env.ACCESS_TOKEN_SECRET);
+    const access_token = jwt.sign({ kakao_id, email }, process.env.ACCESS_TOKEN_SECRET);
+    const refresh_token = jwt.sign({ kakao_id, email }, process.env.REFRESH_TOKEN_SECRET);
 
-    return { token, user };
+    return { access_token, refresh_token, user };
   } catch (error) {
     throw new authError.KakaoLoginError('카카오 로그인 실패');
   }

@@ -23,7 +23,7 @@ const getUserByEmail = async email => {
       },
     });
   } catch (error) {
-    throw new databaseError.DataBaseError('DataBase Error on login kakao');
+    throw new databaseError.DataBaseError('DataBase Error on Kakao login');
   }
 };
 
@@ -42,7 +42,7 @@ const signUpKakao = async email => {
     });
     return new_user;
   } catch (error) {
-    throw new databaseError.DataBaseError('DataBase Error on login kakao');
+    throw new databaseError.DataBaseError('DataBase Error on Kakao login');
   }
 };
 

@@ -163,7 +163,7 @@ const kakaoLogin = async (req, res, next) => {
     const access_token = await authService.signInKakao(kakao_token);
 
     // 로그인 성공 시 액세스 토큰 반환
-    return res.status(StatusCodes.OK).json({ access_token });
+    return res.status(StatusCodes.OK).json(access_token);
   } catch (error) {
     next(error);
   }

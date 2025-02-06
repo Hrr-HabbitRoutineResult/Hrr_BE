@@ -24,8 +24,8 @@ model User {
   inactiveDate           DateTime?               @db.DateTime(6)
   profilePhoto           String?                 @db.VarChar(255)
   level                  Level?
-  followerCount          Int
-  followingCount         Int
+  followerCount          Int                     @default(0)
+  followingCount         Int                     @default(0)
   points                 Int                     @default(0)
   job                    Job?
   ageGroup               AgeGroup?
@@ -58,7 +58,7 @@ model User {
 
 model Keyword {
   id                Int                @id @default(autoincrement())
-  name              String?            @db.VarChar(40)
+  name              String?            @db.VarChar(40) @unique
   challengeKeywords ChallengeKeyword[]
 
   @@map("Keywords")
@@ -361,15 +361,15 @@ model UserChallenge {
 }
 
 model ChallengeKeyword {
-  id           Int
+  id           Int  @id @default(autoincrement())
   challenge_id Int
   keyword_id   Int
   challenge    Challenge @relation(fields: [challenge_id], references: [id])
   keyword      Keyword   @relation(fields: [keyword_id], references: [id])
 
-  @@id([id, challenge_id, keyword_id])
   @@map("Challenge_Keyword")
 }
+
 
 model Goal {
   id        Int        @id @default(autoincrement())

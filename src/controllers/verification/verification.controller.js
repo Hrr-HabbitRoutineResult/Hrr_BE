@@ -8,7 +8,7 @@ const getSpecificVerification = async (req, res, next) => {
   try {
     const verification_id = parseInt(req.params.verificationId, 10);
     const verification = await verificationService.getSpecificVerification(verification_id);
-    return res.status(StatusCodes.OK).json(verification);
+    return res.success(verification, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -19,7 +19,7 @@ const cameraVerification = async (req, res, next) => {
     const challenge_id = parseInt(req.params.challengeId, 10);
     const completed_challenge = await verificationService.verifyWithCamera(user_id, challenge_id, req.body);
 
-    return res.status(StatusCodes.OK).json(completed_challenge);
+    return res.success(completed_challenge, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -31,7 +31,7 @@ const textVerification = async (req, res, next) => {
     const challenge_id = parseInt(req.params.challengeId, 10);
     const completed_challenge = await verificationService.verifyWithText(user_id, challenge_id, req.body);
 
-    return res.status(StatusCodes.OK).json(completed_challenge);
+    return res.success(completed_challenge, StatusCodes.OK);
   } catch (error) {
     next(error);
   }

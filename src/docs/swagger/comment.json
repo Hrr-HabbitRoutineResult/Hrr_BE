@@ -1,6 +1,6 @@
 {
   "paths": {
-    "/api/v1/verifications/{verificationId}/comment": {
+    "/api/v1/verification/{verificationId}/comment": {
       "post": {
         "summary": "챌린지 인증 댓글 작성 API",
         "description": "특정 챌린지 인증에 댓글을 작성하는 API입니다.",
@@ -24,7 +24,8 @@
                 "type": "object",
                 "properties": {
                   "content": { "type": "string", "example": "이 인증 정말 좋네요!", "description": "댓글 내용" },
-                  "anonymous": { "type": "boolean", "example": false, "description": "익명 여부" }
+                  "anonymous": { "type": "boolean", "example": false, "description": "익명 여부" },
+                  "parentIds": { "type": "integer", "example": false, "description": "부모 댓글 Id" }
                 },
                 "required": ["content", "anonymous"]
               }
@@ -44,9 +45,12 @@
                     "success": {
                       "type": "object",
                       "properties": {
-                        "commentId": { "type": "string", "example": "comment12345" },
-                        "content": { "type": "string", "example": "이 인증 정말 좋네요!" },
-                        "createdAt": { "type": "string", "format": "date-time", "example": "2025-01-08T12:34:56Z" }
+                        "commentId": { "type": "integer", "example": 1 },
+                        "userId": { "type": "integer", "example": 4 },
+                        "verificationId": { "type": "integer", "example": 1 },
+                        "parentId": { "type": ["integer", "null"], "example": null },
+                        "createdAt": { "type": "string", "format": "date-time", "example": "2025-02-06T11:11:56.754Z" },
+                        "content": { "type": "string", "example": "이 인증 정말 좋네요!" }
                       }
                     }
                   }
@@ -85,14 +89,48 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "id": { "type": "integer", "example": 10 },
-                          "user_id": { "type": "integer", "example": 1 },
-                          "nickname": { "type": "string", "example": "김흐르" },
+                          "id": { "type": "integer", "example": 1 },
+                          "user_id": { "type": "integer", "example": 4 },
+                          "nickname": { "type": "string", "example": "test" },
                           "content": { "type": "string", "example": "이 인증 정말 좋네요!" },
+                          "parent_id": { "type": ["integer", "null"], "example": null },
                           "created_at": {
                             "type": "string",
                             "format": "date-time",
-                            "example": "2025-01-31T08:44:46.065Z"
+                            "example": "2025-02-06T11:11:56.754Z"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-02-06T11:11:56.754Z"
+                          },
+                          "selected": { "type": "boolean", "example": false },
+                          "anonymous": { "type": "boolean", "example": false },
+                          "replies": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": { "type": "integer", "example": 2 },
+                                "user_id": { "type": "integer", "example": 4 },
+                                "nickname": { "type": "string", "example": "test" },
+                                "content": { "type": "string", "example": "이 인증 정말 좋네요!" },
+                                "parent_id": { "type": "integer", "example": 1 },
+                                "created_at": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": "2025-02-06T11:13:38.771Z"
+                                },
+                                "updated_at": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": "2025-02-06T11:13:38.771Z"
+                                },
+                                "selected": { "type": "boolean", "example": false },
+                                "anonymous": { "type": "boolean", "example": false },
+                                "replies": { "type": "array", "items": {} }
+                              }
+                            }
                           }
                         }
                       }
@@ -105,7 +143,7 @@
         }
       }
     },
-    "/api/v1/comment/{commentId}": {
+    "/api/v1/verification/comment/{commentId}": {
       "patch": {
         "summary": "특정 인증 댓글 수정 API",
         "description": "특정 인증에 작성된 댓글을 수정하는 API입니다.",
@@ -152,9 +190,22 @@
                     "success": {
                       "type": "object",
                       "properties": {
-                        "commentId": { "type": "integer", "example": 1 },
+                        "id": { "type": "integer", "example": 1 },
+                        "user_id": { "type": "integer", "example": 4 },
+                        "nickname": { "type": "string", "example": "test" },
                         "content": { "type": "string", "example": "이 인증은 정말 멋집니다!" },
-                        "updatedAt": { "type": "string", "format": "date-time", "example": "2025-01-08T13:00:00Z" }
+                        "parent_id": { "type": ["integer", "null"], "example": null },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-02-06T11:11:56.754Z"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-02-06T11:16:07.146Z"
+                        },
+                        "anonymous": { "type": "boolean", "example": false }
                       }
                     }
                   }

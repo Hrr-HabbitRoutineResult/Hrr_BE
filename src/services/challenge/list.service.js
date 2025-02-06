@@ -1,7 +1,7 @@
 import listRepository from '../../repositories/challenge/list.repository.js';
 import listError from '../../errors/challenge/list.error.js';
-const createChallenge = async data => {
-  const created_challenge = await listRepository.createChallenge(data);
+const createChallenge = async (data, keywords) => {
+  const created_challenge = await listRepository.createChallenge(data, keywords);
   return created_challenge;
 };
 

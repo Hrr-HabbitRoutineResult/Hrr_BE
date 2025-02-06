@@ -6,7 +6,7 @@ const joinChallenge = async (req, res, next) => {
     const user_id = req.user.id;
     const challenge_id = parseInt(req.params.challengeId, 10);
     const join_challenge = await participationService.joinChallenge(user_id, challenge_id);
-    return res.success(join_challenge, StatusCodes.OK);
+    return res.success(join_challenge, StatusCodes.CREATED);
   } catch (error) {
     next(error);
   }
@@ -16,7 +16,7 @@ const likeChallenge = async (req, res, next) => {
     const user_id = req.user.id;
     const challenge_id = parseInt(req.params.challengeId, 10);
     const like_challenge = await participationService.increaseChallengeLike(user_id, challenge_id);
-    return res.success(like_challenge, StatusCodes.OK);
+    return res.success(like_challenge, StatusCodes.CREATED);
   } catch (error) {
     next(error);
   }

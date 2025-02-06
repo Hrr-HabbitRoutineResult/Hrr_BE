@@ -15,29 +15,8 @@
             "description": "참가하려는 챌린지의 ID"
           }
         ],
-        "requestBody": {
-          "required": true,
-          "description": "참가 요청 본문 데이터",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "userId": { "type": "string", "example": "user123", "description": "참가하는 사용자의 ID" },
-                  "joinDate": {
-                    "type": "string",
-                    "format": "date-time",
-                    "example": "2025-01-06T15:00:00Z",
-                    "description": "참가 날짜"
-                  }
-                },
-                "required": ["userId", "joinDate"]
-              }
-            }
-          }
-        },
         "responses": {
-          "200": {
+          "201": {
             "description": "챌린지 참가 성공",
             "content": {
               "application/json": {
@@ -49,10 +28,17 @@
                     "success": {
                       "type": "object",
                       "properties": {
-                        "challengeId": { "type": "string", "example": "101" },
-                        "userId": { "type": "string", "example": "user123" },
-                        "joinDate": { "type": "string", "format": "date-time", "example": "2025-01-06T15:00:00Z" },
-                        "message": { "type": "string", "example": "You have successfully joined the challenge." }
+                        "id": { "type": "integer", "example": 1 },
+                        "challenge_id": { "type": "integer", "example": 1 },
+                        "user_id": { "type": "integer", "example": 4 },
+                        "owner": { "type": "boolean", "example": false },
+                        "challengeStatus": { "type": "string", "example": "ongoing" },
+                        "joinDate": { "type": "string", "format": "date-time", "example": "2025-01-01T00:00:00.000Z" },
+                        "endDate": { "type": "string", "format": "date-time", "example": "2025-03-29T00:00:00.000Z" },
+                        "verifyCount": { "type": ["integer", "null"], "example": null },
+                        "unverifiedCount": { "type": ["integer", "null"], "example": null },
+                        "status": { "type": "string", "example": "active" },
+                        "warn": { "type": "integer", "example": 0 }
                       }
                     }
                   }
@@ -154,9 +140,10 @@
                     "success": {
                       "type": "object",
                       "properties": {
-                        "challengeId": { "type": "string", "example": "101" },
-                        "userId": { "type": "string", "example": "123" },
-                        "message": { "type": "string", "example": "Challenge liked successfully." }
+                        "id": { "type": "integer", "example": 1 },
+                        "user_id": { "type": "integer", "example": 4 },
+                        "challenge_id": { "type": "integer", "example": 1 },
+                        "update_challenge_like": { "type": "integer", "example": 1 }
                       }
                     }
                   }
@@ -231,7 +218,7 @@
       }
     },
     "/api/v1/challenge/{challengeId}/unlike": {
-      "post": {
+      "delete": {
         "summary": "챌린지 좋아요 취소 API",
         "description": "사용자가 특정 챌린지에 대한 좋아요를 취소하는 API입니다.",
         "tags": ["Challenge"],
@@ -258,53 +245,52 @@
                     "success": {
                       "type": "object",
                       "properties": {
-                        "challengeId": { "type": "string", "example": "101" },
-                        "userId": { "type": "string", "example": "123" },
-                        "message": { "type": "string", "example": "Challenge unlike successfully." }
+                        "count": { "type": "integer", "example": 1 },
+                        "update_challenge_like": { "type": "integer", "example": 2 }
                       }
                     }
                   }
                 }
               }
-            }
-          },
-          "401": {
-            "description": "인증 실패",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "resultType": { "type": "string", "example": "FAILURE" },
-                    "error": { "type": "string", "example": "Unauthorized access." }
+            },
+            "401": {
+              "description": "인증 실패",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "resultType": { "type": "string", "example": "FAILURE" },
+                      "error": { "type": "string", "example": "Unauthorized access." }
+                    }
                   }
                 }
               }
-            }
-          },
-          "404": {
-            "description": "챌린지를 찾을 수 없음",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "resultType": { "type": "string", "example": "NOT_FOUND" },
-                    "error": { "type": "string", "example": "Challenge not found." }
+            },
+            "404": {
+              "description": "챌린지를 찾을 수 없음",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "resultType": { "type": "string", "example": "NOT_FOUND" },
+                      "error": { "type": "string", "example": "Challenge not found." }
+                    }
                   }
                 }
               }
-            }
-          },
-          "500": {
-            "description": "서버 오류",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "resultType": { "type": "string", "example": "FAILURE" },
-                    "error": { "type": "string", "example": "Internal server error." }
+            },
+            "500": {
+              "description": "서버 오류",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "resultType": { "type": "string", "example": "FAILURE" },
+                      "error": { "type": "string", "example": "Internal server error." }
+                    }
                   }
                 }
               }
@@ -464,13 +450,20 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": { "type": "integer", "example": 5 },
-                      "nickname": { "type": "string", "example": "john_doe" },
-                      "owner": { "type": "boolean", "example": true }
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "integer", "example": 4 },
+                          "nickname": { "type": "string", "example": "test" },
+                          "owner": { "type": "boolean", "example": false }
+                        }
+                      }
                     }
                   }
                 }

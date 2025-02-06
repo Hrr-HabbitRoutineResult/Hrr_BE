@@ -1,6 +1,6 @@
 {
   "paths": {
-    "/api/v1/verifications/{verificationId}/like": {
+    "/api/v1/verification/{verificationId}/like": {
       "post": {
         "summary": "특정 인증 좋아요 추가 API",
         "description": "특정 챌린지 인증에 좋아요를 추가하는 API입니다.",
@@ -15,17 +15,8 @@
             "description": "인증 ID"
           }
         ],
-        "requestBody": {
-          "required": false,
-          "description": "요청 본문 데이터는 비어 있습니다.",
-          "content": {
-            "application/json": {
-              "schema": { "type": "object", "properties": {} }
-            }
-          }
-        },
         "responses": {
-          "200": {
+          "201": {
             "description": "좋아요 추가 성공",
             "content": {
               "application/json": {
@@ -50,7 +41,7 @@
         }
       }
     },
-    "/api/v1/verifications/{verificationId}/unlike": {
+    "/api/v1/verification/{verificationId}/unlike": {
       "delete": {
         "summary": "특정 인증 좋아요 취소 API",
         "description": "특정 인증에 추가된 좋아요를 취소하는 API입니다.",
@@ -65,15 +56,6 @@
             "description": "인증 ID"
           }
         ],
-        "requestBody": {
-          "required": false,
-          "description": "요청 본문 데이터는 비어 있습니다.",
-          "content": {
-            "application/json": {
-              "schema": { "type": "object", "properties": {} }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "좋아요 취소 성공",

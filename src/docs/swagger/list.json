@@ -85,39 +85,61 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "category": { "type": "string", "example": "2", "description": "카테고리 ID" },
-                  "type": { "type": "string", "example": "1", "description": "챌린지 유형" },
-                  "profileImage": {
+                  "name": { "type": "string", "example": "30일 독서 챌린지", "description": "챌린지 이름" },
+                  "owner_id": { "type": "integer", "example": 1, "description": "챌린지 개설자 ID" },
+                  "type": { "type": "string", "example": "study", "description": "챌린지 유형" },
+                  "description": {
                     "type": "string",
-                    "example": "https://image.com",
+                    "example": "30일 동안 하루 한 권의 책을 읽는 챌린지입니다.",
+                    "description": "챌린지 설명"
+                  },
+                  "challengeImage": {
+                    "type": "string",
+                    "example": "https://example.com/images/reading-challenge.jpg",
                     "description": "챌린지 대표 이미지 URL"
                   },
-                  "duration": {
-                    "type": "object",
-                    "properties": {
-                      "startDate": { "type": "string", "format": "date", "example": "2025-01-06" },
-                      "finishDate": { "type": "string", "format": "date", "example": "2026-01-06" }
-                    },
-                    "description": "챌린지 기간"
+                  "category": { "type": "string", "example": "hobby", "description": "챌린지 카테고리" },
+                  "challengeStatus": { "type": "string", "example": "ongoing", "description": "챌린지 진행 상태" },
+                  "maxParticipants": { "type": "integer", "example": 100, "description": "챌린지 최대 참가자 수" },
+                  "verificationType": { "type": "string", "example": "camera", "description": "인증 방법" },
+                  "rule": {
+                    "type": "string",
+                    "example": "매일 독서 인증 사진을 업로드하세요.",
+                    "description": "챌린지 규칙"
                   },
-                  "maxParticipants": { "type": "integer", "example": 20, "description": "제한 인원" },
-                  "verificationMethod": { "type": "string", "example": "camera", "description": "인증 방법" },
-                  "rule": { "type": "string", "example": "매주 인증하세요", "description": "챌린지 규칙" },
+                  "joinDate": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2025-01-01T00:00:00.000000",
+                    "description": "챌린지 시작 날짜"
+                  },
+                  "endDate": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2025-01-30T00:00:00.000000",
+                    "description": "챌린지 종료 날짜"
+                  },
+                  "duration": { "type": "string", "example": "week_1", "description": "챌린지 기간" },
                   "keywords": {
                     "type": "array",
-                    "items": { "type": "string", "example": "운동" },
+                    "items": { "type": "string", "example": "exercise" },
                     "description": "챌린지 키워드"
                   }
                 },
                 "required": [
-                  "category",
+                  "name",
+                  "owner_id",
                   "type",
-                  "profileImage",
-                  "duration",
+                  "description",
+                  "challengeImage",
+                  "category",
+                  "challengeStatus",
                   "maxParticipants",
-                  "verificationMethod",
+                  "verificationType",
                   "rule",
-                  "keywords"
+                  "joinDate",
+                  "endDate",
+                  "duration"
                 ]
               }
             }
@@ -136,28 +158,40 @@
                     "success": {
                       "type": "object",
                       "properties": {
-                        "message": { "type": "string", "example": "챌린지가 성공적으로 개설되었습니다." },
-                        "challenge": {
+                        "result": {
                           "type": "object",
                           "properties": {
-                            "id": { "type": "string", "example": "101" },
-                            "category": { "type": "string", "example": "운동" },
-                            "type": { "type": "string", "example": "카메라" },
-                            "profileImage": { "type": "string", "example": "https://image.com" },
-                            "duration": {
-                              "type": "object",
-                              "properties": {
-                                "startDate": { "type": "string", "format": "date", "example": "2025-01-06" },
-                                "finishDate": { "type": "string", "format": "date", "example": "2026-01-06" }
-                              }
+                            "id": { "type": "integer", "example": 8 },
+                            "owner_id": { "type": "integer", "example": 1 },
+                            "name": { "type": ["string", "null"], "example": null },
+                            "type": { "type": "string", "example": "study" },
+                            "description": {
+                              "type": "string",
+                              "example": "30일 동안 하루 한 권의 책을 읽는 챌린지입니다."
                             },
-                            "maxParticipants": { "type": "integer", "example": 20 },
-                            "verificationMethod": { "type": "string", "example": "camera" },
-                            "rule": { "type": "string", "example": "매주 인증하세요" },
-                            "keywords": {
-                              "type": "array",
-                              "items": { "type": "string", "example": "운동" }
-                            }
+                            "challengeImage": {
+                              "type": "string",
+                              "example": "https://example.com/images/reading-challenge.jpg"
+                            },
+                            "challengeStatus": { "type": "string", "example": "ongoing" },
+                            "maxParticipants": { "type": "integer", "example": 100 },
+                            "verificationType": { "type": "string", "example": "camera" },
+                            "rule": { "type": "string", "example": "매일 독서 인증 사진을 업로드하세요." },
+                            "joinDate": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2024-12-31T15:00:00.000Z"
+                            },
+                            "endDate": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2025-01-29T15:00:00.000Z"
+                            },
+                            "created_at": { "type": ["string", "null"], "format": "date-time", "example": null },
+                            "updated_at": { "type": ["string", "null"], "format": "date-time", "example": null },
+                            "duration": { "type": "string", "example": "week_1" },
+                            "category": { "type": "string", "example": "hobby" },
+                            "likesCount": { "type": "integer", "example": 0 }
                           }
                         }
                       }
@@ -202,7 +236,7 @@
             "in": "query",
             "name": "keyword",
             "required": false,
-            "schema": { "type": "string", "example": "운동" },
+            "schema": { "type": "string", "example": "exercise" },
             "description": "검색 키워드"
           },
           {
@@ -256,7 +290,7 @@
                               "name": { "type": "string", "example": "운동을 해보아요" },
                               "category": { "type": "string", "example": "2" },
                               "duration": { "type": "string", "example": "1y" },
-                              "keyword": { "type": "string", "example": "운동" },
+                              "keyword": { "type": "string", "example": "exercise" },
                               "type": { "type": "string", "example": "1" },
                               "frequency": { "type": "string", "example": "2W" }
                             }
@@ -342,13 +376,31 @@
                     "success": {
                       "type": "object",
                       "properties": {
-                        "challengeId": { "type": "integer", "example": 101 },
-                        "name": { "type": "string", "example": "운동 챌린지" },
-                        "category": { "type": "string", "example": "운동" },
-                        "duration": { "type": "string", "example": "3개월" },
-                        "participants": { "type": "integer", "example": 50 },
-                        "verificationMethod": { "type": "string", "example": "사진 인증" },
-                        "description": { "type": "string", "example": "매일 운동 인증을 하는 챌린지입니다." }
+                        "id": { "type": "integer", "example": 1 },
+                        "owner_id": { "type": "integer", "example": 1 },
+                        "name": { "type": "string", "example": "코딩공부" },
+                        "type": { "type": "string", "example": "study" },
+                        "description": { "type": "string", "example": "공부합니다" },
+                        "challengeImage": { "type": "string", "example": "image1@example.com" },
+                        "challengeStatus": { "type": "string", "example": "ongoing" },
+                        "maxParticipants": { "type": "integer", "example": 30 },
+                        "verificationType": { "type": "string", "example": "camera" },
+                        "rule": { "type": "string", "example": "3" },
+                        "joinDate": { "type": "string", "format": "date-time", "example": "2025-02-02T18:44:31.000Z" },
+                        "endDate": { "type": "string", "format": "date-time", "example": "2025-02-07T18:50:09.000Z" },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-02-02T18:43:39.000Z"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-02-02T18:43:54.000Z"
+                        },
+                        "duration": { "type": "string", "example": "month_1" },
+                        "category": { "type": "string", "example": "study" },
+                        "likesCount": { "type": "integer", "example": 3 }
                       }
                     }
                   }

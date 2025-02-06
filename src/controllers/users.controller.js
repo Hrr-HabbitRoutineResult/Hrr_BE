@@ -7,8 +7,7 @@ const getMe = async (req, res, next) => {
   try {
     const my_email = req.user.email;
     const my_info = await userService.getUserInfoByEmail(my_email);
-
-    return res.status(StatusCodes.OK).json(my_info);
+    return res.success(my_info, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -17,8 +16,7 @@ const putMe = async (req, res, next) => {
   try {
     const email = req.user.email;
     const my_new_info = await userService.updateUserInfobyEmail(email, userDto.updateUserInfoRequestDto(req.body));
-
-    return res.status(StatusCodes.OK).json(my_new_info);
+    return res.success(my_new_info, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -28,8 +26,7 @@ const getUserChallengesOngoing = async (req, res, next) => {
   try {
     const id = req.user.id;
     const ongoing_challenge = await userService.getOngoingChallenge(id);
-
-    return res.status(StatusCodes.OK).json(ongoing_challenge);
+    return res.success(ongoing_challenge, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -38,8 +35,7 @@ const getUserChallengesCompleted = async (req, res, next) => {
   try {
     const id = req.user.id;
     const completed_challenge = await userService.getCompletedChallenge(id);
-
-    return res.status(StatusCodes.OK).json(completed_challenge);
+    return res.success(completed_challenge, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -48,8 +44,7 @@ const getUserChallengesHistory = async (req, res, next) => {
   try {
     const id = req.user.id;
     const challenge_history = await userService.getUserChallengeHistory(id);
-
-    return res.status(StatusCodes.OK).json(challenge_history);
+    return res.success(challenge_history, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -58,8 +53,7 @@ const getUserBadges = async (req, res, next) => {
   try {
     const id = req.user.id;
     const all_badges = await userService.getUserBadgesById(id);
-
-    return res.status(StatusCodes.OK).json(all_badges);
+    return res.success(all_badges, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -69,8 +63,7 @@ const postUserFollow = async (req, res, next) => {
     const followed_user_id = req.params.followedUserId;
     const user_id = req.user.id;
     const response = await userService.postUserFollowById(user_id, Number(followed_user_id));
-
-    return res.status(StatusCodes.OK).json(response);
+    return res.success(response, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -80,8 +73,7 @@ const deleteUserFollow = async (req, res, next) => {
     const unfollowed_user_id = req.params.unfollowedUserId;
     const user_id = req.user.id;
     const response = await userService.deleteUserFollowById(user_id, Number(unfollowed_user_id));
-
-    return res.status(StatusCodes.OK).json(response);
+    return res.success(response, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -91,7 +83,7 @@ const getUserVerificationScraps = async (req, res, next) => {
   try {
     const user_id = req.user.id;
     const response = await userService.getUserVerificationScraps(user_id);
-    return res.status(StatusCodes.OK).json(response);
+    return res.success(response, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -101,7 +93,7 @@ const getUserVerificationLikes = async (req, res, next) => {
   try {
     const user_id = req.user.id;
     const response = await userService.getUserVerificationLikes(user_id);
-    return res.status(StatusCodes.OK).json(response);
+    return res.success(response, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -112,7 +104,7 @@ const getUserBadgesConditions = async (req, res, next) => {
     const user_id = req.user.id;
     const badges_condition = await userService.getUserBadgesConditionById(user_id);
 
-    return res.status(StatusCodes.OK).json(badges_condition);
+    return res.success(badges_condition, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -123,7 +115,7 @@ const getUserLevel = async (req, res, next) => {
     const user_id = req.user.id;
     const user_level = await userService.getUserLevelById(user_id);
 
-    return res.status(StatusCodes.OK).json(user_level);
+    return res.success(user_level, StatusCodes.OK);
   } catch (error) {
     next(error);
   }

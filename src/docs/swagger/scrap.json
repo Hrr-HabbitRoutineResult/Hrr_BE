@@ -1,6 +1,6 @@
 {
   "paths": {
-    "/api/v1/verifications/{verificationId}/scrap": {
+    "/api/v1/verification/{verificationId}/scrap": {
       "post": {
         "summary": "특정 인증 스크랩 API",
         "description": "특정 챌린지 인증을 스크랩하는 API입니다.",
@@ -15,15 +15,6 @@
             "description": "인증 ID"
           }
         ],
-        "requestBody": {
-          "required": false,
-          "description": "요청 본문 데이터는 비어 있습니다.",
-          "content": {
-            "application/json": {
-              "schema": { "type": "object", "properties": {} }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "스크랩 성공",
@@ -50,7 +41,7 @@
         }
       }
     },
-    "/api/v1/verifications/{verificationId}/upscrap": {
+    "/api/v1/verification/{verificationId}/unscrap": {
       "delete": {
         "summary": "특정 인증 스크랩 취소 API",
         "description": "특정 챌린지 인증에 추가된 스크랩을 취소하는 API입니다.",
@@ -65,21 +56,6 @@
             "description": "인증 ID"
           }
         ],
-        "requestBody": {
-          "required": true,
-          "description": "스크랩 취소 요청 데이터",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "scrapId": { "type": "string", "example": "scrap12345", "description": "취소할 스크랩 ID" }
-                },
-                "required": ["scrapId"]
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "스크랩 취소 성공",

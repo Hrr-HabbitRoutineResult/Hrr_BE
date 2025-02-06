@@ -9,7 +9,7 @@ export const emailLogin = async (req, res, next) => {
     const { email, password } = req.body;
     const user_id = await authService.login(email, password);
     const { access_token, refresh_token } = authService.generateTokens({ email: email, id: user_id });
-    return res.status(StatusCodes.OK).json({ accessToken: access_token, refreshToken: refresh_token });
+    return res.success({ accessToken: access_token, refreshToken: refresh_token }, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -24,7 +24,7 @@ export const refreshToken = (req, res) => {
   try {
     const user = authService.verifyRefreshToken(refreshToken);
     const { accessToken } = authService.generateTokens({ username: user.username });
-    return res.status(StatusCodes.OK).json({ accessToken });
+    return res.success({ accessToken }, StatusCodes.OK);
   } catch (error) {
     logger.error('Error during token refresh:', error);
     throw new authError.RefreshTokenError('Invalid refresh token');
@@ -59,7 +59,7 @@ const register = async (req, res, next) => {
   try {
     const dto = authDTO.registerDto(req.body);
     const new_user = await authService.register(dto);
-    return res.status(StatusCodes.OK).json(new_user);
+    return res.success(new_user, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -69,7 +69,7 @@ const sendVerificationCode = async (req, res, next) => {
   try {
     const email = req.body.email;
     const verification_code = await authService.sendVerificationEmail(email);
-    return res.status(StatusCodes.OK).json({ email });
+    return res.success(email, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -79,7 +79,7 @@ const checkEmailVerificationCode = async (req, res, next) => {
   try {
     const { email, verification_code } = authDTO.emailVerificationCodeDto(req.body);
     const email_verification = await authService.checkEmailVerificationCode(email, verification_code);
-    return res.status(StatusCodes.OK).json(email_verification);
+    return res.success(email_verification, StatusCodes.OK);
   } catch (error) {
     return next(error);
   }

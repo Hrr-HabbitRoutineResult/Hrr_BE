@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import authError from '../errors/auth.error.js';
 import authDTO from '../dtos/auth.dto.js';
 import logger from '../logger.js';
+
 export const emailLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -30,11 +31,30 @@ export const refreshToken = (req, res) => {
   }
 };
 
-const kakaoLogin = () => {};
+const kakaoLogin = async (req, res, next) => {
+  try {
+    const { kakao_token } = req.body;
+
+    // 토큰 유효성 검증
+    if (!kakao_token) {
+      throw new authError.MissingKakaoTokenError('카카오 토큰이 없습니다.');
+    }
+
+    // 카카오 로그인 처리
+    const access_token = await authService.signInKakao(kakao_token);
+
+    // 로그인 성공 시 액세스 토큰 반환
+    return res.status(StatusCodes.OK).json(access_token);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const naverLogin = () => {};
 const findEmail = () => {};
 const ressetPasswordByPhone = () => {};
 const ressetPasswordByEmail = () => {};
+
 const register = async (req, res, next) => {
   try {
     const dto = authDTO.registerDto(req.body);

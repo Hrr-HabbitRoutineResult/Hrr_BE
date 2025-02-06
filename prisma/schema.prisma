@@ -70,6 +70,8 @@ model ChallengeLike {
   challenge_id Int
   user         User      @relation(fields: [user_id], references: [id])
   challenge    Challenge @relation(fields: [challenge_id], references: [id])
+  created_at   DateTime  @default(now())  @db.DateTime(6)
+  updated_at   DateTime? @updatedAt @db.DateTime(6)
 
   @@map("ChallengeLikes")
 }
@@ -311,7 +313,7 @@ model Challenge {
   endDate             DateTime?           @db.DateTime(6)
   created_at          DateTime?           @db.DateTime(6)
   updated_at          DateTime?           @db.DateTime(6)
-  duration            Duration
+  duration            Duration?
   category            Category
   likesCount          Int                 @default(0)
   user                User                @relation(fields: [owner_id], references: [id])
@@ -319,6 +321,7 @@ model Challenge {
   frequencies         Frequency[]
   userChallenges      UserChallenge[]
   challengeKeywords   ChallengeKeyword[]
+  currentParticipants Int?
 
   @@map("Challenges")
 }
@@ -328,13 +331,14 @@ model Frequency {
   id             Int           @id @default(autoincrement())
   challenge_id   Int
   frequencyType  FrequencyType
-  monday         Boolean       @default(false)
-  tuesday        Boolean       @default(false)
-  wednesday      Boolean       @default(false)
-  thursday       Boolean       @default(false)
-  friday         Boolean       @default(false)
-  saturday       Boolean       @default(false)
-  sunday         Boolean       @default(false)
+  frequencyValue FrequencyValue?
+  monday         Boolean?       @default(false)
+  tuesday        Boolean?       @default(false)
+  wednesday      Boolean?       @default(false)
+  thursday       Boolean?       @default(false)
+  friday         Boolean?       @default(false)
+  saturday       Boolean?       @default(false)
+  sunday         Boolean?       @default(false)
   challenge      Challenge     @relation(fields: [challenge_id], references: [id])
 
   @@map("Frequencies")
@@ -577,4 +581,13 @@ enum Duration {
   month_3
   month_6
   year_1
+}
+
+enum FrequencyValue {
+  everyday
+  week_2
+  week_3
+  week_5
+  weekdays
+  weekends
 }

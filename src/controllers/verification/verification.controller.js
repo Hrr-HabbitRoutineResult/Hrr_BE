@@ -7,8 +7,7 @@ const getChallengeVerificationStatus = async (req, res, next) => {
     const challenge_id = parseInt(req.params.challengeId, 10);
     const verification_status = await verificationService.getChallengeVerifications(challenge_id);
 
-    // return res.success(verification_status, StatusCodes.OK);
-    return res.status(StatusCodes.OK).json(verification_status);
+    return res.success(verification_status, StatusCodes.OK);
   } catch (error) {
     next(error);
   }

@@ -6,7 +6,7 @@ const likeSpecificVerification = async (req, res, next) => {
     const user_id = req.user.id;
     const verification_id = Number(req.params.verificationId);
     const like_verification = await likeService.likeVerification(user_id, verification_id);
-    return res.success(like_verification, StatusCodes.OK);
+    return res.success(like_verification, StatusCodes.CREATED);
   } catch (error) {
     next(error);
   }

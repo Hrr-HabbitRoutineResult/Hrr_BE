@@ -15,9 +15,16 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "interests": {
-                    "type": "array",
-                    "items": { "type": "string", "example": "운동" }
+                  "resultType": { "type": "string", "example": "SUCCESS" },
+                  "error": { "type": "object", "nullable": true, "example": null },
+                  "success": {
+                    "type": "object",
+                    "properties": {
+                      "interests": {
+                        "type": "array",
+                        "items": { "type": "string", "example": "운동" }
+                      }
+                    }
                   }
                 },
                 "required": ["interests"]
@@ -57,41 +64,48 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "integer", "example": 1 },
-                    "nickname": { "type": "string", "example": "김흐르" },
-                    "gender": { "type": "string", "example": "male" },
-                    "email": { "type": "string", "example": "user@example.com" },
-                    "level": { "type": "string", "example": "bronze" },
-                    "points": { "type": "integer", "example": 300 },
-                    "followerCount": { "type": "integer", "example": 100 },
-                    "followingCount": { "type": "integer", "example": 50 },
-                    "user_badge_1": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": { "type": "integer", "example": 1 },
-                          "name": { "type": "string", "example": "운동 마스터" },
-                          "icon": { "type": "string", "example": "https://icon1.png" },
-                          "type": { "type": "string", "example": "category" },
-                          "obtainedCount": { "type": "integer", "example": 30 }
-                        }
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer", "example": 1 },
+                        "nickname": { "type": "string", "example": "김흐르" },
+                        "gender": { "type": "string", "example": "male" },
+                        "email": { "type": "string", "example": "user@example.com" },
+                        "level": { "type": "string", "example": "bronze" },
+                        "points": { "type": "integer", "example": 300 },
+                        "followerCount": { "type": "integer", "example": 100 },
+                        "followingCount": { "type": "integer", "example": 50 },
+                        "user_badge_1": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": { "type": "integer", "example": 1 },
+                              "name": { "type": "string", "example": "운동 마스터" },
+                              "icon": { "type": "string", "example": "https://icon1.png" },
+                              "type": { "type": "string", "example": "category" },
+                              "obtainedCount": { "type": "integer", "example": 30 }
+                            }
+                          }
+                        },
+                        "user_badge_2": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": { "type": "integer", "example": 2 },
+                              "name": { "type": "string", "example": "올라운더" },
+                              "icon": { "type": "string", "example": "https://icon2.png" },
+                              "type": { "type": "string", "example": "type" },
+                              "obtainedCount": { "type": "integer", "example": 30 }
+                            }
+                          }
+                        },
+                        "user_badge_3": { "type": "null", "example": null }
                       }
-                    },
-                    "user_badge_2": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": { "type": "integer", "example": 2 },
-                          "name": { "type": "string", "example": "올라운더" },
-                          "icon": { "type": "string", "example": "https://icon2.png" },
-                          "type": { "type": "string", "example": "type" },
-                          "obtainedCount": { "type": "integer", "example": 30 }
-                        }
-                      }
-                    },
-                    "user_badge_3": { "type": "null", "example": null }
+                    }
                   }
                 }
               }
@@ -116,11 +130,8 @@
                   "name": { "type": "string", "example": "흐르르" },
                   "profilePhoto": { "type": "string", "example": "https://example.com/newprofile.jpg" },
                   "badges": {
-                    "type": "array",
-                    "items": {
-                      "type": ["integer", "null"],
-                      "example": [2, 1, null]
-                    }
+                    "type": ["integer", "null"],
+                    "example": [2, 1, null]
                   }
                 },
                 "required": ["name", "profilePhoto", "badges"]
@@ -136,13 +147,20 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "name": { "type": "string", "example": "흐르르" },
-                    "profilePhoto": { "type": "string", "example": "https://example.com/newprofile.jpg" },
-                    "badges": {
-                      "type": "array",
-                      "items": {
-                        "type": ["integer", "null"],
-                        "example": [2, 1, null]
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "object",
+                      "properties": {
+                        "name": { "type": "string", "example": "흐르르" },
+                        "profilePhoto": { "type": "string", "example": "https://example.com/newprofile.jpg" },
+                        "badges": {
+                          "type": "array",
+                          "items": {
+                            "type": ["integer", "null"],
+                            "example": [2, 1, null]
+                          }
+                        }
                       }
                     }
                   }
@@ -166,15 +184,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "challenge_id": { "type": "integer", "example": 1 },
-                      "name": { "type": "string", "example": "자잘자잘" },
-                      "challengeImage": { "type": "string", "example": "https://img1" },
-                      "type": { "type": "string", "example": "basic" },
-                      "verification": { "type": "boolean", "example": true }
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "challenge_id": { "type": "integer", "example": 1 },
+                          "name": { "type": "string", "example": "자잘자잘" },
+                          "challengeImage": { "type": "string", "example": "https://img1" },
+                          "type": { "type": "string", "example": "basic" },
+                          "verification": { "type": "boolean", "example": true }
+                        }
+                      }
                     }
                   }
                 }
@@ -197,14 +222,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "challenge_id": { "type": "integer", "example": 1 },
-                      "name": { "type": "string", "example": "런런" },
-                      "challengeImage": { "type": "string", "example": "https://img1" },
-                      "description": { "type": "string", "example": "러닝하고 인증하기" }
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "challenge_id": { "type": "integer", "example": 1 },
+                          "name": { "type": "string", "example": "런런" },
+                          "challengeImage": { "type": "string", "example": "https://img1" },
+                          "description": { "type": "string", "example": "러닝하고 인증하기" }
+                        }
+                      }
                     }
                   }
                 }
@@ -227,17 +259,28 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "challenge_id": { "type": "integer", "example": 1 },
-                      "name": { "type": "string", "example": "영화 봐요" },
-                      "verification_id": { "type": "integer", "example": 1 },
-                      "created_at": { "type": "string", "format": "date-time", "example": "2025-01-30T04:28:48.125Z" },
-                      "title": { "type": "string", "example": "1일차 챌린지 인증" },
-                      "photoUrl": { "type": "string", "format": "uri", "example": "https://url1.com" },
-                      "textUrl": { "type": ["string", "null"], "example": null }
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "challenge_id": { "type": "integer", "example": 1 },
+                          "name": { "type": "string", "example": "영화 봐요" },
+                          "verification_id": { "type": "integer", "example": 1 },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-01-30T04:28:48.125Z"
+                          },
+                          "title": { "type": "string", "example": "1일차 챌린지 인증" },
+                          "photoUrl": { "type": "string", "format": "uri", "example": "https://url1.com" },
+                          "textUrl": { "type": ["string", "null"], "example": null }
+                        }
+                      }
                     }
                   }
                 }
@@ -260,31 +303,35 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "typeBadges": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "badgeId": { "type": "integer", "example": 1 },
-                            "name": { "type": "string", "example": "운동 마스터" },
-                            "icon": { "type": "string", "example": "https://icon1.png" },
-                            "isObtained": { "type": "boolean", "example": true }
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "object",
+                      "properties": {
+                        "typeBadges": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "badgeId": { "type": "integer", "example": 1 },
+                              "name": { "type": "string", "example": "운동 마스터" },
+                              "icon": { "type": "string", "example": "https://icon1.png" },
+                              "isObtained": { "type": "boolean", "example": true }
+                            }
                           }
-                        }
-                      },
-                      "categoryBadges": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "badgeId": { "type": "integer", "example": 2 },
-                            "name": { "type": "string", "example": "학업 스타터" },
-                            "icon": { "type": "string", "example": "https://icon2.png" },
-                            "isObtained": { "type": "boolean", "example": true }
+                        },
+                        "categoryBadges": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "badgeId": { "type": "integer", "example": 2 },
+                              "name": { "type": "string", "example": "학업 스타터" },
+                              "icon": { "type": "string", "example": "https://icon2.png" },
+                              "isObtained": { "type": "boolean", "example": true }
+                            }
                           }
                         }
                       }
@@ -320,8 +367,15 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": { "type": "string", "example": "User followed successfully" },
-                    "followedUserId": { "type": "integer", "example": 123 }
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "object",
+                      "properties": {
+                        "message": { "type": "string", "example": "User followed successfully" },
+                        "followedUserId": { "type": "integer", "example": 123 }
+                      }
+                    }
                   }
                 }
               }
@@ -353,8 +407,15 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": { "type": "string", "example": "User unfollowed successfully" },
-                    "unfollowedUserId": { "type": "integer", "example": 123 }
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "object",
+                      "properties": {
+                        "message": { "type": "string", "example": "User unfollowed successfully" },
+                        "unfollowedUserId": { "type": "integer", "example": 123 }
+                      }
+                    }
                   }
                 }
               }
@@ -376,19 +437,26 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": { "type": "integer", "example": 3 },
-                      "verification": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "array",
+                      "items": {
                         "type": "object",
                         "properties": {
-                          "id": { "type": "integer", "example": 1 },
-                          "title": { "type": "string", "example": "1일차 챌린지 인증" },
-                          "content": { "type": "string", "example": "확인했습니다" },
-                          "verification": { "type": "string", "example": "certified" },
-                          "created_at": { "type": "string", "example": "2025-01-30T04:28:48.125Z" }
+                          "id": { "type": "integer", "example": 3 },
+                          "verification": {
+                            "type": "object",
+                            "properties": {
+                              "id": { "type": "integer", "example": 1 },
+                              "title": { "type": "string", "example": "1일차 챌린지 인증" },
+                              "content": { "type": "string", "example": "확인했습니다" },
+                              "verificationStatus": { "type": "string", "example": "certified" },
+                              "created_at": { "type": "string", "example": "2025-01-30T04:28:48.125Z" }
+                            }
+                          }
                         }
                       }
                     }
@@ -413,14 +481,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "badgeId": { "type": "integer", "example": 1 },
-                      "conditionId": { "type": "integer", "example": 1 },
-                      "description": { "type": "string", "example": "운동 챌린지 참가 10회" },
-                      "isAchieved": { "type": "boolean", "example": true }
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "badgeId": { "type": "integer", "example": 1 },
+                          "conditionId": { "type": "integer", "example": 1 },
+                          "description": { "type": "string", "example": "운동 챌린지 참가 10회" },
+                          "isAchieved": { "type": "boolean", "example": true }
+                        }
+                      }
                     }
                   }
                 }
@@ -443,15 +518,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "level": { "type": "string", "example": "gold" },
-                      "points": { "type": "integer", "example": 150 },
-                      "levelConditionId": { "type": "integer", "example": 1 },
-                      "condition": { "type": "string", "example": "포인트 150p 달성 : Gold 획득 !" },
-                      "isAchieved": { "type": "boolean", "example": true }
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "level": { "type": "string", "example": "gold" },
+                          "points": { "type": "integer", "example": 150 },
+                          "levelConditionId": { "type": "integer", "example": 1 },
+                          "condition": { "type": "string", "example": "포인트 150p 달성 : Gold 획득 !" },
+                          "isAchieved": { "type": "boolean", "example": true }
+                        }
+                      }
                     }
                   }
                 }
@@ -476,7 +558,14 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "user_id": { "type": "integer", "example": 12345 }
+                  "resultType": { "type": "string", "example": "SUCCESS" },
+                  "error": { "type": "object", "nullable": true, "example": null },
+                  "success": {
+                    "type": "object",
+                    "properties": {
+                      "user_id": { "type": "integer", "example": 12345 }
+                    }
+                  }
                 },
                 "required": ["user_id"]
               }

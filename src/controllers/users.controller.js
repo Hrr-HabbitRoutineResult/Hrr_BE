@@ -33,8 +33,8 @@ const getUserChallengesOngoing = async (req, res, next) => {
 };
 const getUserChallengesCompleted = async (req, res, next) => {
   try {
-    const id = req.user.id;
-    const completed_challenge = await userService.getCompletedChallenge(id);
+    const user_id = Number(req.params.userId);
+    const completed_challenge = await userService.getCompletedChallenge(user_id);
     return res.success(completed_challenge, StatusCodes.OK);
   } catch (error) {
     next(error);

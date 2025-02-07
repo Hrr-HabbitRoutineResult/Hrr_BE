@@ -52,20 +52,15 @@ const updateUserInfobyEmail = async (email, update_data) => {
 const getOngoingChallenge = async user_id => {
   const ongoing_challenges = await userRepository.findOngoingChallenges(user_id);
   const response_data = userDto.userChallengeDto(ongoing_challenges);
-  if (!response_data) {
-    return null;
-  }
-  return response_data;
+
+  return { ongoingChallenges: response_data };
 };
 
-const getCompletedChallenge = async id => {
-  const completed_challenges = await userRepository.findCompletedChallenges(id);
+const getCompletedChallenge = async user_id => {
+  const completed_challenges = await userRepository.findCompletedChallenges(user_id);
   const response_data = userDto.userChallengeDto(completed_challenges);
-  if (!response_data) {
-    return null;
-  }
 
-  return response_data;
+  return { completedChallenges: response_data };
 };
 
 const getUserChallengeHistory = async id => {

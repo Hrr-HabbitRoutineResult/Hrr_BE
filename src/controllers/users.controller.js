@@ -3,11 +3,11 @@ import userService from '../services/users.service.js';
 import userDto from '../dtos/user.dto.js';
 
 const putUserInterests = () => {};
-const getMe = async (req, res, next) => {
+const getUserById = async (req, res, next) => {
   try {
-    const my_email = req.user.email;
-    const my_info = await userService.getUserInfoByEmail(my_email);
-    return res.success(my_info, StatusCodes.OK);
+    const user_id = Number(req.params.userId);
+    const user_info = await userService.getUserInfoById(user_id);
+    return res.success(user_info, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -206,7 +206,7 @@ const blockUser = () => {
 
 export default {
   putUserInterests,
-  getMe,
+  getUserById,
   putMe,
   getUserChallengesOngoing,
   getUserChallengesCompleted,

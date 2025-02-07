@@ -4,7 +4,7 @@ import authMiddleware from '../middlewares/auth.middleware.js';
 const router = express.Router();
 
 router.put('/:userId/interests', usersController.putUserInterests);
-router.get('/me', authMiddleware, usersController.getMe);
+router.get('/:userId', usersController.getUserById);
 router.put('/me', authMiddleware, usersController.putMe);
 router.get('/challenges/ongoing', authMiddleware, usersController.getUserChallengesOngoing);
 router.get('/challenges/completed', authMiddleware, usersController.getUserChallengesCompleted);

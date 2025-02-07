@@ -4520,19 +4520,25 @@
         }
       }
     },
-    "/api/v1/users/me": {
+    "/api/v1/users/{userId}": {
       "get": {
         "summary": "사용자 정보 조회 API",
         "description": "사용자의 기본 정보를 조회합니다.",
         "tags": [
           "User"
         ],
-        "security": [
+        "parameters": [
           {
-            "bearerAuth": []
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1"
+            },
+            "description": "사용자의 ID"
           }
         ],
-        "parameters": [],
         "responses": {
           "200": {
             "description": "사용자 정보 조회 성공",

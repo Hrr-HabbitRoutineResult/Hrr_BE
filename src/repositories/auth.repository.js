@@ -1,13 +1,27 @@
 import authError from '../errors/auth.error.js';
 import { prisma } from '../db.config.js';
 import bcrypt from 'bcrypt';
-import logger from '../logger.js';
+
+const findUserById = async user_id => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: user_id },
+    });
+    return user;
+  } catch {
+    throw new databaseError.DataBaseError('유저 조회중 에러가 발생했습니다.');
+  }
+};
 
 const findUserByEmail = async email => {
-  const user = await prisma.user.findUnique({
-    where: { email },
-  });
-  return user;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+    return user;
+  } catch {
+    throw new databaseError.DataBaseError('유저 조회중 에러가 발생했습니다.');
+  }
 };
 
 // 이메일 인증 정보를 조회하는 함수
@@ -114,6 +128,7 @@ const signUpKakao = async email => {
 };
 
 export default {
+  findUserById,
   findUserByEmail,
   findEmailVerification,
   deleteEmailVerification,

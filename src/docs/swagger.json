@@ -2120,55 +2120,85 @@
                       "properties": {
                         "id": {
                           "type": "integer",
-                          "example": 1
+                          "example": 3
                         },
-                        "challenge_id": {
+                        "owner_id": {
                           "type": "integer",
-                          "example": 1
+                          "example": 3
                         },
-                        "user_id": {
-                          "type": "integer",
-                          "example": 4
+                        "name": {
+                          "type": "string",
+                          "example": "수학"
                         },
-                        "owner": {
-                          "type": "boolean",
-                          "example": false
+                        "type": {
+                          "type": "string",
+                          "example": "study"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "수학공부"
+                        },
+                        "challengeImage": {
+                          "type": "string",
+                          "example": "https://image3.com"
                         },
                         "challengeStatus": {
                           "type": "string",
                           "example": "ongoing"
                         },
-                        "joinDate": {
+                        "maxParticipants": {
+                          "type": "integer",
+                          "example": 60
+                        },
+                        "verificationType": {
+                          "type": "string",
+                          "example": "text"
+                        },
+                        "rule": {
+                          "type": "string",
+                          "example": "3"
+                        },
+                        "created_at": {
                           "type": "string",
                           "format": "date-time",
-                          "example": "2025-01-01T00:00:00.000Z"
+                          "example": "2025-02-07T01:47:07.000Z"
+                        },
+                        "updated_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date-time",
+                          "example": null
                         },
                         "endDate": {
                           "type": "string",
                           "format": "date-time",
-                          "example": "2025-03-29T00:00:00.000Z"
+                          "example": "2026-02-07T01:47:38.000Z"
                         },
-                        "verifyCount": {
-                          "type": [
-                            "integer",
-                            "null"
-                          ],
-                          "example": null
-                        },
-                        "unverifiedCount": {
-                          "type": [
-                            "integer",
-                            "null"
-                          ],
-                          "example": null
-                        },
-                        "status": {
+                        "joinDate": {
                           "type": "string",
-                          "example": "active"
+                          "format": "date-time",
+                          "example": "2025-02-07T01:47:28.000Z"
                         },
-                        "warn": {
+                        "category": {
+                          "type": "string",
+                          "example": "study"
+                        },
+                        "duration": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "example": null
+                        },
+                        "likesCount": {
                           "type": "integer",
-                          "example": 0
+                          "example": 1
+                        },
+                        "currentParticipants": {
+                          "type": "integer",
+                          "example": 15
                         }
                       }
                     }

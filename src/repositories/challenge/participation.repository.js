@@ -3,12 +3,21 @@ import participationError, { DataBaseError } from '../../errors/challenge/partic
 
 const joinChallenge = async data => {
   try {
-    const created_user_challenge = await prisma.userChallenge.create({
-      data: data,
+    return await prisma.$transaction(async prisma => {
+      await prisma.userChallenge.create({
+        data: data,
+      });
+
+      const joined_challenge = await prisma.challenge.update({
+        where: { id: data.challenge_id },
+        data: { currentParticipants: { increment: 1 } },
+      });
+
+      return joined_challenge;
     });
-    return created_user_challenge;
   } catch (error) {
-    throw new participationError.DataBaseError('Error on creating userChallenge');
+    console.log(error);
+    throw new participationError.DataBaseError('Error on creating userChallenge and updating currentParticipant');
   }
 };
 

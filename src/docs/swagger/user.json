@@ -341,13 +341,20 @@
         }
       }
     },
-    "/api/v1/users/badges": {
+    "/api/v1/users/{userId}/badges": {
       "get": {
         "summary": "사용자 배지 조회 API",
         "description": "사용자가 획득한 배지 정보를 조회합니다.",
         "tags": ["User"],
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": { "type": "string", "example": "1" },
+            "description": "사용자의 ID"
+          }
+        ],
         "responses": {
           "200": {
             "description": "배지 정보 조회 성공",

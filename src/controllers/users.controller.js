@@ -51,8 +51,8 @@ const getUserChallengesHistory = async (req, res, next) => {
 };
 const getUserBadges = async (req, res, next) => {
   try {
-    const id = req.user.id;
-    const all_badges = await userService.getUserBadgesById(id);
+    const user_id = Number(req.params.userId);
+    const all_badges = await userService.getUserBadgesById(user_id);
     return res.success(all_badges, StatusCodes.OK);
   } catch (error) {
     next(error);

@@ -3,11 +3,11 @@ import userService from '../services/users.service.js';
 import userDto from '../dtos/user.dto.js';
 
 const putUserInterests = () => {};
-const getMe = async (req, res, next) => {
+const getUserById = async (req, res, next) => {
   try {
-    const my_email = req.user.email;
-    const my_info = await userService.getUserInfoByEmail(my_email);
-    return res.success(my_info, StatusCodes.OK);
+    const user_id = Number(req.params.userId);
+    const user_info = await userService.getUserInfoById(user_id);
+    return res.success(user_info, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -24,8 +24,8 @@ const putMe = async (req, res, next) => {
 
 const getUserChallengesOngoing = async (req, res, next) => {
   try {
-    const id = req.user.id;
-    const ongoing_challenge = await userService.getOngoingChallenge(id);
+    const user_id = Number(req.params.userId);
+    const ongoing_challenge = await userService.getOngoingChallenge(user_id);
     return res.success(ongoing_challenge, StatusCodes.OK);
   } catch (error) {
     next(error);
@@ -33,8 +33,8 @@ const getUserChallengesOngoing = async (req, res, next) => {
 };
 const getUserChallengesCompleted = async (req, res, next) => {
   try {
-    const id = req.user.id;
-    const completed_challenge = await userService.getCompletedChallenge(id);
+    const user_id = Number(req.params.userId);
+    const completed_challenge = await userService.getCompletedChallenge(user_id);
     return res.success(completed_challenge, StatusCodes.OK);
   } catch (error) {
     next(error);
@@ -51,8 +51,8 @@ const getUserChallengesHistory = async (req, res, next) => {
 };
 const getUserBadges = async (req, res, next) => {
   try {
-    const id = req.user.id;
-    const all_badges = await userService.getUserBadgesById(id);
+    const user_id = Number(req.params.userId);
+    const all_badges = await userService.getUserBadgesById(user_id);
     return res.success(all_badges, StatusCodes.OK);
   } catch (error) {
     next(error);
@@ -206,7 +206,7 @@ const blockUser = () => {
 
 export default {
   putUserInterests,
-  getMe,
+  getUserById,
   putMe,
   getUserChallengesOngoing,
   getUserChallengesCompleted,

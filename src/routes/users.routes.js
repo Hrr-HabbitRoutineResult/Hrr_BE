@@ -4,12 +4,12 @@ import authMiddleware from '../middlewares/auth.middleware.js';
 const router = express.Router();
 
 router.put('/:userId/interests', usersController.putUserInterests);
-router.get('/me', authMiddleware, usersController.getMe);
+router.get('/:userId', usersController.getUserById);
 router.put('/me', authMiddleware, usersController.putMe);
-router.get('/challenges/ongoing', authMiddleware, usersController.getUserChallengesOngoing);
-router.get('/challenges/completed', authMiddleware, usersController.getUserChallengesCompleted);
+router.get('/:userId/challenges/ongoing', usersController.getUserChallengesOngoing);
+router.get('/:userId/challenges/completed', usersController.getUserChallengesCompleted);
 router.get('/challenges/verification/history', authMiddleware, usersController.getUserChallengesHistory);
-router.get('/badges', authMiddleware, usersController.getUserBadges);
+router.get('/:userId/badges', usersController.getUserBadges);
 router.post('/:followedUserId/follow', authMiddleware, usersController.postUserFollow);
 router.delete('/:unfollowedUserId/unfollow', authMiddleware, usersController.deleteUserFollow);
 router.get('/verification/scrap', authMiddleware, usersController.getUserVerificationScraps);

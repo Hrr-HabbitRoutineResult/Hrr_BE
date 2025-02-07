@@ -44,7 +44,7 @@ const userChallengeDto = challenges => {
     challengeImage: challenge.challenge.challengeImage,
     type: challenge.challenge.type,
     description: challenge.challenge.description,
-    // 인증 추가
+    verificatedToday: challenge.hasVerificationToday,
   }));
 };
 

@@ -16,27 +16,53 @@ const updateUserInfo = async (email, update_data) => {
   }
 };
 
+import { startOfDay, endOfDay } from 'date-fns';
+
 const findOngoingChallenges = async user_id => {
   try {
-    return prisma.userChallenge.findMany({
-      where: {
-        user_id,
-        challengeStatus: 'ongoing',
-      },
-      select: {
-        challenge_id: true,
-        challenge: {
-          select: {
-            name: true,
-            challengeImage: true,
-            type: true,
-            // 인증 추가
+    // 오늘 날짜의 시작과 끝을 구함
+    const todayStart = startOfDay(new Date());
+    const todayEnd = endOfDay(new Date());
+
+    return prisma.userChallenge
+      .findMany({
+        where: {
+          user_id,
+          challengeStatus: 'ongoing',
+        },
+        select: {
+          challenge_id: true,
+          challenge: {
+            select: {
+              name: true,
+              challengeImage: true,
+              type: true,
+            },
+          },
+          // 오늘 날짜의 verification이 있는지 확인
+          verification: {
+            select: {
+              id: true, // verification이 존재하는지만 확인하면 되므로 id만 선택
+            },
+            where: {
+              user_id,
+              created_at: {
+                gte: todayStart,
+                lte: todayEnd,
+              },
+            },
           },
         },
-      },
-    });
+      })
+      .then(challenges =>
+        challenges.map(challenge => ({
+          challenge_id: challenge.challenge_id,
+          challenge: challenge.challenge,
+          hasVerificationToday: challenge.verification.length > 0, // 오늘 인증 여부
+        })),
+      );
   } catch (error) {
-    throw new authError.DataBaseError('DataBase Error on updating user information');
+    throw new authError.DataBaseError('DataBase Error finding ongoing challenges');
   }
 };
 
@@ -59,7 +85,7 @@ const findCompletedChallenges = async user_id => {
       },
     });
   } catch (error) {
-    throw new authError.DataBaseError('DataBase Error on updating user information');
+    throw new authError.DataBaseError('DataBase Error on finding completed challenges');
   }
 };
 

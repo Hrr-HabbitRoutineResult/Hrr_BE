@@ -49,13 +49,20 @@
         }
       }
     },
-    "/api/v1/users/me": {
+    "/api/v1/users/{userId}": {
       "get": {
         "summary": "사용자 정보 조회 API",
         "description": "사용자의 기본 정보를 조회합니다.",
         "tags": ["User"],
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": { "type": "string", "example": "1" },
+            "description": "사용자의 ID"
+          }
+        ],
         "responses": {
           "200": {
             "description": "사용자 정보 조회 성공",
@@ -112,7 +119,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/v1/users/me": {
       "put": {
         "summary": "사용자 정보 수정 API",
         "description": "사용자가 자신의 정보를 수정하는 API입니다.",
@@ -171,16 +180,23 @@
         }
       }
     },
-    "/api/v1/users/challenges/ongoing": {
+    "/api/v1/users/{userId}/challenges/ongoing": {
       "get": {
-        "summary": "내 챌린지 조회 API",
-        "description": "내가 참여한 챌린지들을 보여주는 API입니다.",
+        "summary": "진행중인 챌린지 조회 API",
+        "description": "유저가 참여한 챌린지들을 보여주는 API입니다.",
         "tags": ["User"],
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": { "type": "string", "example": "1" },
+            "description": "사용자의 ID"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "내 챌린지 조회 성공",
+            "description": "사용자의 챌린지 조회 성공",
             "content": {
               "application/json": {
                 "schema": {
@@ -189,16 +205,39 @@
                     "resultType": { "type": "string", "example": "SUCCESS" },
                     "error": { "type": "object", "nullable": true, "example": null },
                     "success": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "challenge_id": { "type": "integer", "example": 1 },
-                          "name": { "type": "string", "example": "자잘자잘" },
-                          "challengeImage": { "type": "string", "example": "https://img1" },
-                          "type": { "type": "string", "example": "basic" },
-                          "verification": { "type": "boolean", "example": true }
+                      "type": "object",
+                      "properties": {
+                        "ongoingChallenges": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "challenge_id": { "type": "integer", "example": 1 },
+                              "name": { "type": "string", "example": "코딩" },
+                              "challengeImage": { "type": "string", "example": "https://image1.com" },
+                              "type": { "type": "string", "example": "study" },
+                              "verificatedToday": { "type": "boolean", "example": true }
+                            }
+                          }
                         }
+                      },
+                      "example": {
+                        "ongoingChallenges": [
+                          {
+                            "challenge_id": 1,
+                            "name": "코딩",
+                            "challengeImage": "https://image1.com",
+                            "type": "study",
+                            "verificatedToday": true
+                          },
+                          {
+                            "challenge_id": 3,
+                            "name": "수학",
+                            "challengeImage": "https://image3.com",
+                            "type": "study",
+                            "verificatedToday": false
+                          }
+                        ]
                       }
                     }
                   }
@@ -209,13 +248,20 @@
         }
       }
     },
-    "/api/v1/users/challenges/completed": {
+    "/api/v1/users/{userId}/challenges/completed": {
       "get": {
         "summary": "완료한 챌린지 조회 API",
-        "description": "내가 완료한 챌린지들을 보여주는 API입니다.",
+        "description": "사용자가 완료한 챌린지들을 보여주는 API입니다.",
         "tags": ["User"],
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": { "type": "string", "example": "1" },
+            "description": "사용자의 ID"
+          }
+        ],
         "responses": {
           "200": {
             "description": "완료한 챌린지 조회 성공",
@@ -227,14 +273,19 @@
                     "resultType": { "type": "string", "example": "SUCCESS" },
                     "error": { "type": "object", "nullable": true, "example": null },
                     "success": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "challenge_id": { "type": "integer", "example": 1 },
-                          "name": { "type": "string", "example": "런런" },
-                          "challengeImage": { "type": "string", "example": "https://img1" },
-                          "description": { "type": "string", "example": "러닝하고 인증하기" }
+                      "type": "object",
+                      "properties": {
+                        "completedChallenges": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "challenge_id": { "type": "integer", "example": 2 },
+                              "name": { "type": "string", "example": "영어" },
+                              "challengeImage": { "type": "string", "example": "https://image2.com" },
+                              "description": { "type": "string", "example": "영어공부" }
+                            }
+                          }
                         }
                       }
                     }
@@ -290,13 +341,20 @@
         }
       }
     },
-    "/api/v1/users/badges": {
+    "/api/v1/users/{userId}/badges": {
       "get": {
         "summary": "사용자 배지 조회 API",
         "description": "사용자가 획득한 배지 정보를 조회합니다.",
         "tags": ["User"],
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": { "type": "string", "example": "1" },
+            "description": "사용자의 ID"
+          }
+        ],
         "responses": {
           "200": {
             "description": "배지 정보 조회 성공",

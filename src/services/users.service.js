@@ -49,8 +49,8 @@ const updateUserInfobyEmail = async (email, update_data) => {
   }
 };
 
-const getOngoingChallenge = async id => {
-  const ongoing_challenges = await userRepository.findOngoingChallenges(id);
+const getOngoingChallenge = async user_id => {
+  const ongoing_challenges = await userRepository.findOngoingChallenges(user_id);
   const response_data = userDto.userChallengeDto(ongoing_challenges);
   if (!response_data) {
     return null;

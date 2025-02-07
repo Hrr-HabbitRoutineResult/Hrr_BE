@@ -36,7 +36,7 @@ const findOngoingChallenges = async user_id => {
       },
     });
   } catch (error) {
-    throw new authError.DataBaseError('DataBase Error on updating user information');
+    throw new authError.DataBaseError('DataBase Error finding ongoing challenges');
   }
 };
 

@@ -24,8 +24,8 @@ const putMe = async (req, res, next) => {
 
 const getUserChallengesOngoing = async (req, res, next) => {
   try {
-    const id = req.user.id;
-    const ongoing_challenge = await userService.getOngoingChallenge(id);
+    const user_id = Number(req.params.userId);
+    const ongoing_challenge = await userService.getOngoingChallenge(user_id);
     return res.success(ongoing_challenge, StatusCodes.OK);
   } catch (error) {
     next(error);

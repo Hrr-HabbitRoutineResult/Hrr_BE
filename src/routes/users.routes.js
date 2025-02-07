@@ -6,7 +6,7 @@ const router = express.Router();
 router.put('/:userId/interests', usersController.putUserInterests);
 router.get('/:userId', usersController.getUserById);
 router.put('/me', authMiddleware, usersController.putMe);
-router.get('/challenges/ongoing', authMiddleware, usersController.getUserChallengesOngoing);
+router.get('/:userId/challenges/ongoing', usersController.getUserChallengesOngoing);
 router.get('/challenges/completed', authMiddleware, usersController.getUserChallengesCompleted);
 router.get('/challenges/verification/history', authMiddleware, usersController.getUserChallengesHistory);
 router.get('/badges', authMiddleware, usersController.getUserBadges);

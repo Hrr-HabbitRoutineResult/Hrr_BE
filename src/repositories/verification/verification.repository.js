@@ -68,7 +68,7 @@ const findChallengeVerificationCurrentParticipants = async challenge_id => {
 const findChallengeVerificationCounts = async challenge_id => {
   try {
     // 오늘의 시작과 끝 시간 구하기
-    const today = new Date();
+    const today = new Date(new Date().getTime() + 9 * 60 * 60 * 1000);
     const start_of_day = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate(), 0, 0, 0));
     const end_of_day = new Date(
       Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate(), 23, 59, 59, 999),

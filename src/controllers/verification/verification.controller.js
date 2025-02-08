@@ -2,7 +2,16 @@ import { StatusCodes } from 'http-status-codes';
 import verificationService from '../../services/verification/verification.service.js';
 import verificationDto from '../../dtos/verification/verification.dto.js';
 
-const getChallengeVerificationStatus = () => {};
+const getChallengeVerificationStatus = async (req, res, next) => {
+  try {
+    const challenge_id = parseInt(req.params.challengeId, 10);
+    const verification_status = await verificationService.getChallengeVerifications(challenge_id);
+
+    return res.success(verification_status, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
 const getWeeklyVerification = () => {};
 const getSpecificVerification = async (req, res, next) => {
   try {

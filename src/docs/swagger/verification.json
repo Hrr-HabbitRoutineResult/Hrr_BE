@@ -28,23 +28,10 @@
                     "success": {
                       "type": "object",
                       "properties": {
-                        "challengeInfo": {
-                          "type": "object",
-                          "properties": {
-                            "id": { "type": "integer", "example": 3 },
-                            "name": { "type": "string", "example": "2025년 개발 챌린지" },
-                            "challengeType": { "type": "string", "example": "basic" }
-                          }
-                        },
-                        "participants": {
-                          "type": "object",
-                          "properties": {
-                            "total": { "type": "integer", "example": 50 },
-                            "verified": { "type": "integer", "example": 35 },
-                            "unverified": { "type": "integer", "example": 15 }
-                          }
-                        },
-                        "verificationRate": { "type": "number", "format": "float", "example": 0.7 }
+                        "challengeId": { "type": "integer", "example": 3 },
+                        "total": { "type": "integer", "example": 50 },
+                        "verified": { "type": "integer", "example": 35 },
+                        "unverified": { "type": "integer", "example": 15 }
                       }
                     }
                   }

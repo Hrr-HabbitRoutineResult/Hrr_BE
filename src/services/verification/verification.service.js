@@ -51,8 +51,19 @@ const getSpecificVerification = async verification_id => {
   return { ...verification, comment: comment };
 };
 
+const getChallengeVerifications = async challenge_id => {
+  const verification = await verificationRepository.findChallengeVerificationCurrentParticipants(challenge_id);
+  if (!verification) {
+    throw new verificationError.VerificationNotExistsError('해당 ID를 가진 인증이 존재하지 않습니다.');
+  }
+  const count = await verificationRepository.findChallengeVerificationCounts(challenge_id);
+  const status = verificationDto.verificationStatusServiceToControllerDto(verification, count);
+  return status;
+};
+
 export default {
   verifyWithCamera,
   verifyWithText,
   getSpecificVerification,
+  getChallengeVerifications,
 };

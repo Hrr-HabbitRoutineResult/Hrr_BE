@@ -56,9 +56,21 @@ const textVerificationServiceToRepositoryDto = (user_id, user_challenge_id, body
   };
 };
 
+const verificationStatusServiceToControllerDto = (verification, count) => {
+  const unverified = verification.currentParticipants - count;
+  const response_data = {
+    challengeId: verification.id,
+    total: verification.currentParticipants,
+    verified: count,
+    unverified: unverified,
+  };
+  return response_data;
+};
+
 export default {
   cameraVerificationServiceToController,
   textVerificationServiceToController,
   cameraVerificationServiceToRepositoryDto,
   textVerificationServiceToRepositoryDto,
+  verificationStatusServiceToControllerDto,
 };

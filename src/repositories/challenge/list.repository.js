@@ -9,7 +9,6 @@ const createChallenge = async (data, keywords) => {
       });
       const keyword_records = await Promise.all(
         keywords.map(async name => {
-          console.log(name);
           return await prisma.keyword.upsert({
             where: { name },
             update: {},
@@ -18,7 +17,6 @@ const createChallenge = async (data, keywords) => {
         }),
       );
 
-      console.log(created_challenge);
       await prisma.challengeKeyword.createMany({
         data: keyword_records.map(keyword => ({
           challenge_id: created_challenge.id,

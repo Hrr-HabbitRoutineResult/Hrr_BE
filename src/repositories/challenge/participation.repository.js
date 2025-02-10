@@ -16,7 +16,6 @@ const joinChallenge = async data => {
       return joined_challenge;
     });
   } catch (error) {
-    console.log(error);
     throw new participationError.DataBaseError('Error on creating userChallenge and updating currentParticipant');
   }
 };

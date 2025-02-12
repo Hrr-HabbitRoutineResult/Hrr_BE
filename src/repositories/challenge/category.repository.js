@@ -1,5 +1,4 @@
 import { prisma } from '../../db.config.js';
-import { PrismaClient, Category as PrismaCategory } from '@prisma/client';
 import { Category } from '@prisma/client';
 import categoryError from '../../errors/challenge/category.error.js';
 
@@ -60,8 +59,6 @@ const getDailyHotChallenge = async (yesterday_start, yesterday_end) => {
           },
           take: 1, // 카테고리별 1개만 가져오기
         });
-
-        console.log(`[Repository] 카테고리: ${category}, 조회된 챌린지 개수: ${data.length}`);
         return data[0] || null;
       }),
     );

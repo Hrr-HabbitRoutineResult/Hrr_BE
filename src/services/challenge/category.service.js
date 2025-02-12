@@ -21,7 +21,6 @@ const getDailyHotChallenge = async () => {
       Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1, 23, 59, 59, 999),
     );
 
-    console.log(`[Service] 전날 날짜 범위: ${yesterday_start.toISOString()} ~ ${yesterday_end.toISOString()}`);
     const categories = Object.values(PrismaCategory);
     const hot_challenges = await Promise.all(
       categories.map(async category => {
@@ -41,7 +40,6 @@ const getDailyHotChallenge = async () => {
             },
           },
         });
-
         // 좋아요 개수 기준으로 정렬
         const sorted_challenges = challenges
           .map(challenge => ({
@@ -60,10 +58,6 @@ const getDailyHotChallenge = async () => {
           });
           top_challenge = fallback_challenge || { id: null, name: `기본 ${category} 챌린지`, category };
         }
-
-        console.log(
-          `[Service] 카테고리: ${category}, 인기 챌린지: ${top_challenge.name} (좋아요: ${top_challenge.likes_yesterday || 0})`,
-        );
         return top_challenge;
       }),
     );

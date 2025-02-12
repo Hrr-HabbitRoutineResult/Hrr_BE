@@ -301,9 +301,10 @@ model Challenge {
   owner_id            Int
   name                String?            @db.VarChar(40)
   type                ChallengeType
-  description         String?            @db.VarChar(255)
-  challengeImage      String             @db.VarChar(255)
-  challengeStatus     ChallengeStatus    @map("status")
+  description         String?             @db.VarChar(255)
+  challengeImage      String              @db.VarChar(255)
+  challengeStatus     ChallengeStatus     @map("status")
+  currentParticipants Int?
   maxParticipants     Int?
   verificationType    VerificationType
   rule                String?             @db.Text
@@ -321,7 +322,6 @@ model Challenge {
   frequencies         Frequency[]
   userChallenges      UserChallenge[]
   challengeKeywords   ChallengeKeyword[]
-  currentParticipants Int?
 
   @@map("Challenges")
 }
@@ -453,7 +453,6 @@ model UserAgreement {
 
   @@map("UserAgreements")
 }
-
 model LevelCondition {
   id         Int         @id @default(autoincrement())
   condition  String

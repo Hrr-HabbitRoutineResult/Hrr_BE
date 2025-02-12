@@ -7,8 +7,8 @@ import authMiddleware from '../middlewares/auth.middleware.js';
 const router = express.Router();
 
 // Category
-router.get('/category', categoryController.getChallengeCategory);
-router.get('/hotness', authMiddleware, categoryController.getWeeklyHotChallenge);
+router.get('/category', authMiddleware, categoryController.getChallengeCategory);
+router.get('/hotness', authMiddleware, categoryController.getDailyHotChallenge);
 
 // List and Detail
 router.get('/', authMiddleware, listController.getChallengeList);
@@ -21,8 +21,9 @@ router.get('/:challengeId/verification/my', authMiddleware, participationControl
 router.post('/:challengeId/join', authMiddleware, participationController.joinChallenge);
 router.post('/:challengeId/like', authMiddleware, participationController.likeChallenge);
 router.delete('/:challengeId/unlike', authMiddleware, participationController.unlikeChallenge);
-router.get('/:challengeId/challengerslist', participationController.getChallengerList);
-router.get('/:challengeId/challengerslist/kick', participationController.kickChallenger);
+router.post('/:challengeId/participation', participationController.participateInChallenge);
+router.get('/:challengeId/challengerslist', participationController.getChallengeParticipantsList);
+router.get('/:challengeId/challengerslist/kick', participationController.kickChallengeParticipant);
 router.get('/:challengeId/calendar', participationController.getChallengeCalendar);
 
 export default router;

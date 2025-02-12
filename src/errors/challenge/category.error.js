@@ -18,7 +18,18 @@ export class DataBaseError extends Error {
   }
 }
 
+export class SendCategoryError extends Error {
+  errorCode = 'C003';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 400;
+    this.data = data;
+  }
+}
+
 export default {
   DataBaseError,
   CategoryFoundError,
+  SendCategoryError,
 };

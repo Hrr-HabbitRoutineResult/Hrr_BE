@@ -16,3 +16,5 @@ export const pool = mysql.createPool({
   connectionLimit: 10, // 몇 개의 커넥션을 가지게끔 할 것인지
   queueLimit: 0, // getConnection에서 오류가 발생하기 전에 Pool에 대기할 요청의 개수 한도
 });
+
+export default prisma;

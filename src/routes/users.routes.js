@@ -17,4 +17,6 @@ router.get('/verification/likes', authMiddleware, usersController.getUserVerific
 router.get('/badges/conditions', authMiddleware, usersController.getUserBadgesConditions);
 router.get('/level', authMiddleware, usersController.getUserLevel);
 router.post('/block', usersController.blockUser);
+router.get('/:userId/following', usersController.getFollowingList);
+router.get('/:userId/follower', usersController.getFollowerList);
 export default router;

@@ -361,6 +361,50 @@ const getUserVerificationLikes = async user_id => {
   }
 };
 
+const getFollowerList = async user_id => {
+  try {
+    const followers = await prisma.follow.findMany({
+      where: {
+        following_id: user_id,
+      },
+      include: {
+        follower: {
+          select: {
+            id: true,
+            nickname: true,
+            profilePhoto: true,
+          },
+        },
+      },
+    });
+    return followers;
+  } catch (error) {
+    throw new databaseError.DataBaseError('Error fetching followers');
+  }
+};
+
+const getFollowingList = async user_id => {
+  try {
+    const followings = await prisma.follow.findMany({
+      where: {
+        follower_id: user_id,
+      },
+      include: {
+        follower: {
+          select: {
+            id: true,
+            nickname: true,
+            profilePhoto: true,
+          },
+        },
+      },
+    });
+    return followings;
+  } catch (error) {
+    throw new databaseError.DataBaseError('Error fetching followers');
+  }
+};
+
 export default {
   updateUserInfo,
   findOngoingChallenges,
@@ -375,4 +419,6 @@ export default {
   findUserLevel,
   getUserVerificationScraps,
   getUserVerificationLikes,
+  getFollowerList,
+  getFollowingList,
 };

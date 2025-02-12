@@ -121,6 +121,28 @@ const getUserLevel = async (req, res, next) => {
   }
 };
 
+const getFollowerList = async (req, res, next) => {
+  try {
+    const user_id = Number(req.params.userId);
+    const followers = await userService.getFollowerList(user_id);
+
+    return res.success(followers, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getFollowingList = async (req, res, next) => {
+  try {
+    const user_id = Number(req.params.userId);
+    const followings = await userService.getFollowingList(user_id);
+
+    return res.success(followings, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const blockUser = () => {
   /**
   #swagger.summary = '이용자 차단 API';
@@ -219,4 +241,6 @@ export default {
   getUserBadgesConditions,
   getUserLevel,
   blockUser,
+  getFollowerList,
+  getFollowingList,
 };

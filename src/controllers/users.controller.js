@@ -143,7 +143,7 @@ const getFollowingList = async (req, res, next) => {
   }
 };
 
-const blockUser = () => {
+const blockUser = async (req, res, next) => {
   /**
   #swagger.summary = '이용자 차단 API';
   #swagger.description = '쪽지함에서 특정 이용자를 차단하는 API입니다.';
@@ -224,6 +224,15 @@ const blockUser = () => {
     }
   };
    */
+  try {
+    const block_user_id = Number(req.params.userId);
+    const user_id = req.user.id;
+    const response = await userService.blockUser(user_id, block_user_id);
+
+    return res.success(response, StatusCodes.CREATED);
+  } catch (error) {
+    next(error);
+  }
 };
 
 export default {

@@ -49,6 +49,8 @@ model User {
   followings             Follow[]                @relation("FollowingRelation")
   receivedMessages       Message[]               @relation("ReceivedMessages")
   sentMessages           Message[]               @relation("SentMessages")
+  blockingUsers Block[] @relation("BlockerRelation")
+  blockedByUsers Block[] @relation("BlockedRelation")
   userBoards             UserBoard[]
   userAgreements         UserAgreement[]
   verificationLikes      VerificationLike[]
@@ -73,8 +75,6 @@ model ChallengeLike {
   updated_at   DateTime? @db.DateTime(6)
   user         User      @relation(fields: [user_id], references: [id])
   challenge    Challenge @relation(fields: [challenge_id], references: [id])
-  created_at   DateTime  @default(now())  @db.DateTime(6)
-  updated_at   DateTime? @updatedAt @db.DateTime(6)
 
   @@map("ChallengeLikes")
 }
@@ -222,6 +222,20 @@ model Follow {
   @@map("Follows")
 }
 
+model Block {
+  id         Int  @id @default(autoincrement())
+  blocker_id Int
+  blocked_id Int
+  created_at DateTime @default(now())
+
+  blocker User @relation("BlockerRelation", fields: [blocker_id], references: [id], onDelete: Cascade)
+  blocked User @relation("BlockedRelation", fields: [blocked_id], references: [id], onDelete: Cascade)
+
+  @@unique([blocker_id, blocked_id]) // 동일한 차단 관계가 중복되지 않도록 설정
+  @@map("Blocks")
+}
+
+
 model Badge {
   id            Int         @id @default(autoincrement())
   name          String?     @db.VarChar(50)
@@ -314,9 +328,7 @@ model Challenge {
   updated_at          DateTime?           @db.DateTime(6)
   duration            Duration?
   category            Category
-  duration            Duration?
   likesCount          Int                @default(0)
-  currentParticipants Int?
   user                User               @relation(fields: [owner_id], references: [id])
   challengeLikes      ChallengeLike[]
   frequencies         Frequency[]

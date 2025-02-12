@@ -405,6 +405,32 @@ const getFollowingList = async user_id => {
   }
 };
 
+/**
+ * 특정 사용자가 다른 사용자를 차단했는지 확인
+ */
+const isUserBlocked = async (blockerId, blockedId) => {
+  return await prisma.block.findUnique({
+    where: {
+      blocker_id_blocked_id: {
+        blocker_id: blockerId,
+        blocked_id: blockedId,
+      },
+    },
+  });
+};
+
+/**
+ * 사용자를 차단하는 함수
+ */
+const createBlock = async (blockerId, blockedId) => {
+  return await prisma.block.create({
+    data: {
+      blocker_id: blockerId,
+      blocked_id: blockedId,
+    },
+  });
+};
+
 export default {
   updateUserInfo,
   findOngoingChallenges,
@@ -421,4 +447,6 @@ export default {
   getUserVerificationLikes,
   getFollowerList,
   getFollowingList,
+  isUserBlocked,
+  createBlock,
 };

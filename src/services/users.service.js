@@ -139,6 +139,19 @@ const getFollowingList = async user_id => {
   return { followings: response };
 };
 
+const blockUser = async (user_id, block_user_id) => {
+  if (user_id === block_user_id) {
+    throw new userError.UserAlreadyBlockedError('Cannot block myself');
+  }
+  const existingBlock = await userRepository.isUserBlocked(user_id, block_user_id);
+  if (existingBlock) {
+    throw new userError.UserAlreadyBlockedError('User is already blocked');
+  }
+
+  const blockedUser = await userRepository.createBlock(user_id, block_user_id);
+  return blockedUser;
+};
+
 export default {
   getUserInfoById,
   updateUserInfobyEmail,
@@ -154,4 +167,5 @@ export default {
   getUserVerificationLikes,
   getFollowerList,
   getFollowingList,
+  blockUser,
 };

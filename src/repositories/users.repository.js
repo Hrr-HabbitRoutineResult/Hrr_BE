@@ -422,11 +422,22 @@ const isUserBlocked = async (blockerId, blockedId) => {
 /**
  * 사용자를 차단하는 함수
  */
-const createBlock = async (blockerId, blockedId) => {
+const createBlock = async (user_id, block_user_id) => {
   return await prisma.block.create({
     data: {
-      blocker_id: blockerId,
-      blocked_id: blockedId,
+      blocker_id: user_id,
+      blocked_id: block_user_id,
+    },
+  });
+};
+
+const deleteBlock = async (user_id, unblock_user_id) => {
+  return prisma.block.delete({
+    where: {
+      blocker_id_blocked_id: {
+        blocker_id: user_id,
+        blocked_id: unblock_user_id,
+      },
     },
   });
 };
@@ -449,4 +460,5 @@ export default {
   getFollowingList,
   isUserBlocked,
   createBlock,
+  deleteBlock,
 };

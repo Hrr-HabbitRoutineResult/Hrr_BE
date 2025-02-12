@@ -152,6 +152,19 @@ const blockUser = async (user_id, block_user_id) => {
   return blockedUser;
 };
 
+const unblockUser = async (user_id, unblock_user_id) => {
+  if (user_id === unblock_user_id) {
+    throw new userError.UserAlreadyBlockedError('Cannot unblock myself');
+  }
+  const existingBlock = await userRepository.isUserBlocked(user_id, unblock_user_id);
+  if (!existingBlock) {
+    throw new userError.UserAlreadyBlockedError('User is not blocked');
+  }
+
+  const unblockedUser = await userRepository.deleteBlock(user_id, unblock_user_id);
+  return unblockedUser;
+};
+
 export default {
   getUserInfoById,
   updateUserInfobyEmail,
@@ -168,4 +181,5 @@ export default {
   getFollowerList,
   getFollowingList,
   blockUser,
+  unblockUser,
 };

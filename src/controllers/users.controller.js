@@ -144,90 +144,22 @@ const getFollowingList = async (req, res, next) => {
 };
 
 const blockUser = async (req, res, next) => {
-  /**
-  #swagger.summary = '이용자 차단 API';
-  #swagger.description = '쪽지함에서 특정 이용자를 차단하는 API입니다.';
-  #swagger.tags = ['User'];
-  #swagger.parameters['Authorization'] = {
-    in: 'header',
-    required: true,
-    schema: { type: 'string', example: 'Bearer <access_token>' },
-    description: '인증을 위한 액세스 토큰'
-  };
-  #swagger.parameters['Content-Type'] = {
-    in: 'header',
-    required: true,
-    schema: { type: 'string', example: 'application/json' },
-    description: '요청 본문의 콘텐츠 타입'
-  };
-  #swagger.requestBody = {
-    required: true,
-    description: '차단할 이용자의 ID',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            user_id: { type: 'integer', example: 12345 }
-          },
-          required: ['user_id']
-        },
-      }
-    }
-  };
-  #swagger.responses[200] = {
-    description: '이용자 차단 성공',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            resultType: { type: 'string', example: 'SUCCESS' },
-            error: { type: 'object', nullable: true, example: null },
-            success: {
-              type: 'object',
-              properties: {
-                message: { type: 'string', example: '이용자를 성공적으로 차단했습니다.' }
-              }
-            }
-          }
-        }
-      }
-    }
-  };
-  #swagger.responses[401] = {
-    description: '인증 실패',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            resultType: { type: 'string', example: 'FAILURE' },
-            error: { type: 'string', example: 'Unauthorized access.' }
-          }
-        }
-      }
-    }
-  };
-  #swagger.responses[404] = {
-    description: '이용자를 찾을 수 없음',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            resultType: { type: 'string', example: 'NOT_FOUND' },
-            error: { type: 'string', example: 'User not found.' }
-          }
-        }
-      }
-    }
-  };
-   */
   try {
     const block_user_id = Number(req.params.userId);
     const user_id = req.user.id;
     const response = await userService.blockUser(user_id, block_user_id);
+
+    return res.success(response, StatusCodes.CREATED);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const unblockUser = async (req, res, next) => {
+  try {
+    const unblock_user_id = Number(req.params.userId);
+    const user_id = req.user.id;
+    const response = await userService.unblockUser(user_id, unblock_user_id);
 
     return res.success(response, StatusCodes.CREATED);
   } catch (error) {
@@ -250,6 +182,7 @@ export default {
   getUserBadgesConditions,
   getUserLevel,
   blockUser,
+  unblockUser,
   getFollowerList,
   getFollowingList,
 };

@@ -161,7 +161,18 @@ const unblockUser = async (req, res, next) => {
     const user_id = req.user.id;
     const response = await userService.unblockUser(user_id, unblock_user_id);
 
-    return res.success(response, StatusCodes.CREATED);
+    return res.success(response, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getBlockedList = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const blocked_list = await userService.getBlockedList(user_id);
+
+    return res.success(blocked_list, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -185,4 +196,5 @@ export default {
   unblockUser,
   getFollowerList,
   getFollowingList,
+  getBlockedList,
 };

@@ -4,7 +4,6 @@ import authMiddleware from '../middlewares/auth.middleware.js';
 const router = express.Router();
 
 router.put('/:userId/interests', usersController.putUserInterests);
-router.get('/:userId', usersController.getUserById);
 router.put('/me', authMiddleware, usersController.putMe);
 router.get('/:userId/challenges/ongoing', usersController.getUserChallengesOngoing);
 router.get('/:userId/challenges/completed', usersController.getUserChallengesCompleted);
@@ -18,6 +17,8 @@ router.get('/badges/conditions', authMiddleware, usersController.getUserBadgesCo
 router.get('/level', authMiddleware, usersController.getUserLevel);
 router.post('/:userId/block', authMiddleware, usersController.blockUser);
 router.delete('/:userId/unblock', authMiddleware, usersController.unblockUser);
+router.get('/blocked', authMiddleware, usersController.getBlockedList);
 router.get('/:userId/following', usersController.getFollowingList);
 router.get('/:userId/follower', usersController.getFollowerList);
+router.get('/:userId', usersController.getUserById);
 export default router;

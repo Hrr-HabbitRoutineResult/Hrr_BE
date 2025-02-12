@@ -165,6 +165,12 @@ const unblockUser = async (user_id, unblock_user_id) => {
   return unblockedUser;
 };
 
+const getBlockedList = async user_id => {
+  const blocked_list = await userRepository.getBlockedList(user_id);
+  const response = userDto.getBlockedListDto(blocked_list);
+  return { blockedList: response };
+};
+
 export default {
   getUserInfoById,
   updateUserInfobyEmail,
@@ -182,4 +188,5 @@ export default {
   getFollowingList,
   blockUser,
   unblockUser,
+  getBlockedList,
 };

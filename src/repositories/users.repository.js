@@ -442,6 +442,29 @@ const deleteBlock = async (user_id, unblock_user_id) => {
   });
 };
 
+const getBlockedList = async user_id => {
+  try {
+    const blocked_list = await prisma.block.findMany({
+      where: {
+        blocker_id: user_id,
+      },
+      include: {
+        blocked: {
+          select: {
+            id: true,
+            nickname: true,
+            profilePhoto: true,
+          },
+        },
+      },
+    });
+    return blocked_list;
+  } catch (error) {
+    console.log(error);
+    throw new databaseError.DataBaseError('Error fetching blocked list');
+  }
+};
+
 export default {
   updateUserInfo,
   findOngoingChallenges,
@@ -461,4 +484,5 @@ export default {
   isUserBlocked,
   createBlock,
   deleteBlock,
+  getBlockedList,
 };

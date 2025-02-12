@@ -1,4 +1,5 @@
 import { prisma } from '../../db.config.js';
+import { PrismaClient, Category as PrismaCategory } from '@prisma/client';
 import { Category } from '@prisma/client';
 import categoryError from '../../errors/challenge/category.error.js';
 
@@ -31,6 +32,47 @@ const getCategoryName = category => {
   return categoryMap[category] || category;
 };
 
+const getDailyHotChallenge = async (yesterday_start, yesterday_end) => {
+  try {
+    const categories = Object.values(PrismaCategory);
+
+    const challenges = await Promise.all(
+      categories.map(async category => {
+        const data = await prisma.challenge.findMany({
+          where: {
+            category: category,
+            challengeLikes: {
+              some: {
+                created_at: {
+                  gte: yesterday_start,
+                  lte: yesterday_end,
+                },
+              },
+            },
+          },
+          include: {
+            challengeLikes: true, // 좋아요 데이터 포함
+          },
+          orderBy: {
+            challengeLikes: {
+              _count: 'desc',
+            },
+          },
+          take: 1, // 카테고리별 1개만 가져오기
+        });
+
+        console.log(`[Repository] 카테고리: ${category}, 조회된 챌린지 개수: ${data.length}`);
+        return data[0] || null;
+      }),
+    );
+
+    return challenges.filter(challenge => challenge !== null);
+  } catch (error) {
+    throw new categoryError.SendCategoryError('챌린지를 불러오는 중 오류가 발생했습니다.');
+  }
+};
+
 export default {
   getAllCategories,
+  getDailyHotChallenge,
 };

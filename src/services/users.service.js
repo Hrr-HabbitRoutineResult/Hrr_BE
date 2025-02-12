@@ -127,6 +127,18 @@ const getUserVerificationLikes = async user_id => {
   return liked_verifications;
 };
 
+const getFollowerList = async user_id => {
+  const followers = await userRepository.getFollowerList(user_id);
+  const response = userDto.getFollowerDto(followers);
+  return { followers: response };
+};
+
+const getFollowingList = async user_id => {
+  const followings = await userRepository.getFollowingList(user_id);
+  const response = userDto.getFollowerDto(followings);
+  return { followings: response };
+};
+
 export default {
   getUserInfoById,
   updateUserInfobyEmail,
@@ -140,4 +152,6 @@ export default {
   getUserLevelById,
   getUserVerificationScraps,
   getUserVerificationLikes,
+  getFollowerList,
+  getFollowingList,
 };

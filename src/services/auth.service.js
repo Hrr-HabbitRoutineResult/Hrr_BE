@@ -161,6 +161,12 @@ const signInKakao = async kakao_token => {
   }
 };
 
+const checkNickname = async nickname => {
+  const response = await authRepository.checkNickname(nickname);
+  if (response.length) return { check: true };
+  else return { check: false };
+};
+
 export default {
   generateTokens,
   verifyRefreshToken,
@@ -169,4 +175,5 @@ export default {
   register,
   checkEmailVerificationCode,
   signInKakao,
+  checkNickname,
 };

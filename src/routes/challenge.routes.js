@@ -7,8 +7,8 @@ import authMiddleware from '../middlewares/auth.middleware.js';
 const router = express.Router();
 
 // Category
-router.get('/category', categoryController.getChallengeCategory);
-router.get('/hotness', authMiddleware, categoryController.getWeeklyHotChallenge);
+router.get('/category', authMiddleware, categoryController.getChallengeCategory);
+router.get('/hotness', authMiddleware, categoryController.getDailyHotChallenge);
 
 // List and Detail
 router.get('/', authMiddleware, listController.getChallengeList);

@@ -12,11 +12,17 @@ const getChallengeCategory = async (req, res, next) => {
   }
 };
 
-const getWeeklyHotChallenge = () => {
-  return null;
+const getDailyHotChallenge = async (req, res, next) => {
+  try {
+    logger.debug('인기 챌린지를 불러옵니다!');
+    const hot_challenges = await categoryService.getDailyHotChallenge();
+    return res.success({ challenges: hot_challenges }, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
 };
 
 export default {
   getChallengeCategory,
-  getWeeklyHotChallenge,
+  getDailyHotChallenge,
 };

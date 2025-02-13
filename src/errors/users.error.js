@@ -58,6 +58,16 @@ export class NotFollowingUserError extends Error {
   }
 }
 
+export class UserAlreadyBlockedError extends Error {
+  errorCode = 'U005';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 400;
+    this.data = data;
+  }
+}
+
 export default {
   BadgeNotExistError,
   CannotFollowSelfError,
@@ -65,4 +75,5 @@ export default {
   UserNotExistError,
   FollowedUserError,
   NotFollowingUserError,
+  UserAlreadyBlockedError,
 };

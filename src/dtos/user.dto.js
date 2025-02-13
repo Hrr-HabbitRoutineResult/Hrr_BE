@@ -121,10 +121,18 @@ const getFollowerDto = follower => {
   return response;
 };
 
+
 const getFollowingDto = follower => {
   const response = [];
 
   follower.map(following => response.push(following.following));
+  return response;
+}
+
+const getBlockedListDto = blocked_list => {
+  const response = [];
+
+  blocked_list.map(blocked => response.push(blocked.blocked));
   return response;
 };
 
@@ -141,4 +149,5 @@ export default {
   userLevelDto,
   getFollowerDto,
   getFollowingDto,
+  getBlockedListDto,
 };

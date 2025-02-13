@@ -1,6 +1,7 @@
 import authError from '../errors/auth.error.js';
 import { prisma } from '../db.config.js';
 import bcrypt from 'bcrypt';
+import databaseError from '../errors/database.error.js';
 
 const findUserById = async user_id => {
   try {
@@ -8,7 +9,7 @@ const findUserById = async user_id => {
       where: { id: user_id },
     });
     return user;
-  } catch {
+  } catch (error) {
     throw new databaseError.DataBaseError('유저 조회중 에러가 발생했습니다.');
   }
 };
@@ -19,7 +20,7 @@ const findUserByEmail = async email => {
       where: { email },
     });
     return user;
-  } catch {
+  } catch (error) {
     throw new databaseError.DataBaseError('유저 조회중 에러가 발생했습니다.');
   }
 };

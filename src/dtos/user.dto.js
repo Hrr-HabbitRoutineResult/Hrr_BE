@@ -121,6 +121,13 @@ const getFollowerDto = follower => {
   return response;
 };
 
+const getFollowingDto = follower => {
+  const response = [];
+
+  follower.map(following => response.push(following.following));
+  return response;
+};
+
 export default {
   serviceToControllerDto,
   updateUserInfoResponseDto,
@@ -133,4 +140,5 @@ export default {
   userBadgesConditionDto,
   userLevelDto,
   getFollowerDto,
+  getFollowingDto,
 };

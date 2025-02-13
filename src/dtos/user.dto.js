@@ -64,18 +64,18 @@ const userBadgesDto = (type_badges, category_badges) => {
 };
 
 const userChallengeHistoryDto = (user_challenges, verifications) => {
-  return user_challenges.map(userChallenge => {
-    const verification = verifications.find(v => v.userChallenge_id === userChallenge.id);
+  return user_challenges.flatMap(userChallenge => {
+    const verification = verifications.filter(v => v.userChallenge_id === userChallenge.id);
 
-    return {
-      challengeId: userChallenge.challenge_id,
+    return verification.map(v => ({
+      challenge_id: userChallenge.challenge_id,
       name: userChallenge.challenge.name,
-      verificationId: verification ? verification.id : null,
-      created_at: verification ? verification.created_at : null,
-      title: verification ? verification.title : null,
-      photoUrl: verification ? verification.photoUrl : null,
-      textUrl: verification ? verification.textUrl : null,
-    };
+      verification_id: v.id,
+      created_at: v.created_at,
+      title: v.title,
+      photoUrl: v.photoUrl,
+      textUrl: v.textUrl,
+    }));
   });
 };
 

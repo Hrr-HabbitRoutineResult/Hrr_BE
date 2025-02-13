@@ -390,7 +390,7 @@ const getFollowingList = async user_id => {
         follower_id: user_id,
       },
       include: {
-        follower: {
+        following: {
           select: {
             id: true,
             nickname: true,

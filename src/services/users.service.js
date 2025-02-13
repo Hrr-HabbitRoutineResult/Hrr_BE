@@ -135,7 +135,7 @@ const getFollowerList = async user_id => {
 
 const getFollowingList = async user_id => {
   const followings = await userRepository.getFollowingList(user_id);
-  const response = userDto.getFollowerDto(followings);
+  const response = userDto.getFollowingDto(followings);
   return { followings: response };
 };
 

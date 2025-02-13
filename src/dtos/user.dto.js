@@ -121,6 +121,13 @@ const getFollowerDto = follower => {
   return response;
 };
 
+const getBlockedListDto = blocked_list => {
+  const response = [];
+
+  blocked_list.map(blocked => response.push(blocked.blocked));
+  return response;
+};
+
 export default {
   serviceToControllerDto,
   updateUserInfoResponseDto,
@@ -133,4 +140,5 @@ export default {
   userBadgesConditionDto,
   userLevelDto,
   getFollowerDto,
+  getBlockedListDto,
 };

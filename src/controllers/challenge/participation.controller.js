@@ -58,10 +58,10 @@ const kickChallenger = () => {};
 const getChallengeCalendar = () => {};
 
 export default {
+  getUserChallengeVerification,
   joinChallenge,
   likeChallenge,
   unlikeChallenge,
-  getUserChallengeVerification,
   getChallengerList,
   kickChallenger,
   getChallengeCalendar,

@@ -405,6 +405,66 @@ const getFollowingList = async user_id => {
   }
 };
 
+/**
+ * 특정 사용자가 다른 사용자를 차단했는지 확인
+ */
+const isUserBlocked = async (blockerId, blockedId) => {
+  return await prisma.block.findUnique({
+    where: {
+      blocker_id_blocked_id: {
+        blocker_id: blockerId,
+        blocked_id: blockedId,
+      },
+    },
+  });
+};
+
+/**
+ * 사용자를 차단하는 함수
+ */
+const createBlock = async (user_id, block_user_id) => {
+  return await prisma.block.create({
+    data: {
+      blocker_id: user_id,
+      blocked_id: block_user_id,
+    },
+  });
+};
+
+const deleteBlock = async (user_id, unblock_user_id) => {
+  return prisma.block.delete({
+    where: {
+      blocker_id_blocked_id: {
+        blocker_id: user_id,
+        blocked_id: unblock_user_id,
+      },
+    },
+  });
+};
+
+const getBlockedList = async user_id => {
+  try {
+    const blocked_list = await prisma.block.findMany({
+      where: {
+        blocker_id: user_id,
+      },
+      include: {
+        blocked: {
+          select: {
+            id: true,
+            nickname: true,
+            profilePhoto: true,
+          },
+        },
+      },
+    });
+    return blocked_list;
+  } catch (error) {
+    console.log(error);
+    throw new databaseError.DataBaseError('Error fetching blocked list');
+  }
+};
+
 export default {
   updateUserInfo,
   findOngoingChallenges,
@@ -421,4 +481,8 @@ export default {
   getUserVerificationLikes,
   getFollowerList,
   getFollowingList,
+  isUserBlocked,
+  createBlock,
+  deleteBlock,
+  getBlockedList,
 };

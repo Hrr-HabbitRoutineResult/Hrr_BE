@@ -139,6 +139,38 @@ const getFollowingList = async user_id => {
   return { followings: response };
 };
 
+const blockUser = async (user_id, block_user_id) => {
+  if (user_id === block_user_id) {
+    throw new userError.UserAlreadyBlockedError('Cannot block myself');
+  }
+  const existingBlock = await userRepository.isUserBlocked(user_id, block_user_id);
+  if (existingBlock) {
+    throw new userError.UserAlreadyBlockedError('User is already blocked');
+  }
+
+  const blockedUser = await userRepository.createBlock(user_id, block_user_id);
+  return blockedUser;
+};
+
+const unblockUser = async (user_id, unblock_user_id) => {
+  if (user_id === unblock_user_id) {
+    throw new userError.UserAlreadyBlockedError('Cannot unblock myself');
+  }
+  const existingBlock = await userRepository.isUserBlocked(user_id, unblock_user_id);
+  if (!existingBlock) {
+    throw new userError.UserAlreadyBlockedError('User is not blocked');
+  }
+
+  const unblockedUser = await userRepository.deleteBlock(user_id, unblock_user_id);
+  return unblockedUser;
+};
+
+const getBlockedList = async user_id => {
+  const blocked_list = await userRepository.getBlockedList(user_id);
+  const response = userDto.getBlockedListDto(blocked_list);
+  return { blockedList: response };
+};
+
 export default {
   getUserInfoById,
   updateUserInfobyEmail,
@@ -154,4 +186,7 @@ export default {
   getUserVerificationLikes,
   getFollowerList,
   getFollowingList,
+  blockUser,
+  unblockUser,
+  getBlockedList,
 };

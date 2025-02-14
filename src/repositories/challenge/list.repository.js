@@ -31,7 +31,6 @@ const createChallenge = async (data, keywords) => {
   }
 };
 
-//챌린지 리스트 조회 함수
 const challengeList = async (filters, orderBy) => {
   try {
     return await prisma.challenge.findMany({

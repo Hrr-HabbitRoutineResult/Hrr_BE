@@ -128,6 +128,18 @@ const signUpKakao = async email => {
   }
 };
 
+const checkNickname = async nickname => {
+  try {
+    const existingUser = await prisma.user.findMany({
+      where: { nickname },
+      select: { id: true },
+    });
+    return existingUser;
+  } catch (error) {
+    throw new Error('Database error while checking nickname');
+  }
+};
+
 export default {
   findUserById,
   findUserByEmail,
@@ -139,4 +151,5 @@ export default {
   createUser,
   findEmailVerificationById,
   signUpKakao,
+  checkNickname,
 };

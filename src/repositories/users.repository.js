@@ -485,6 +485,24 @@ const getBlockedList = async user_id => {
     throw new databaseError.DataBaseError('Error fetching blocked list');
   }
 };
+const userQuit = async user_id => {
+  try {
+    return await prisma.user.update({
+      where: { id: user_id },
+      data: {
+        isDeleted: true, // 회원 탈퇴 처리
+        deletedAt: new Date(), // 현재 시간 기록
+      },
+      select: {
+        id: true,
+        isDeleted: true,
+        deletedAt: true,
+      },
+    });
+  } catch (error) {
+    throw new databaseError.DataBaseError(`Error during user quit: ${error.message}`);
+  }
+};
 
 export default {
   updateUserInfo,
@@ -507,4 +525,5 @@ export default {
   createBlock,
   deleteBlock,
   getBlockedList,
+  userQuit,
 };

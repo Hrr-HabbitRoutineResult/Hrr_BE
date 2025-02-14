@@ -187,6 +187,17 @@ const getBlockedList = async (req, res, next) => {
   }
 };
 
+const userQuit = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const response = await userService.userQuit(user_id);
+
+    return res.success(response, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   putUserInterests,
   getUserById,
@@ -207,4 +218,5 @@ export default {
   getFollowerList,
   getFollowingList,
   getBlockedList,
+  userQuit,
 };

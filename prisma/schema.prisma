@@ -20,6 +20,8 @@ model User {
   password               String                  @db.VarChar(255)
   created_at             DateTime                @default(now())
   updated_at             DateTime                @updatedAt
+  isDeleted              Boolean                 @default(false)
+  deletedAt              DateTime?
   inactiveDate           DateTime?               @db.DateTime(6)
   profilePhoto           String?                 @db.VarChar(255)
   level                  Level?

@@ -30,6 +30,10 @@ const login = async (email, password) => {
   if (user.password !== password) {
     throw new authError.PasswordMismatchError('비밀번호가 일치하지 않습니다.', { password });
   }
+  console.log(user);
+  if (user.isDeleted) {
+    throw new authError.UserQuitError('이미 탈퇴한 유저입니다.');
+  }
   return user.id;
 };
 

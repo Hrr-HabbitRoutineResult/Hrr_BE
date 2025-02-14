@@ -973,6 +973,80 @@
           }
         }
       }
+    },
+    "/api/v1/users/quit": {
+      "patch": {
+        "summary": "회원 탈퇴",
+        "description": "현재 로그인한 사용자의 계정을 탈퇴 처리합니다 (Soft Delete).",
+        "tags": ["User"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "회원 탈퇴 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer", "example": 1 },
+                        "isDeleted": { "type": "boolean", "example": true },
+                        "deletedAt": { "type": "string", "format": "date-time", "example": "2025-02-12T17:39:21.317Z" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 요청 (이미 탈퇴한 계정 또는 존재하지 않는 유저)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "FAIL" },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "errorCode": { "type": "string", "example": "ALREADY_DELETED" },
+                        "reason": { "type": "string", "example": "This account has already been deleted." }
+                      }
+                    },
+                    "success": { "type": "object", "nullable": true, "example": null }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패 (토큰이 없거나 유효하지 않음)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "FAIL" },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "errorCode": { "type": "string", "example": "UNAUTHORIZED" },
+                        "reason": { "type": "string", "example": "Invalid or missing authentication token." }
+                      }
+                    },
+                    "success": { "type": "object", "nullable": true, "example": null }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

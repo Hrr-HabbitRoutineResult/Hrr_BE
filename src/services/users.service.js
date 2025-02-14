@@ -181,6 +181,11 @@ const getBlockedList = async user_id => {
   return { blockedList: response };
 };
 
+const userQuit = async user_id => {
+  const response = await userRepository.userQuit(user_id);
+  return response;
+};
+
 export default {
   getUserInfoById,
   updateUserInfobyEmail,
@@ -200,4 +205,5 @@ export default {
   blockUser,
   unblockUser,
   getBlockedList,
+  userQuit,
 };

@@ -200,6 +200,27 @@ const findUserCategoryBadges = async user_id => {
   }
 };
 
+const findUserLatestBadge = async user_id => {
+  try {
+    return prisma.userBadge.findFirst({
+      where: { user_id },
+      orderBy: { created_at: 'desc' },
+      select: {
+        badge: {
+          select: {
+            id: true,
+            name: true,
+            icon: true,
+            type: true,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    throw new databaseError.DataBaseError('DataBase Error on retrieving latest badge information');
+  }
+};
+
 const createUserFollows = async (follower_user_id, followed_user_id) => {
   try {
     return await prisma.$transaction([
@@ -471,6 +492,7 @@ export default {
   findCompletedChallenges,
   findUserTypeBadges,
   findUserCategoryBadges,
+  findUserLatestBadge,
   findUserChallengeHistory,
   findUserVerificationHistory,
   createUserFollows,

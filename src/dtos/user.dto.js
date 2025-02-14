@@ -63,6 +63,15 @@ const userBadgesDto = (type_badges, category_badges) => {
   };
 };
 
+const userLatestBadgeDto = latest_badge => {
+  return {
+    badge_id: latest_badge.badge.id,
+    name: latest_badge.badge.name,
+    icon: latest_badge.badge.icon,
+    type: latest_badge.badge.type,
+  };
+};
+
 const userChallengeHistoryDto = (user_challenges, verifications) => {
   return user_challenges.map(userChallenge => {
     const verification = verifications.find(v => v.userChallenge_id === userChallenge.id);
@@ -121,13 +130,12 @@ const getFollowerDto = follower => {
   return response;
 };
 
-
 const getFollowingDto = follower => {
   const response = [];
 
   follower.map(following => response.push(following.following));
   return response;
-}
+};
 
 const getBlockedListDto = blocked_list => {
   const response = [];
@@ -142,6 +150,7 @@ export default {
   updateUserInfoRequestDto,
   userChallengeDto,
   userBadgesDto,
+  userLatestBadgeDto,
   userChallengeHistoryDto,
   userFollowDto,
   userUnfollowDto,

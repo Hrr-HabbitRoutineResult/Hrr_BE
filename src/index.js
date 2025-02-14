@@ -26,6 +26,20 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+app.get('/error/html', (req, res) => {
+  // 현재 날짜 가져오기
+  const today = new Date().toISOString().split('T')[0];
+  const logFilePath = path.join(__dirname, '..', 'logs', `${today}.exception.log`);
+
+  fs.readFile(logFilePath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(404).send('<h1>해당 날짜의 로그 파일을 찾을 수 없습니다.</h1>');
+    }
+
+    res.send(`<pre>${data}</pre>`);
+  });
+});
+
 // 서버 실행
 app.listen(port, () => {
   logger.info(`🚀 Server listening on port ${port}`);

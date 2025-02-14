@@ -10,9 +10,7 @@
       "get": {
         "summary": "챌린지 카테고리 불러오기 API",
         "description": "사용 가능한 챌린지 카테고리 목록을 불러옵니다.",
-        "tags": [
-          "Challenge"
-        ],
+        "tags": ["Challenge"],
         "security": [
           {
             "bearerAuth": []
@@ -97,9 +95,7 @@
       "get": {
         "summary": "이번 주 인기 챌린지 API",
         "description": "이번 주에 인기 있었던 챌린지 5개를 가져옵니다. 메인 화면에서 사용됩니다.",
-        "tags": [
-          "Challenge"
-        ],
+        "tags": ["Challenge"],
         "security": [
           {
             "bearerAuth": []
@@ -209,9 +205,7 @@
       "get": {
         "summary": "게시판 인기 글 조회 API",
         "description": "게시판 별로 좋아요 순으로 인기 있는 게시글을 보여주는 API입니다.",
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "responses": {
           "200": {
             "description": "인기 게시글 조회 성공",
@@ -340,9 +334,7 @@
       "get": {
         "summary": "내가 작성한 글 목록 조회 API",
         "description": "사용자가 작성한 글 목록을 조회하는 API입니다.",
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "security": [
           {
             "bearerAuth": []
@@ -447,13 +439,102 @@
         }
       }
     },
-    "/api/v1/post/commented": {
+    "/api/v1/auth/check-nickname": {
+      "post": {
+        "summary": "닉네임 중복 확인(중복 : true, 중복 x : false)",
+        "description": "사용자가 입력한 닉네임이 이미 존재하는지 확인합니다.",
+        "tags": ["Auth"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "example": "john_doe",
+                    "description": "중복 확인할 닉네임"
+                  }
+                },
+                "required": ["nickname"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "닉네임 중복 확인 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": {
+                      "type": "string",
+                      "example": "SUCCESS"
+                    },
+                    "error": {
+                      "type": "object",
+                      "nullable": true,
+                      "example": null
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 요청",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": {
+                      "type": "string",
+                      "example": "FAIL"
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "errorCode": {
+                          "type": "string",
+                          "example": "INVALID_REQUEST"
+                        },
+                        "reason": {
+                          "type": "string",
+                          "example": "닉네임이 필요합니다."
+                        }
+                      }
+                    },
+                    "success": {
+                      "type": "object",
+                      "nullable": true,
+                      "example": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/board/categories": {
       "get": {
         "summary": "내가 댓글을 단 글 목록 조회 API",
         "description": "사용자가 댓글을 단 글 목록을 조회하는 API입니다.",
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "security": [
           {
             "bearerAuth": []
@@ -562,9 +643,7 @@
       "get": {
         "summary": "저장한 글 목록 조회 API",
         "description": "사용자가 저장한 글 목록을 조회하는 API입니다.",
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "security": [
           {
             "bearerAuth": []
@@ -673,9 +752,7 @@
       "post": {
         "summary": "새 게시글 작성 API",
         "description": "새로운 게시글을 작성하는 API입니다.",
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "security": [
           {
             "bearerAuth": []
@@ -709,11 +786,7 @@
                     }
                   }
                 },
-                "required": [
-                  "title",
-                  "content",
-                  "anonymity"
-                ]
+                "required": ["title", "content", "anonymity"]
               }
             }
           }
@@ -820,9 +893,7 @@
       "get": {
         "summary": "전체 게시글 목록 조회 API",
         "description": "전체 게시글 목록을 조회하는 API입니다.",
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "responses": {
           "200": {
             "description": "전체 게시글 목록 조회 성공",
@@ -934,9 +1005,7 @@
       "get": {
         "summary": "게시글 상세 정보 조회 API",
         "description": "특정 게시글의 상세 정보를 조회하는 API입니다.",
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "in": "path",
@@ -1102,9 +1171,7 @@
       "post": {
         "summary": "게시글 좋아요 추가 API",
         "description": "특정 게시글에 좋아요를 추가하는 API입니다.",
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "security": [
           {
             "bearerAuth": []
@@ -1220,9 +1287,7 @@
       "post": {
         "summary": "게시글 댓글 추가 API",
         "description": "특정 게시글에 댓글을 추가하는 API입니다.",
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "security": [
           {
             "bearerAuth": []
@@ -1253,9 +1318,7 @@
                     "example": "댓글 내용입니다."
                   }
                 },
-                "required": [
-                  "content"
-                ]
+                "required": ["content"]
               }
             }
           }
@@ -1382,9 +1445,7 @@
       "post": {
         "summary": "게시글 저장(스크랩) API",
         "description": "특정 게시글을 저장(스크랩)하는 API입니다.",
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "security": [
           {
             "bearerAuth": []
@@ -1500,9 +1561,7 @@
       "get": {
         "summary": "게시판 카테고리 목록 조회 API",
         "description": "게시판의 카테고리 목록을 조회하는 API입니다.",
-        "tags": [
-          "Board"
-        ],
+        "tags": ["Board"],
         "security": [
           {
             "bearerAuth": []
@@ -1607,9 +1666,7 @@
       "post": {
         "summary": "게시판 생성 API",
         "description": "사용자가 새로운 게시판을 생성하는 API입니다.",
-        "tags": [
-          "Board"
-        ],
+        "tags": ["Board"],
         "security": [
           {
             "bearerAuth": []
@@ -1694,9 +1751,7 @@
       "patch": {
         "summary": "게시판 상단 고정 API",
         "description": "특정 게시판을 게시판 상단에 고정하는 API입니다.",
-        "tags": [
-          "Board"
-        ],
+        "tags": ["Board"],
         "security": [
           {
             "bearerAuth": []
@@ -1725,9 +1780,7 @@
       "patch": {
         "summary": "게시판 상단 고정 해제 API",
         "description": "특정 게시판을 게시판 상단에서 고정 해제하는 API입니다.",
-        "tags": [
-          "Board"
-        ],
+        "tags": ["Board"],
         "security": [
           {
             "bearerAuth": []
@@ -1756,9 +1809,7 @@
       "get": {
         "summary": "특정 게시판 인기 글 목록 조회 API",
         "description": "특정 게시판의 인기 글 목록을 조회하는 API입니다.",
-        "tags": [
-          "Board"
-        ],
+        "tags": ["Board"],
         "security": [
           {
             "bearerAuth": []
@@ -1838,9 +1889,7 @@
       "post": {
         "summary": "챌린지 인증 댓글 작성 API",
         "description": "특정 챌린지 인증에 댓글을 작성하는 API입니다.",
-        "tags": [
-          "Challenge:Verification"
-        ],
+        "tags": ["Challenge:Verification"],
         "security": [
           {
             "bearerAuth": []
@@ -1882,10 +1931,7 @@
                     "description": "부모 댓글 Id"
                   }
                 },
-                "required": [
-                  "content",
-                  "anonymous"
-                ]
+                "required": ["content", "anonymous"]
               }
             }
           }
@@ -1923,10 +1969,7 @@
                           "example": 1
                         },
                         "parentId": {
-                          "type": [
-                            "integer",
-                            "null"
-                          ],
+                          "type": ["integer", "null"],
                           "example": null
                         },
                         "createdAt": {
@@ -1950,9 +1993,7 @@
       "get": {
         "summary": "특정 인증 댓글 조회 API",
         "description": "특정 챌린지 인증에 작성된 댓글들을 조회하는 API입니다.",
-        "tags": [
-          "Challenge:Verification"
-        ],
+        "tags": ["Challenge:Verification"],
         "security": [
           {
             "bearerAuth": []
@@ -2009,10 +2050,7 @@
                             "example": "이 인증 정말 좋네요!"
                           },
                           "parent_id": {
-                            "type": [
-                              "integer",
-                              "null"
-                            ],
+                            "type": ["integer", "null"],
                             "example": null
                           },
                           "created_at": {
@@ -2098,9 +2136,7 @@
       "patch": {
         "summary": "특정 인증 댓글 수정 API",
         "description": "특정 인증에 작성된 댓글을 수정하는 API입니다.",
-        "tags": [
-          "Challenge:Verification"
-        ],
+        "tags": ["Challenge:Verification"],
         "security": [
           {
             "bearerAuth": []
@@ -2132,9 +2168,7 @@
                     "description": "수정할 댓글 내용"
                   }
                 },
-                "required": [
-                  "content"
-                ]
+                "required": ["content"]
               }
             }
           }
@@ -2176,10 +2210,7 @@
                           "example": "이 인증은 정말 멋집니다!"
                         },
                         "parent_id": {
-                          "type": [
-                            "integer",
-                            "null"
-                          ],
+                          "type": ["integer", "null"],
                           "example": null
                         },
                         "created_at": {
@@ -2210,9 +2241,7 @@
       "post": {
         "summary": "특정 인증 좋아요 추가 API",
         "description": "특정 챌린지 인증에 좋아요를 추가하는 API입니다.",
-        "tags": [
-          "Challenge:Verification"
-        ],
+        "tags": ["Challenge:Verification"],
         "security": [
           {
             "bearerAuth": []
@@ -2276,9 +2305,7 @@
       "delete": {
         "summary": "특정 인증 좋아요 취소 API",
         "description": "특정 인증에 추가된 좋아요를 취소하는 API입니다.",
-        "tags": [
-          "Challenge:Verification"
-        ],
+        "tags": ["Challenge:Verification"],
         "security": [
           {
             "bearerAuth": []
@@ -2342,9 +2369,7 @@
       "get": {
         "summary": "챌린지 리스트 조회 API",
         "description": "챌린지 이름, 종류, 인원 제한, 참가 인원, 인증 방식, 한 줄 설명, 인증 빈도가 포함된 챌린지 리스트를 조회하는 API입니다.",
-        "tags": [
-          "Challenge"
-        ],
+        "tags": ["Challenge"],
         "security": [
           {
             "bearerAuth": []
@@ -2462,9 +2487,7 @@
       "post": {
         "summary": "챌린지 개설 API",
         "description": "사용자가 새로운 챌린지를 개설하는 API입니다. 카테고리, 유형, 사진, 기간, 제한 인원, 인증 수단, 규칙, 키워드를 포함합니다.",
-        "tags": [
-          "Challenge"
-        ],
+        "tags": ["Challenge"],
         "security": [
           {
             "bearerAuth": []
@@ -2605,10 +2628,7 @@
                               "example": 1
                             },
                             "name": {
-                              "type": [
-                                "string",
-                                "null"
-                              ],
+                              "type": ["string", "null"],
                               "example": null
                             },
                             "type": {
@@ -2650,18 +2670,12 @@
                               "example": "2025-01-29T15:00:00.000Z"
                             },
                             "created_at": {
-                              "type": [
-                                "string",
-                                "null"
-                              ],
+                              "type": ["string", "null"],
                               "format": "date-time",
                               "example": null
                             },
                             "updated_at": {
-                              "type": [
-                                "string",
-                                "null"
-                              ],
+                              "type": ["string", "null"],
                               "format": "date-time",
                               "example": null
                             },
@@ -2727,9 +2741,7 @@
       "get": {
         "summary": "챌린지 검색 API",
         "description": "사용자가 특정 조건에 따라 챌린지를 검색하는 API입니다.",
-        "tags": [
-          "Challenge"
-        ],
+        "tags": ["Challenge"],
         "security": [
           {
             "bearerAuth": []
@@ -2917,9 +2929,7 @@
       "get": {
         "summary": "챌린지 상세 조회 API",
         "description": "특정 챌린지의 상세 정보를 조회하는 API입니다.",
-        "tags": [
-          "Challenge"
-        ],
+        "tags": ["Challenge"],
         "security": [
           {
             "bearerAuth": []
@@ -3063,9 +3073,7 @@
       "post": {
         "summary": "특정 인증 스크랩 API",
         "description": "특정 챌린지 인증을 스크랩하는 API입니다.",
-        "tags": [
-          "Challenge:Verification"
-        ],
+        "tags": ["Challenge:Verification"],
         "security": [
           {
             "bearerAuth": []
@@ -3129,9 +3137,7 @@
       "delete": {
         "summary": "특정 인증 스크랩 취소 API",
         "description": "특정 챌린지 인증에 추가된 스크랩을 취소하는 API입니다.",
-        "tags": [
-          "Challenge:Verification"
-        ],
+        "tags": ["Challenge:Verification"],
         "security": [
           {
             "bearerAuth": []
@@ -3195,9 +3201,7 @@
       "post": {
         "summary": "특정 챌린지 참가 API",
         "description": "사용자가 특정 챌린지에 참가하는 API입니다.",
-        "tags": [
-          "Challenge"
-        ],
+        "tags": ["Challenge"],
         "security": [
           {
             "bearerAuth": []
@@ -3281,10 +3285,7 @@
                           "example": "2025-02-07T01:47:07.000Z"
                         },
                         "updated_at": {
-                          "type": [
-                            "string",
-                            "null"
-                          ],
+                          "type": ["string", "null"],
                           "format": "date-time",
                           "example": null
                         },
@@ -3303,10 +3304,7 @@
                           "example": "study"
                         },
                         "duration": {
-                          "type": [
-                            "string",
-                            "null"
-                          ],
+                          "type": ["string", "null"],
                           "example": null
                         },
                         "likesCount": {
@@ -3425,9 +3423,7 @@
       "post": {
         "summary": "챌린지 좋아요 기능 API",
         "description": "사용자가 특정 챌린지에 좋아요를 추가하는 API입니다.",
-        "tags": [
-          "Challenge"
-        ],
+        "tags": ["Challenge"],
         "security": [
           {
             "bearerAuth": []
@@ -3589,9 +3585,7 @@
       "delete": {
         "summary": "챌린지 좋아요 취소 API",
         "description": "사용자가 특정 챌린지에 대한 좋아요를 취소하는 API입니다.",
-        "tags": [
-          "Challenge"
-        ],
+        "tags": ["Challenge"],
         "security": [
           {
             "bearerAuth": []
@@ -3711,9 +3705,7 @@
       "get": {
         "summary": "나의 챌린지 인증 현황 조회 API",
         "description": "특정 챌린지에서 사용자의 인증 현황(이름, 사진, 인증 횟수, 미인증 횟수, 인증 상세 목록)을 조회하는 API입니다.",
-        "tags": [
-          "Challenge"
-        ],
+        "tags": ["Challenge"],
         "security": [
           {
             "bearerAuth": []
@@ -3920,9 +3912,7 @@
       "get": {
         "summary": "챌린저 리스트 조회 API",
         "description": "특정 챌린지에 참가한 챌린저 리스트를 조회하는 API입니다. 각 챌린저의 인증 횟수와 상태도 함께 표시됩니다.",
-        "tags": [
-          "Challenge"
-        ],
+        "tags": ["Challenge"],
         "security": [
           {
             "bearerAuth": []
@@ -4009,9 +3999,7 @@
       "post": {
         "summary": "챌린저 리스트 내보내기 API",
         "description": "특정 챌린지에서 3회 미인증한 챌린저를 내보낼 수 있는 API입니다.",
-        "tags": [
-          "Challenge"
-        ],
+        "tags": ["Challenge"],
         "security": [
           {
             "bearerAuth": []
@@ -4084,9 +4072,7 @@
       "get": {
         "summary": "챌린지 인증 달력 조회 API",
         "description": "특정 챌린지에서 사용자가 인증한 날과 인증하지 않은 날들이 표시된 달력을 조회하는 API입니다.",
-        "tags": [
-          "Challenge"
-        ],
+        "tags": ["Challenge"],
         "security": [
           {
             "bearerAuth": []
@@ -4178,9 +4164,7 @@
       "get": {
         "summary": "챌린지 인증 현황 조회 API",
         "description": "현재 참가 중인 챌린지의 인증 현황(총 인원, 인증 완료 인원, 미인증 인원)을 조회하는 API입니다.",
-        "tags": [
-          "Challenge:Verification"
-        ],
+        "tags": ["Challenge:Verification"],
         "security": [
           {
             "bearerAuth": []
@@ -4248,9 +4232,7 @@
       "get": {
         "summary": "이번 주 인증 현황 조회 API",
         "description": "특정 챌린지에서 사용자가 이번 주 어떤 요일에 인증했는지를 조회하는 API입니다.",
-        "tags": [
-          "Challenge:Verification"
-        ],
+        "tags": ["Challenge:Verification"],
         "security": [
           {
             "bearerAuth": []
@@ -4318,9 +4300,7 @@
       "get": {
         "summary": "특정 인증 상세 조회 API",
         "description": "특정 챌린지 인증의 상세 정보를 조회하는 API입니다.",
-        "tags": [
-          "Challenge:Verification"
-        ],
+        "tags": ["Challenge:Verification"],
         "security": [
           {
             "bearerAuth": []
@@ -4446,10 +4426,7 @@
                                 "example": "이 인증은 정말 멋집니다!"
                               },
                               "parent_id": {
-                                "type": [
-                                  "integer",
-                                  "null"
-                                ],
+                                "type": ["integer", "null"],
                                 "example": null
                               },
                               "created_at": {
@@ -4537,9 +4514,7 @@
       "post": {
         "summary": "챌린지 사진 인증 등록 API",
         "description": "특정 챌린지에 사진 인증을 등록하는 API입니다.",
-        "tags": [
-          "Challenge:Verification"
-        ],
+        "tags": ["Challenge:Verification"],
         "security": [
           {
             "bearerAuth": []
@@ -4649,9 +4624,7 @@
       "post": {
         "summary": "챌린지 글 인증 등록 API",
         "description": "사용자가 챌린지 글로 인증을 등록하는 API입니다.",
-        "tags": [
-          "Challenge:Verification"
-        ],
+        "tags": ["Challenge:Verification"],
         "security": [
           {
             "bearerAuth": []
@@ -4745,9 +4718,7 @@
       "get": {
         "summary": "챌린지 글 인증 임시저장 조회 API",
         "description": "챌린지 글 인증 작성 중 임시 저장된 내용을 조회하는 API입니다.",
-        "tags": [
-          "Challenge:Verification"
-        ],
+        "tags": ["Challenge:Verification"],
         "security": [
           {
             "bearerAuth": []
@@ -4762,9 +4733,7 @@
       "delete": {
         "summary": "임시 저장된 글 삭제 API",
         "description": "챌린지 글 인증 작성 중 임시 저장된 내용을 삭제하는 API입니다.",
-        "tags": [
-          "Challenge:Verification"
-        ],
+        "tags": ["Challenge:Verification"],
         "security": [
           {
             "bearerAuth": []
@@ -4781,9 +4750,7 @@
       "put": {
         "summary": "사용자 관심사 수정 API",
         "description": "사용자가 자신의 관심사를 수정하는 API입니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "security": [
           {
             "bearerAuth": []
@@ -4820,9 +4787,7 @@
                     }
                   }
                 },
-                "required": [
-                  "interests"
-                ]
+                "required": ["interests"]
               }
             }
           }
@@ -4851,9 +4816,7 @@
       "get": {
         "summary": "사용자 정보 조회 API",
         "description": "사용자의 기본 정보를 조회합니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "parameters": [
           {
             "in": "path",
@@ -4992,9 +4955,7 @@
       "put": {
         "summary": "사용자 정보 수정 API",
         "description": "사용자가 자신의 정보를 수정하는 API입니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "security": [
           {
             "bearerAuth": []
@@ -5018,22 +4979,11 @@
                     "example": "https://example.com/newprofile.jpg"
                   },
                   "badges": {
-                    "type": [
-                      "integer",
-                      "null"
-                    ],
-                    "example": [
-                      2,
-                      1,
-                      null
-                    ]
+                    "type": ["integer", "null"],
+                    "example": [2, 1, null]
                   }
                 },
-                "required": [
-                  "name",
-                  "profilePhoto",
-                  "badges"
-                ]
+                "required": ["name", "profilePhoto", "badges"]
               }
             }
           }
@@ -5069,15 +5019,8 @@
                         "badges": {
                           "type": "array",
                           "items": {
-                            "type": [
-                              "integer",
-                              "null"
-                            ],
-                            "example": [
-                              2,
-                              1,
-                              null
-                            ]
+                            "type": ["integer", "null"],
+                            "example": [2, 1, null]
                           }
                         }
                       }
@@ -5094,9 +5037,7 @@
       "get": {
         "summary": "진행중인 챌린지 조회 API",
         "description": "유저가 참여한 챌린지들을 보여주는 API입니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "parameters": [
           {
             "in": "path",
@@ -5189,9 +5130,7 @@
       "get": {
         "summary": "완료한 챌린지 조회 API",
         "description": "사용자가 완료한 챌린지들을 보여주는 API입니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "parameters": [
           {
             "in": "path",
@@ -5262,9 +5201,7 @@
       "get": {
         "summary": "챌린지 기록 조회 API",
         "description": "사용자가 인증한 챌린지 기록을 조회합니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "security": [
           {
             "bearerAuth": []
@@ -5320,10 +5257,7 @@
                             "example": "https://url1.com"
                           },
                           "textUrl": {
-                            "type": [
-                              "string",
-                              "null"
-                            ],
+                            "type": ["string", "null"],
                             "example": null
                           }
                         }
@@ -5341,9 +5275,7 @@
       "get": {
         "summary": "사용자 배지 조회 API",
         "description": "사용자가 획득한 배지 정보를 조회합니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "parameters": [
           {
             "in": "path",
@@ -5438,9 +5370,7 @@
       "get": {
         "summary": "최근 획득한 배지 조회 API",
         "description": "사용자가 최근에 획득한 배지 정보를 조회합니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "security": [
           {
             "bearerAuth": []
@@ -5497,9 +5427,7 @@
       "post": {
         "summary": "사용자 팔로우 API",
         "description": "특정 사용자를 팔로우합니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "security": [
           {
             "bearerAuth": []
@@ -5559,9 +5487,7 @@
       "delete": {
         "summary": "사용자 언팔로우 API",
         "description": "특정 사용자를 언팔로우합니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "security": [
           {
             "bearerAuth": []
@@ -5621,9 +5547,7 @@
       "get": {
         "summary": "스크랩한 인증 글 목록 조회 API",
         "description": "내가 스크랩한 인증 글들의 목록을 불러오는 API입니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "security": [
           {
             "bearerAuth": []
@@ -5696,9 +5620,7 @@
       "get": {
         "summary": "배지 조건 조회 API",
         "description": "사용자가 획득한 배지 조건을 조회합니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "security": [
           {
             "bearerAuth": []
@@ -5758,9 +5680,7 @@
       "get": {
         "summary": "레벨 조회 API",
         "description": "사용자가 획득한 레벨을 조회합니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "security": [
           {
             "bearerAuth": []
@@ -5824,9 +5744,7 @@
       "get": {
         "summary": "사용자의 팔로워 목록 조회",
         "description": "특정 사용자를 팔로우하는 사용자 목록을 조회합니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "parameters": [
           {
             "name": "userId",
@@ -5927,9 +5845,7 @@
       "get": {
         "summary": "사용자의 팔로잉 목록 조회",
         "description": "특정 사용자를 팔로우하는 사용자 목록을 조회합니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "parameters": [
           {
             "name": "userId",
@@ -6030,9 +5946,7 @@
       "post": {
         "summary": "사용자 차단",
         "description": "특정 사용자를 차단합니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "security": [
           {
             "bearerAuth": []
@@ -6134,9 +6048,7 @@
       "delete": {
         "summary": "사용자 차단 해제",
         "description": "특정 사용자의 차단을 해제합니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "security": [
           {
             "bearerAuth": []
@@ -6238,9 +6150,7 @@
       "get": {
         "summary": "사용자의 차단 목록 조회",
         "description": "사용자가 차단한 사용자의 목록을 조회합니다.",
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "security": [
           {
             "bearerAuth": []
@@ -6334,9 +6244,7 @@
       "post": {
         "summary": "로그인 API",
         "description": "이메일과 비밀번호로 사용자를 인증하고, JWT 또는 세션 토큰을 반환합니다.",
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "requestBody": {
           "required": true,
           "description": "로그인 요청 정보",
@@ -6354,10 +6262,7 @@
                     "example": "password123"
                   }
                 },
-                "required": [
-                  "email",
-                  "password"
-                ]
+                "required": ["email", "password"]
               }
             }
           }
@@ -6414,9 +6319,7 @@
       "post": {
         "summary": "토큰 갱신 API",
         "description": "Refresh Token을 사용하여 Access Token을 새롭게 발급합니다.",
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "requestBody": {
           "required": true,
           "description": "Refresh Token 요청 정보",
@@ -6430,9 +6333,7 @@
                     "example": "refresh_token_here"
                   }
                 },
-                "required": [
-                  "refreshToken"
-                ]
+                "required": ["refreshToken"]
               }
             }
           }
@@ -6461,9 +6362,7 @@
       "post": {
         "summary": "이메일 찾기 API",
         "description": "사용자의 이름과 휴대폰 번호를 기반으로 이메일을 찾습니다.",
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "requestBody": {
           "required": true,
           "description": "이메일 찾기 요청 정보",
@@ -6481,10 +6380,7 @@
                     "example": "01012345678"
                   }
                 },
-                "required": [
-                  "name",
-                  "phoneNumber"
-                ]
+                "required": ["name", "phoneNumber"]
               }
             }
           }
@@ -6513,9 +6409,7 @@
       "post": {
         "summary": "비밀번호 재설정 API",
         "description": "이메일을 통해 비밀번호를 재설정합니다.",
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "requestBody": {
           "required": true,
           "description": "비밀번호 재설정 요청 정보",
@@ -6533,10 +6427,7 @@
                     "example": "new_password123"
                   }
                 },
-                "required": [
-                  "email",
-                  "newPassword"
-                ]
+                "required": ["email", "newPassword"]
               }
             }
           }
@@ -6565,9 +6456,7 @@
       "post": {
         "summary": "회원가입 API",
         "description": "사용자의 회원가입을 처리합니다.",
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "requestBody": {
           "required": true,
           "description": "회원가입 요청 정보",
@@ -6593,12 +6482,7 @@
                     "example": 1
                   }
                 },
-                "required": [
-                  "email",
-                  "password",
-                  "nickname",
-                  "verificationId"
-                ]
+                "required": ["email", "password", "nickname", "verificationId"]
               }
             }
           }

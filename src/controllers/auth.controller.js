@@ -88,6 +88,16 @@ const checkEmailVerificationCode = async (req, res, next) => {
   }
 };
 
+const checkNickname = async (req, res, next) => {
+  try {
+    const nickname = req.body.nickname;
+    const nickname_check = await authService.checkNickname(nickname);
+    return res.success(nickname_check, StatusCodes.OK);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export default {
   emailLogin,
   kakaoLogin,
@@ -99,4 +109,5 @@ export default {
   register,
   sendVerificationCode,
   checkEmailVerificationCode,
+  checkNickname,
 };

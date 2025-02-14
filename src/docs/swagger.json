@@ -530,7 +530,7 @@
         }
       }
     },
-    "/api/v1/board/categories": {
+    "/api/v1/post/commented": {
       "get": {
         "summary": "내가 댓글을 단 글 목록 조회 API",
         "description": "사용자가 댓글을 단 글 목록을 조회하는 API입니다.",

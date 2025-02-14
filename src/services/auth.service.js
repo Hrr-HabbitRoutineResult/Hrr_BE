@@ -3,6 +3,7 @@ import authRepository from '../repositories/auth.repository.js';
 import authError, { SendmailError } from '../errors/auth.error.js';
 import sendmail from '../utils/sendmail.util.js';
 import crypto from 'crypto';
+import axios from 'axios';
 
 //emailLogin-api
 const generateTokens = payload => {
@@ -29,7 +30,7 @@ const login = async (email, password) => {
   if (user.password !== password) {
     throw new authError.PasswordMismatchError('비밀번호가 일치하지 않습니다.', { password });
   }
-  return email;
+  return user.id;
 };
 
 //sendVerficationEmail-api
@@ -67,7 +68,7 @@ const generateVerificationCode = () => {
 
 //register-api
 const register = async dto => {
-  const { email, password, verification_id } = dto;
+  const { email, password, nickname, verification_id } = dto;
 
   const verificated_email = await authRepository.findEmailVerificationById(verification_id);
   if (!verificated_email) {
@@ -91,7 +92,7 @@ const register = async dto => {
   const new_user = {
     email: email,
     password: password,
-    nickname: '사용자',
+    nickname: nickname,
     phoneNumber: '010012345678',
     followerCount: 0,
     followingCount: 0,
@@ -123,6 +124,43 @@ const checkEmailVerificationCode = async (email, verification_code) => {
   return updated_verification;
 };
 
+// Kakao 소셜 로그인
+const signInKakao = async kakao_token => {
+  try {
+    // 1. 카카오 API를 호출하여 사용자 정보 가져오기
+    const result = await axios.get('https://kapi.kakao.com/v2/user/me', {
+      headers: {
+        Authorization: `Bearer ${kakao_token}`,
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+      },
+    });
+
+    const { data } = result;
+    const kakao_id = data.id; // 카카오 유저의 고유 ID
+    const email = data.kakao_account?.email;
+
+    if (!email) {
+      throw new authError.UserNotExistError('존재하지 않는 이메일입니다.');
+    }
+
+    // 2. DB에서 사용자 조회
+    let user = await authRepository.findUserByEmail(email);
+
+    // 3. 신규 사용자라면 회원가입 처리
+    if (!user) {
+      user = await authRepository.signUpKakao(email);
+    }
+
+    // 3. JWT 발급
+    const access_token = jwt.sign({ kakao_id, email }, process.env.ACCESS_TOKEN_SECRET);
+    const refresh_token = jwt.sign({ kakao_id, email }, process.env.REFRESH_TOKEN_SECRET);
+
+    return { access_token, refresh_token };
+  } catch (error) {
+    throw new authError.KakaoLoginError('카카오 로그인 실패');
+  }
+};
+
 export default {
   generateTokens,
   verifyRefreshToken,
@@ -130,4 +168,5 @@ export default {
   sendVerificationEmail,
   register,
   checkEmailVerificationCode,
+  signInKakao,
 };

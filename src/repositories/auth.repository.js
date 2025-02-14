@@ -1,12 +1,28 @@
 import authError from '../errors/auth.error.js';
 import { prisma } from '../db.config.js';
-import logger from '../logger.js';
+import bcrypt from 'bcrypt';
+import databaseError from '../errors/database.error.js';
+
+const findUserById = async user_id => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: user_id },
+    });
+    return user;
+  } catch (error) {
+    throw new databaseError.DataBaseError('유저 조회중 에러가 발생했습니다.');
+  }
+};
 
 const findUserByEmail = async email => {
-  const user = await prisma.user.findUnique({
-    where: { email },
-  });
-  return user;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+    return user;
+  } catch (error) {
+    throw new databaseError.DataBaseError('유저 조회중 에러가 발생했습니다.');
+  }
 };
 
 // 이메일 인증 정보를 조회하는 함수
@@ -79,7 +95,7 @@ const createUser = async new_user => {
     const created_user = await prisma.user.create({
       data: new_user,
     });
-    return { id: created_user.id, email: created_user.email, name: created_user.nickname };
+    return { id: created_user.id, email: created_user.email, nickname: created_user.nickname };
   } catch (error) {
     throw new authError.DataBaseError('Error on creating email verification');
   }
@@ -93,7 +109,27 @@ const findEmailVerificationById = async id => {
   return email_verification;
 };
 
+const signUpKakao = async email => {
+  try {
+    const dummy_password = await bcrypt.hash('kakao_dummy_password', 10); // 더미 비밀번호 해시화
+
+    const new_user = await prisma.user.create({
+      data: {
+        email,
+        password: dummy_password,
+        followerCount: 0,
+        followingCount: 0,
+        points: 0,
+      },
+    });
+    return new_user;
+  } catch (error) {
+    throw new databaseError.DataBaseError('DataBase Error on Kakao login');
+  }
+};
+
 export default {
+  findUserById,
   findUserByEmail,
   findEmailVerification,
   deleteEmailVerification,
@@ -102,4 +138,5 @@ export default {
   setEmailVerifiedTrue,
   createUser,
   findEmailVerificationById,
+  signUpKakao,
 };

@@ -43,8 +43,96 @@ const userChallengeDto = challenges => {
     name: challenge.challenge.name,
     challengeImage: challenge.challenge.challengeImage,
     type: challenge.challenge.type,
-    // 인증 추가가
+    description: challenge.challenge.description,
+    verificatedToday: challenge.hasVerificationToday,
   }));
+};
+
+const userBadgesDto = (type_badges, category_badges) => {
+  const formatBadges = badges =>
+    badges.map(badge => ({
+      badgeId: badge.id,
+      name: badge.name,
+      icon: badge.icon,
+      isObtained: badge.isObtained,
+    }));
+
+  return {
+    typeBadges: formatBadges(type_badges),
+    categoryBadges: formatBadges(category_badges),
+  };
+};
+
+const userChallengeHistoryDto = (user_challenges, verifications) => {
+  return user_challenges.flatMap(userChallenge => {
+    const verification = verifications.filter(v => v.userChallenge_id === userChallenge.id);
+
+    return verification.map(v => ({
+      challenge_id: userChallenge.challenge_id,
+      name: userChallenge.challenge.name,
+      verification_id: v.id,
+      created_at: v.created_at,
+      title: v.title,
+      photoUrl: v.photoUrl,
+      textUrl: v.textUrl,
+    }));
+  });
+};
+
+const userFollowDto = followed_user_id => {
+  const response_data = {
+    message: 'User followed successfully',
+    followedUserId: followed_user_id[0].following_id,
+  };
+  return response_data;
+};
+
+const userUnfollowDto = unfollowed_user_id => {
+  const response_data = {
+    message: 'User unfollowed successfully',
+    unfollowedUserId: unfollowed_user_id[0].id,
+  };
+  return response_data;
+};
+
+const userBadgesConditionDto = condition => {
+  return condition.map(condition => ({
+    badgeId: condition.condition.badge_id,
+    conditionId: condition.condition.id,
+    description: condition.condition.description,
+    isAchieved: condition.isAchieved,
+  }));
+};
+
+const userLevelDto = level => {
+  return level.map(level => ({
+    level: level.user.level,
+    points: level.user.points,
+    levelConditionId: level.levelConditionId,
+    condition: level.levelCondition.condition,
+    isAchieved: level.achieved,
+  }));
+};
+
+const getFollowerDto = follower => {
+  const response = [];
+
+  follower.map(follower => response.push(follower.follower));
+  return response;
+};
+
+const getFollowingDto = follower => {
+  const response = [];
+
+  follower.map(following => response.push(following.following));
+  return response;
+};
+
+const getBlockedListDto = blocked_list => {
+  const response = [];
+
+  blocked_list.map(blocked => response.push(blocked.blocked));
+  return response;
 };
 
 export default {
@@ -52,4 +140,13 @@ export default {
   updateUserInfoResponseDto,
   updateUserInfoRequestDto,
   userChallengeDto,
+  userBadgesDto,
+  userChallengeHistoryDto,
+  userFollowDto,
+  userUnfollowDto,
+  userBadgesConditionDto,
+  userLevelDto,
+  getFollowerDto,
+  getFollowingDto,
+  getBlockedListDto,
 };

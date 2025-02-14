@@ -8,8 +8,18 @@ export class BadgeNotExistError extends Error {
   }
 }
 
-export class DataBaseError extends Error {
+export class CannotFollowSelfError extends Error {
   errorCode = 'U002';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
+export class DataBaseError extends Error {
+  errorCode = 'U003';
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
@@ -18,8 +28,8 @@ export class DataBaseError extends Error {
   }
 }
 
-export class OngoingChallengeNotExistError extends Error {
-  errorCode = 'U003';
+export class UserNotExistError extends Error {
+  errorCode = 'P2025';
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
@@ -28,8 +38,42 @@ export class OngoingChallengeNotExistError extends Error {
   }
 }
 
+export class FollowedUserError extends Error {
+  errorCode = 'P2002';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 409;
+    this.data = data;
+  }
+}
+
+export class NotFollowingUserError extends Error {
+  errorCode = 'U004';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 404;
+    this.data = data;
+  }
+}
+
+export class UserAlreadyBlockedError extends Error {
+  errorCode = 'U005';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 400;
+    this.data = data;
+  }
+}
+
 export default {
   BadgeNotExistError,
+  CannotFollowSelfError,
   DataBaseError,
-  OngoingChallengeNotExistError,
+  UserNotExistError,
+  FollowedUserError,
+  NotFollowingUserError,
+  UserAlreadyBlockedError,
 };

@@ -50,10 +50,21 @@ export class ChallengeIdNotExistsError extends Error {
   }
 }
 
+export class NoChallengeFoundError extends Error {
+  errorCode = 'C006';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statuscode = 404;
+    this.data = data;
+  }
+}
+
 export default {
   CreateChallengeError,
   DataBaseError,
   ChallengeExpiredError,
   SendChallengeError,
   ChallengeIdNotExistsError,
+  NoChallengeFoundError,
 };

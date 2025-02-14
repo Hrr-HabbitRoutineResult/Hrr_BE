@@ -14,7 +14,6 @@ model User {
   userBadge1_id          Int?
   userBadge2_id          Int?
   userBadge3_id          Int?
-  nickname               String?                 @db.VarChar(40) @default("사용자")
   gender                 Gender?
   email                  String                  @unique @db.VarChar(255)
   phoneNumber            String?                 @db.VarChar(40)
@@ -24,12 +23,12 @@ model User {
   inactiveDate           DateTime?               @db.DateTime(6)
   profilePhoto           String?                 @db.VarChar(255)
   level                  Level?
-  followerCount          Int
-  followingCount         Int
+  followerCount          Int                     @default(0)
+  followingCount         Int                     @default(0)
   points                 Int                     @default(0)
-  job                    Job?
-  category               Category
   ageGroup               AgeGroup?
+  job                    Job?
+  nickname               String?                 @default("사용자") @db.VarChar(40)
   userBadge1             UserBadge?              @relation("Badge1", fields: [userBadge1_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   userBadge2             UserBadge?              @relation("Badge2", fields: [userBadge2_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   userBadge3             UserBadge?              @relation("Badge3", fields: [userBadge3_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -40,7 +39,7 @@ model User {
   verifications          Verification[]
   userBadges             UserBadge[]
   userCategoryTypes      UserCategoryType[]
-  scraps                 Scrap[]
+  verificationScraps     VerificationScrap[]
   temporaryVerifications TemporaryVerification[]
   challenges             Challenge[]
   userChallenges         UserChallenge[]
@@ -50,14 +49,19 @@ model User {
   followings             Follow[]                @relation("FollowingRelation")
   receivedMessages       Message[]               @relation("ReceivedMessages")
   sentMessages           Message[]               @relation("SentMessages")
-  userBoards             UserBoard[] 
+  blockingUsers Block[] @relation("BlockerRelation")
+  blockedByUsers Block[] @relation("BlockedRelation")
+  userBoards             UserBoard[]
   userAgreements         UserAgreement[]
+  verificationLikes      VerificationLike[]
+  userLevels             UserLevel[]
+
   @@map("Users")
 }
 
 model Keyword {
   id                Int                @id @default(autoincrement())
-  name              String?            @db.VarChar(40)
+  name              String?            @db.VarChar(40) @unique
   challengeKeywords ChallengeKeyword[]
 
   @@map("Keywords")
@@ -67,6 +71,8 @@ model ChallengeLike {
   id           Int       @id @default(autoincrement())
   user_id      Int
   challenge_id Int
+  created_at   DateTime  @default(now()) @db.DateTime(6)
+  updated_at   DateTime? @db.DateTime(6)
   user         User      @relation(fields: [user_id], references: [id])
   challenge    Challenge @relation(fields: [challenge_id], references: [id])
 
@@ -74,45 +80,46 @@ model ChallengeLike {
 }
 
 model Comment {
-  id              Int          @id @default(autoincrement())
+  id              Int           @id @default(autoincrement())
   user_id         Int
-  post_id         Int
-  verification_id Int
-  content         String?      @db.Text
-  parent_id       Int?         //부모 댓글 ID(NULL일 때는 최상위 댓글)
-  anonymous       Boolean      @default(false)
-  created_at      DateTime?    @db.DateTime(6)
-  updated_at      DateTime?    @db.DateTime(6)
-  user            User         @relation(fields: [user_id], references: [id])
-  post            Post         @relation(fields: [post_id], references: [id])
-  verification    Verification @relation(fields: [verification_id], references: [id])
-  parent_comment  Comment?     @relation("CommentReplies", fields:[parent_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  child_comment   Comment[]    @relation("CommentReplies")
+  post_id         Int?
+  verification_id Int?
+  content         String?       @db.Text
+  created_at      DateTime?     @default(now()) @db.DateTime(6)
+  updated_at      DateTime?     @updatedAt @db.DateTime(6)
+  anonymous       Boolean       @default(false)
+  parent_id       Int?
+  selected        Boolean       @default(false)
+  user            User          @relation(fields: [user_id], references: [id])
+  post            Post?         @relation(fields: [post_id], references: [id])
+  verification    Verification? @relation(fields: [verification_id], references: [id])
+  parent_comment  Comment?      @relation("CommentReplies", fields: [parent_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  child_comment   Comment[]     @relation("CommentReplies")
 
   @@map("Comments")
 }
 
 model UserBoard {
-  id        Int       @id @default(autoincrement())
-  userId    Int
-  boardId   Int
-  pinned    Boolean   @default(false)
-  user      User      @relation(fields: [userId], references: [id])
-  board     Board     @relation(fields: [boardId], references: [id])
+  id      Int     @id @default(autoincrement())
+  userId  Int
+  boardId Int
+  pinned  Boolean @default(false)
+  user    User    @relation(fields: [userId], references: [id])
+  board   Board   @relation(fields: [boardId], references: [id])
 
   @@unique([userId, boardId])
   @@map("UserBoard")
 }
 
 model Board {
-  id          Int          @id @default(autoincrement())
-  name        String       @db.VarChar(40)
-  description String?      @db.VarChar(255)
-  posts       Post[]
-  status      Boolean      @default(false)
+  id          Int         @id @default(autoincrement())
+  name        String      @db.VarChar(40)
+  description String?     @db.VarChar(255)
   category    Category
+  status      Boolean     @default(false)
+  posts       Post[]
   userBoards  UserBoard[]
-  
+
   @@map("Boards")
 }
 
@@ -159,26 +166,38 @@ model Verification {
   id                     Int                     @id @default(autoincrement())
   user_id                Int
   userChallenge_id       Int
-  challengeType          ChallengeType
   verificationType       VerificationType        @map("type")
   photoUrl               String?                 @db.VarChar(255)
   title                  String?                 @db.VarChar(80)
   content                String?                 @db.VarChar(200)
   question               Boolean?
   textUrl                String?                 @db.VarChar(255)
-  verificationStatus     VerificationStatus      @map("status")
   created_at             DateTime?               @default(now())
   updated_at             DateTime?               @updatedAt
-  deadline               DateTime?               @db.DateTime(6)
   adoptionComplete       Boolean                 @default(false)
+  verificationStatus     VerificationStatus      @map("VerificationStatus")
+  likesCount             Int                     @default(0)
+  commentsCount          Int                     @default(0)
+  scrapsCount            Int                     @default(0)
   user                   User                    @relation(fields: [user_id], references: [id])
   userChallenge          UserChallenge           @relation(fields: [userChallenge_id], references: [id])
   comments               Comment[]
   temporaryVerifications TemporaryVerification[]
-  scrapTarget1           Scrap[]                 @relation("ScrapTarget1")
-  scrapTarget2           Scrap[]                 @relation("ScrapTarget2")
+  verificationLikes      VerificationLike[]
+  VerificationScrap      VerificationScrap[]
 
   @@map("Verifications")
+}
+
+model VerificationLike {
+  id              Int          @id @default(autoincrement())
+  user_id         Int
+  verification_id Int
+  user            User         @relation(fields: [user_id], references: [id])
+  verification    Verification @relation(fields: [verification_id], references: [id])
+
+  @@unique([user_id, verification_id])
+  @@map("VerificationLikes")
 }
 
 model KickOut {
@@ -203,14 +222,26 @@ model Follow {
   @@map("Follows")
 }
 
+model Block {
+  id         Int  @id @default(autoincrement())
+  blocker_id Int
+  blocked_id Int
+  created_at DateTime @default(now())
+
+  blocker User @relation("BlockerRelation", fields: [blocker_id], references: [id], onDelete: Cascade)
+  blocked User @relation("BlockedRelation", fields: [blocked_id], references: [id], onDelete: Cascade)
+
+  @@unique([blocker_id, blocked_id]) // 동일한 차단 관계가 중복되지 않도록 설정
+  @@map("Blocks")
+}
+
+
 model Badge {
   id            Int         @id @default(autoincrement())
   name          String?     @db.VarChar(50)
   icon          String?     @db.VarChar(255)
-  description   String?     @db.Text
-  type          BadgeType?
   obtainedCount Int?
-  profileImage  String?     @db.VarChar(255)
+  type          BadgeType?
   userBadges    UserBadge[]
   conditions    Condition[]
 
@@ -222,8 +253,8 @@ model UserBadge {
   user_id            Int
   badge_id           Int
   created_at         DateTime?            @default(now())
-  isObtained         Boolean
   updated_at         DateTime?            @updatedAt
+  isObtained         Boolean
   user               User                 @relation(fields: [user_id], references: [id])
   badge              Badge                @relation(fields: [badge_id], references: [id])
   userBadge1         User[]               @relation("Badge1")
@@ -233,7 +264,6 @@ model UserBadge {
 
   @@map("User_Badge")
 }
-
 
 model FavorType {
   id                Int                @id @default(autoincrement())
@@ -246,26 +276,23 @@ model UserCategoryType {
   user_id      Int
   category_id  Int
   favorType_id Int
+  category     Category
   user         User      @relation(fields: [user_id], references: [id])
-  category     Category  
   favorType    FavorType @relation(fields: [favorType_id], references: [id])
 
   @@id([id, user_id, category_id, favorType_id])
   @@map("User_CategoryType")
 }
 
-model Scrap {
-  id              Int           @id @default(autoincrement())
+model VerificationScrap {
+  id              Int          @id @default(autoincrement())
   user_id         Int
-  scrapTarget1_id Int
-  scrapTarget2_id Int
-  scrapType       ScrapType
-  created_at      DateTime?     @default(now())
-  user            User          @relation(fields: [user_id], references: [id])
-  scrapTarget1    Verification? @relation("ScrapTarget1", fields: [scrapTarget1_id], references: [id])
-  scrapTarget2    Verification? @relation("ScrapTarget2", fields: [scrapTarget2_id], references: [id])
+  verification_id Int
+  user            User         @relation(fields: [user_id], references: [id])
+  verification    Verification @relation(fields: [verification_id], references: [id])
 
-  @@map("Scraps")
+  @@unique([user_id, verification_id])
+  @@map("VerificationScraps")
 }
 
 model TemporaryVerification {
@@ -284,13 +311,14 @@ model TemporaryVerification {
 }
 
 model Challenge {
-  id                  Int                 @id @default(autoincrement())
+  id                  Int                @id @default(autoincrement())
   owner_id            Int
-  name                String?             @db.VarChar(40)
+  name                String?            @db.VarChar(40)
   type                ChallengeType
   description         String?             @db.VarChar(255)
   challengeImage      String              @db.VarChar(255)
   challengeStatus     ChallengeStatus     @map("status")
+  currentParticipants Int?
   maxParticipants     Int?
   verificationType    VerificationType
   rule                String?             @db.Text
@@ -298,9 +326,10 @@ model Challenge {
   endDate             DateTime?           @db.DateTime(6)
   created_at          DateTime?           @db.DateTime(6)
   updated_at          DateTime?           @db.DateTime(6)
-  duration            Duration
+  duration            Duration?
   category            Category
-  user                User                @relation(fields: [owner_id], references: [id])
+  likesCount          Int                @default(0)
+  user                User               @relation(fields: [owner_id], references: [id])
   challengeLikes      ChallengeLike[]
   frequencies         Frequency[]
   userChallenges      UserChallenge[]
@@ -310,36 +339,38 @@ model Challenge {
 }
 
 model Frequency {
-  id             Int           @id @default(autoincrement())
+  id             Int                         @id @default(autoincrement())
   challenge_id   Int
   frequencyType  FrequencyType
-  monday         Boolean       @default(false)
-  tuesday        Boolean       @default(false)
-  wednesday      Boolean       @default(false)
-  thursday       Boolean       @default(false)
-  friday         Boolean       @default(false)
-  saturday       Boolean       @default(false)
-  sunday         Boolean       @default(false)
+  frequencyValue FrequencyValue?
+  monday         Boolean?       @default(false)
+  tuesday        Boolean?       @default(false)
+  wednesday      Boolean?       @default(false)
+  thursday       Boolean?       @default(false)
+  friday         Boolean?       @default(false)
+  saturday       Boolean?       @default(false)
+  sunday         Boolean?       @default(false)
   challenge      Challenge     @relation(fields: [challenge_id], references: [id])
 
   @@map("Frequencies")
 }
 
 model UserChallenge {
-  id                  Int                 @id @default(autoincrement())
-  challenge_id        Int
-  user_id             Int
-  challengeStatus     ChallengeStatus
-  joinDate            DateTime?           @db.DateTime(6)
-  endDate             DateTime?           @db.DateTime(6)
-  verifyCount         Int?
-  unverifiedCount     Int?
-  status              Status              @default(active)
-  warn                Int                 @default(0)
-  challenge           Challenge           @relation(fields: [challenge_id], references: [id])
-  user                User                @relation(fields: [user_id], references: [id])
-  verification        Verification[]
-  kickOuts            KickOut[]
+  id              Int             @id @default(autoincrement())
+  challenge_id    Int
+  user_id         Int
+  challengeStatus ChallengeStatus
+  joinDate        DateTime?       @db.DateTime(6)
+  endDate         DateTime?       @db.DateTime(6)
+  verifyCount     Int?
+  unverifiedCount Int?
+  status          Status          @default(active)
+  warn            Int             @default(0)
+  owner           Boolean         @default(false)
+  challenge       Challenge       @relation(fields: [challenge_id], references: [id])
+  user            User            @relation(fields: [user_id], references: [id])
+  verification    Verification[]
+  kickOuts        KickOut[]
 
   @@map("User_Challenge")
 }
@@ -379,10 +410,10 @@ model Alarm {
   sender_id   Int?
   alarmType   AlarmType
   referenceId Int       @map("reference_id")
-  title       String    @db.VarChar(120)
   message     String?   @db.VarChar(255)
   isRead      Boolean?
   created_at  DateTime  @default(now())
+  title       String    @db.VarChar(120)
   user        User      @relation(fields: [user_id], references: [id])
   sender      Follow?   @relation("SenderAlarm", fields: [sender_id], references: [id])
 
@@ -413,26 +444,43 @@ model UserBadgeCondition {
 model EmailVerification {
   id               Int      @id @default(autoincrement())
   email            String   @unique
-  verificationCode String  
+  verificationCode String
   codeExpires      DateTime
-  verified         Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+  verified         Boolean  @default(false)
 }
 
 model UserAgreement {
-  id                  Int      @id @default(autoincrement())
-  user_id             Int
-  user                User     @relation(fields: [user_id], references: [id])
-  agree_all           Boolean  @default(false) @map("agreeAll")
-  terms_of_service    Boolean  @default(false) @map("termsOfService")
-  privacy_policy      Boolean  @default(false) @map("privacyPolicy")
-  third_party_provision Boolean @default(false) @map("thirdPartyProvision")
-  marketing_and_ads   Boolean  @default(false) @map("marketingAndAds")
-  created_at          DateTime @default(now())
-  updated_at          DateTime @updatedAt
+  id                    Int      @id @default(autoincrement())
+  user_id               Int
+  agree_all             Boolean  @default(false) @map("agreeAll")
+  terms_of_service      Boolean  @default(false) @map("termsOfService")
+  privacy_policy        Boolean  @default(false) @map("privacyPolicy")
+  third_party_provision Boolean  @default(false) @map("thirdPartyProvision")
+  marketing_and_ads     Boolean  @default(false) @map("marketingAndAds")
+  created_at            DateTime @default(now())
+  updated_at            DateTime @updatedAt
+  user                  User     @relation(fields: [user_id], references: [id])
 
   @@map("UserAgreements")
+}
+model LevelCondition {
+  id         Int         @id @default(autoincrement())
+  condition  String
+  level      Level
+  userLevels UserLevel[]
+
+  @@map("Level_Condition")
+}
+
+model UserLevel {
+  id               Int            @id @default(autoincrement())
+  userId           Int
+  levelConditionId Int
+  achieved         Boolean        @default(false)
+  user             User           @relation(fields: [userId], references: [id])
+  levelCondition   LevelCondition @relation(fields: [levelConditionId], references: [id])
 }
 
 enum AlarmType {
@@ -469,13 +517,8 @@ enum VerificationType {
 }
 
 enum VerificationStatus {
-  verified
-  unverified
-}
-
-enum ScrapType {
-  post
-  verification
+  certified
+  uncertified
 }
 
 enum ChallengeStatus {
@@ -495,6 +538,7 @@ enum Status {
 }
 
 enum Level {
+  general
   bronze
   silver
   gold
@@ -523,7 +567,6 @@ enum AgeGroup {
   fiftyUp @map("50s+")
 }
 
-
 enum BadgeType {
   category
   type
@@ -545,4 +588,13 @@ enum Duration {
   month_3
   month_6
   year_1
+}
+
+enum FrequencyValue {
+  everyday
+  week_2
+  week_3
+  week_5
+  weekdays
+  weekends
 }

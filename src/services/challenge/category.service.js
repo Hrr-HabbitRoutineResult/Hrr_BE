@@ -38,6 +38,7 @@ const getDailyHotChallenge = async () => {
                 },
               },
             },
+            frequencies: true, //인증 빈도 데이터 포함
           },
         });
         // 좋아요 개수 기준으로 정렬
@@ -57,6 +58,45 @@ const getDailyHotChallenge = async () => {
             where: { category: category },
           });
           top_challenge = fallback_challenge || { id: null, name: `기본 ${category} 챌린지`, category };
+        }
+        if (top_challenge) {
+          // 🔥 챌린지 인증 빈도 가져오기
+          let certification_frequency = null;
+          if (top_challenge.type === 'basic') {
+            certification_frequency =
+              top_challenge.frequencies.length > 0 ? top_challenge.frequencies[0].frequencyValue : null;
+          } else if (top_challenge.type === 'study') {
+            certification_frequency =
+              top_challenge.frequencies.length > 0
+                ? Object.entries(top_challenge.frequencies[0])
+                    .filter(
+                      ([key, value]) =>
+                        ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].includes(key) &&
+                        value === true,
+                    )
+                    .map(([key]) => key)
+                : [];
+          }
+          // 🔥 챌린지 기간 가져오기
+          let challenge_duration = null;
+          if (top_challenge.type === 'basic') {
+            challenge_duration = top_challenge.duration;
+          } else if (top_challenge.type === 'study') {
+            if (top_challenge.joinDate && top_challenge.endDate) {
+              const diffDays = Math.ceil((top_challenge.endDate - top_challenge.joinDate) / (1000 * 60 * 60 * 24));
+              if (diffDays <= 7) challenge_duration = '1주일';
+              else if (diffDays <= 14) challenge_duration = '2주일';
+              else if (diffDays <= 21) challenge_duration = '3주일';
+              else if (diffDays <= 31) challenge_duration = '1개월';
+              else if (diffDays <= 91) challenge_duration = '3개월';
+              else if (diffDays <= 181) challenge_duration = '6개월';
+              else challenge_duration = '1년';
+            }
+          }
+
+          // 챌린지에 인증 빈도와 기간 추가
+          top_challenge.certification_frequency = certification_frequency;
+          top_challenge.challenge_duration = challenge_duration;
         }
         return top_challenge;
       }),

@@ -35,10 +35,10 @@ const login = async (email, password) => {
 
 //sendVerficationEmail-api
 const sendVerificationEmail = async email => {
-  const user = await authRepository.findUserByEmail(email);
-  if (user) {
-    throw new authError.UserAlreadyExistsError('이미 가입된 이메일입니다.', { email });
-  }
+  // const user = await authRepository.findUserByEmail(email);
+  // if (user) {
+  //   throw new authError.UserAlreadyExistsError('이미 가입된 이메일입니다.', { email });
+  // }
 
   const verificationCode = generateVerificationCode();
   const email_verification = await authRepository.findEmailVerification(email);
@@ -70,14 +70,14 @@ const generateVerificationCode = () => {
 const register = async dto => {
   const { email, password, nickname, verification_id } = dto;
 
-  const verificated_email = await authRepository.findEmailVerificationById(verification_id);
-  if (!verificated_email) {
-    throw new authError.EmailVerificationError('인증되지 않은 이메일입니다.');
-  }
-
   const user = await authRepository.findUserByEmail(email);
   if (user) {
     throw new authError.UserAlreadyExistsError('이미 가입된 이메일입니다.', { email });
+  }
+
+  const verificated_email = await authRepository.findEmailVerificationById(verification_id);
+  if (!verificated_email) {
+    throw new authError.EmailVerificationError('인증되지 않은 이메일입니다.');
   }
 
   const email_verification = await authRepository.findEmailVerification(email);

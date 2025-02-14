@@ -80,13 +80,14 @@ const getChallengeList = async ({
   }
 
   // 정렬 조건 처리 -> 고정 상태가 인기순으로 변경
-  let orderBy = {};
-  if (sort === 'popular') {
-    orderBy = { challengeLikes: { _count: 'desc' } }; // 인기순 (좋아요 수 기준, 기본값)
+  let orderBy = { challengeLikes: { _count: 'desc' } };
+
+  if (sort === 'latest') {
+    orderBy = { created_at: 'desc' }; // 최신순
   } else if (sort === 'oldest') {
     orderBy = { created_at: 'asc' }; // 오래된 순
-  } else {
-    orderBy = { created_at: 'desc' }; // 최신순
+  } else if (sort === 'popular') {
+    orderBy = { challengeLikes: { _count: 'desc' } }; // 인기순 (좋아요 수 기준, 기본값)
   }
 
   const challenges = await listRepository.challengeList(filters, orderBy);

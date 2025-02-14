@@ -12,10 +12,6 @@ const emailVerificationCodeDto = body => {
   return { verification_code, email };
 };
 
-// generateTokensDto = (tokens) => {
-//   const a
-// }
-
 export default {
   registerDto,
   emailVerificationCodeDto,

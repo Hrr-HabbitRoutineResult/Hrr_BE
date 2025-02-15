@@ -526,13 +526,21 @@
         }
       }
     },
-    "/api/v1/users/badges/conditions": {
+    "/api/v1/users/badges/{badgeId}/conditions": {
       "get": {
         "summary": "배지 조건 조회 API",
         "description": "사용자가 획득한 배지 조건을 조회합니다.",
         "tags": ["User"],
         "security": [{ "bearerAuth": [] }],
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "badgeId",
+            "required": true,
+            "schema": { "type": "string", "example": "1" },
+            "description": "배지 ID"
+          }
+        ],
         "responses": {
           "200": {
             "description": "배지 조건 조회 성공",

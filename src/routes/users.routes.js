@@ -13,7 +13,7 @@ router.post('/:followedUserId/follow', authMiddleware, usersController.postUserF
 router.delete('/:unfollowedUserId/unfollow', authMiddleware, usersController.deleteUserFollow);
 router.get('/verification/scrap', authMiddleware, usersController.getUserVerificationScraps);
 router.get('/verification/likes', authMiddleware, usersController.getUserVerificationLikes);
-router.get('/badges/conditions', authMiddleware, usersController.getUserBadgesConditions);
+router.get('/badges/:badgeId/conditions', authMiddleware, usersController.getUserBadgesConditions);
 router.get('/level', authMiddleware, usersController.getUserLevel);
 router.post('/:userId/block', authMiddleware, usersController.blockUser);
 router.delete('/:userId/unblock', authMiddleware, usersController.unblockUser);

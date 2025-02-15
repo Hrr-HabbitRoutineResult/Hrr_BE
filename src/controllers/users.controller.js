@@ -110,8 +110,9 @@ const getUserVerificationLikes = async (req, res, next) => {
 
 const getUserBadgesConditions = async (req, res, next) => {
   try {
+    const badge_id = Number(req.params.badgeId);
     const user_id = req.user.id;
-    const badges_condition = await userService.getUserBadgesConditionById(user_id);
+    const badges_condition = await userService.getUserBadgesConditionById(user_id, badge_id);
 
     return res.success(badges_condition, StatusCodes.OK);
   } catch (error) {

@@ -445,7 +445,7 @@
         "parameters": [
           {
             "in": "path",
-            "name": "userId",
+            "name": "followedUserId",
             "required": true,
             "schema": { "type": "integer", "example": 123 },
             "description": "팔로우할 사용자의 ID"
@@ -485,7 +485,7 @@
         "parameters": [
           {
             "in": "path",
-            "name": "userId",
+            "name": "unfolllowedUserId",
             "required": true,
             "schema": { "type": "integer", "example": 123 },
             "description": "언팔로우할 사용자의 ID"

@@ -103,9 +103,18 @@ const register = async dto => {
   };
 
   const created_user = await authRepository.createUser(new_user);
-
+  const { access_token, refresh_token } = generateTokens({
+    email: created_user.email,
+    id: created_user.id,
+  });
   // 성공적으로 등록된 경우
-  return { created_user };
+  return {
+    id: created_user.id,
+    email: created_user.email,
+    nickname: created_user.nickname,
+    accessToken: access_token,
+    refreshToken: refresh_token,
+  };
 };
 
 //checkEmailVerificationCode-api

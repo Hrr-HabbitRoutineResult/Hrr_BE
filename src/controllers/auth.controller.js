@@ -17,12 +17,12 @@ export const emailLogin = async (req, res, next) => {
 
 export const refreshToken = (req, res) => {
   const refresh_token = req.body.refreshToken;
-
+  console.log(refresh_token)
   if (!refresh_token) {
     throw new authError.RefreshTokenMissingError('Refresh token required');
   }
   try {
-    const user = authService.verifyRefreshToken(refreshToken);
+    const user = authService.verifyRefreshToken(refresh_token);
     const { access_token } = authService.generateTokens({
       id: user.id,
       email: user.email,

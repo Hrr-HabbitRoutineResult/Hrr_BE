@@ -23,17 +23,17 @@ const textVerificationServiceToController = data => {
   return response_data;
 };
 
-const cameraVerificationServiceToRepositoryDto = (user_id, user_challenge_id, body) => {
-  if (!body?.photoUrl) throw new Error('photoUrl is required in body');
+const cameraVerificationServiceToRepositoryDto = (user_id, user_challenge_id, photo_url, body) => {
   if (!body?.title) throw new Error('title is required in body');
+
   return {
     user_id: user_id,
     userChallenge_id: user_challenge_id,
     title: body.title,
     content: body.content ?? null,
     textUrl: body.textUrl ?? null,
-    question: body.question ?? false,
-    photoUrl: body.photoUrl,
+    question: body.question === 'true',
+    photoUrl: photo_url,
     verificationType: 'camera',
     adoptionComplete: false,
     verificationStatus: 'certified',

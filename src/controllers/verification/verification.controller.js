@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import verificationService from '../../services/verification/verification.service.js';
 import verificationDto from '../../dtos/verification/verification.dto.js';
-
+import { uploadToS3 } from '../../utils/S3Uploader.js';
 const getChallengeVerificationStatus = async (req, res, next) => {
   try {
     const challenge_id = parseInt(req.params.challengeId, 10);
@@ -26,7 +26,13 @@ const cameraVerification = async (req, res, next) => {
   try {
     const user_id = req.user.id;
     const challenge_id = parseInt(req.params.challengeId, 10);
-    const completed_challenge = await verificationService.verifyWithCamera(user_id, challenge_id, req.body);
+    if (!req.file) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: '파일이 필요합니다.' });
+    }
+
+    // S3 업로드
+    const photo_url = await uploadToS3(req.file);
+    const completed_challenge = await verificationService.verifyWithCamera(user_id, challenge_id, photo_url, req.body);
 
     return res.success(completed_challenge, StatusCodes.OK);
   } catch (error) {

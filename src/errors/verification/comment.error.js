@@ -3,7 +3,7 @@ export class CommentContentEmtpyError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -13,7 +13,7 @@ export class CommentTypeError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -23,7 +23,7 @@ export class CommentIdError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -33,7 +33,7 @@ export class CommentContentEmptyError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -43,7 +43,7 @@ export class CommentUpdatePermissionDeniedError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 403;
+    this.statusCode = 403;
     this.data = data;
   }
 }
@@ -53,7 +53,7 @@ export class CommentNotExistsError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 403;
+    this.statusCode = 403;
     this.data = data;
   }
 }

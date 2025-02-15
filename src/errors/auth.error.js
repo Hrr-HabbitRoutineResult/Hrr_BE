@@ -3,7 +3,7 @@ export class UserNotExistError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -13,7 +13,7 @@ export class PasswordMismatchError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 401;
+    this.statusCode = 401;
     this.data = data;
   }
 }
@@ -23,7 +23,7 @@ export class TokenExpiredError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 403;
+    this.statusCode = 403;
     this.data = data;
   }
 }
@@ -33,7 +33,7 @@ export class RefreshTokenError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 403;
+    this.statusCode = 403;
     this.data = data;
   }
 }
@@ -43,7 +43,7 @@ export class AccessTokenError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 401;
+    this.statusCode = 401;
     this.data = data;
   }
 }
@@ -53,7 +53,7 @@ export class InvalidTokenError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 403;
+    this.statusCode = 403;
     this.data = data;
   }
 }
@@ -63,7 +63,7 @@ export class RefreshTokenMissingError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 401;
+    this.statusCode = 401;
     this.data = data;
   }
 }
@@ -73,7 +73,7 @@ export class UserAlreadyExistsError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -83,7 +83,7 @@ export class SendmailError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -93,7 +93,7 @@ export class DataBaseError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -103,7 +103,7 @@ export class EmailVerificationNotExistsError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -113,7 +113,7 @@ export class EmailVerificationExpiredError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -123,7 +123,7 @@ export class InvalidVerificationCodeError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -133,7 +133,7 @@ export class EmailVerificationError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }

@@ -41,8 +41,9 @@ app.use('/api/v1/verification', verificationRoutes);
 // ✅ 마지막으로 전역 오류 처리 미들웨어를 추가
 app.use((err, req, res, next) => {
   if (res.headersSent) return next(err);
+  console.log(err);
   logger.error(`Error occurred: ${err.message}`);
-  res.status(500).json({
+  res.status(err.statusCode).json({
     resultType: 'FAIL',
     error: { errorCode: 'internal_error', reason: err.message },
     success: null,

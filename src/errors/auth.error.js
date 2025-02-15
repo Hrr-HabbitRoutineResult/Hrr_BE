@@ -168,6 +168,16 @@ export class MissingKakaoTokenError extends Error {
   }
 }
 
+export class UserQuitError extends Error {
+  errorCode = 'A018';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 401;
+    this.data = data;
+  }
+}
+
 export default {
   UserNotExistError,
   PasswordMismatchError,
@@ -186,4 +196,5 @@ export default {
   MissingAuthorizationHeader,
   KakaoLoginError,
   MissingKakaoTokenError,
+  UserQuitError,
 };

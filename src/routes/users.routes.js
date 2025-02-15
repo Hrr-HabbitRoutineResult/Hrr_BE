@@ -21,6 +21,7 @@ router.delete('/:userId/unblock', authMiddleware, usersController.unblockUser);
 router.get('/blocked', authMiddleware, usersController.getBlockedList);
 router.get('/:userId/following', usersController.getFollowingList);
 router.get('/:userId/follower', usersController.getFollowerList);
+router.patch('/quit', authMiddleware, usersController.userQuit);
 router.get('/:userId', usersController.getUserById);
 
 export default router;

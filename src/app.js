@@ -13,7 +13,7 @@ import logger from './logger.js';
 dotenv.config();
 const app = express();
 
-// 공통 응답 헬퍼 함수 등록
+// ✅ 공통 응답 헬퍼 미들웨어를 가장 먼저 등록
 app.use((req, res, next) => {
   res.success = (success, status_code) => res.status(status_code).json({ resultType: 'SUCCESS', error: null, success });
 
@@ -22,20 +22,14 @@ app.use((req, res, next) => {
     return res.json({ resultType: 'FAIL', error: { errorCode, reason, data }, success: null });
   };
 
-  next();
+  next(); // ✅ 일반 요청 흐름을 유지
 });
 
-// 전역 오류 처리 미들웨어
-app.use((err, req, res, next) => {
-  if (res.headersSent) return next(err);
-  logger.error(`Error occurred: ${err.errorCode}, Reason: ${err.reason}`);
-  next(err);
-});
-
+// ✅ 그다음 일반 미들웨어들 추가
 app.use(morganMiddleware);
 app.use(express.json());
 
-// API 라우트 설정
+// ✅ API 라우트 등록
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/challenge', challengeRoutes);
@@ -43,5 +37,16 @@ app.use('/api/v1/message', messageRoutes);
 app.use('/api/v1/board', boardRoutes);
 app.use('/api/v1/post', postRoutes);
 app.use('/api/v1/verification', verificationRoutes);
+
+// ✅ 마지막으로 전역 오류 처리 미들웨어를 추가
+app.use((err, req, res, next) => {
+  if (res.headersSent) return next(err);
+  logger.error(`Error occurred: ${err.message}`);
+  res.status(500).json({
+    resultType: 'FAIL',
+    error: { errorCode: 'internal_error', reason: err.message },
+    success: null,
+  });
+});
 
 export default app;

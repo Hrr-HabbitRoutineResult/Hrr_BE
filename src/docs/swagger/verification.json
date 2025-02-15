@@ -219,15 +219,15 @@
           "required": true,
           "description": "사진 인증 등록 데이터",
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "photoUrl": { "type": "string", "example": "https://example.com/photo.jpg" },
+                  "photo": { "type": "string", "format": "binary" },
                   "title": { "type": "string", "example": "1일차 챌린지 인증" },
                   "content": { "type": "string", "example": "This is a sample verification content." },
                   "textUrl": { "type": "string", "example": "https://example.com/text" },
-                  "question": { "type": "boolean", "example": true }
+                  "question": { "type": "boolean", "example": 1 }
                 }
               }
             }
@@ -253,7 +253,10 @@
                             "verificationId": { "type": "integer", "example": 1 },
                             "verificationType": { "type": "string", "example": "camera" },
                             "title": { "type": "string", "example": "1일차 챌린지 인증" },
-                            "photoUrl": { "type": "string", "example": "https://example.com/photo.jpg" }
+                            "photoUrl": {
+                              "type": "string",
+                              "example": "https://s3.amazonaws.com/example-bucket/uploads/image.jpg"
+                            }
                           }
                         }
                       }

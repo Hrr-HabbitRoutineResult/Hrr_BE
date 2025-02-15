@@ -3,7 +3,7 @@ export class DataBaseError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -13,7 +13,7 @@ export class DataBaseNotExistError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }

@@ -3,7 +3,7 @@ export class BadgeNotExistError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 404;
+    this.statusCode = 404;
     this.data = data;
   }
 }
@@ -23,7 +23,7 @@ export class DataBaseError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -33,7 +33,7 @@ export class UserNotExistError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 404;
+    this.statusCode = 404;
     this.data = data;
   }
 }
@@ -43,7 +43,7 @@ export class FollowedUserError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 409;
+    this.statusCode = 409;
     this.data = data;
   }
 }
@@ -53,7 +53,7 @@ export class NotFollowingUserError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 404;
+    this.statusCode = 404;
     this.data = data;
   }
 }
@@ -63,7 +63,7 @@ export class UserAlreadyBlockedError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }

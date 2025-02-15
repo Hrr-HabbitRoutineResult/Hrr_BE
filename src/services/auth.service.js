@@ -30,7 +30,6 @@ const login = async (email, password) => {
   if (user.password !== password) {
     throw new authError.PasswordMismatchError('비밀번호가 일치하지 않습니다.', { password });
   }
-  console.log(user);
   if (user.isDeleted) {
     throw new authError.UserQuitError('이미 탈퇴한 유저입니다.');
   }
@@ -104,9 +103,18 @@ const register = async dto => {
   };
 
   const created_user = await authRepository.createUser(new_user);
-
+  const { access_token, refresh_token } = generateTokens({
+    email: created_user.email,
+    id: created_user.id,
+  });
   // 성공적으로 등록된 경우
-  return { created_user };
+  return {
+    id: created_user.id,
+    email: created_user.email,
+    nickname: created_user.nickname,
+    accessToken: access_token,
+    refreshToken: refresh_token,
+  };
 };
 
 //checkEmailVerificationCode-api

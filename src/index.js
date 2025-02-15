@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 app.get('/error/html', (req, res) => {
   // 현재 날짜 가져오기
   const today = new Date().toISOString().split('T')[0];
-  const logFilePath = path.join(__dirname, '..', 'logs', `${today}.exception.log`);
+  const logFilePath = path.join(__dirname, '..', 'logs/error', `${today}.error.log`);
 
   fs.readFile(logFilePath, 'utf8', (err, data) => {
     if (err) {

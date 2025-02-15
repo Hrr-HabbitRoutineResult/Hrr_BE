@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import verificationService from '../../services/verification/verification.service.js';
 import verificationDto from '../../dtos/verification/verification.dto.js';
-import { uploadToS3 } from '../../utils/S3Uploader.js';
+import { uploadToS3 } from '../../utils/s3Uploader.js';
 const getChallengeVerificationStatus = async (req, res, next) => {
   try {
     const challenge_id = parseInt(req.params.challengeId, 10);

@@ -81,6 +81,88 @@
           }
         }
       }
+    },
+    "/api/v1/challenge/{challengeId}/like": {
+      "post": {
+        "summary": "특정 챌린지 좋아요 추가 API",
+        "description": "특정 챌린지 인증에 좋아요를 추가하는 API입니다.",
+        "tags": ["Challenge"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "challengeId",
+            "required": true,
+            "schema": { "type": "string", "example": "456" },
+            "description": "인증 ID"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "좋아요 추가 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "object",
+                      "properties": {
+                        "challengeId": { "type": "integer", "example": 101 },
+                        "userId": { "type": "integer", "example": 1 },
+                        "likesCount": { "type": "integer", "example": 3 }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/challenge/{challengeId}/unlike": {
+      "delete": {
+        "summary": "특정 챌린지 좋아요 취소 API",
+        "description": "특정 챌린지에 추가된 좋아요를 취소하는 API입니다.",
+        "tags": ["Challenge"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "verificationId",
+            "required": true,
+            "schema": { "type": "string", "example": "456" },
+            "description": "챌린지 ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "좋아요 취소 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "object",
+                      "properties": {
+                        "verificationId": { "type": "integer", "example": 101 },
+                        "userId": { "type": "integer", "example": 1 },
+                        "likesCount": { "type": "integer", "example": 2 }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

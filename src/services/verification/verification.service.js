@@ -6,7 +6,7 @@ import participationRepository from '../../repositories/challenge/participation.
 import verificationDto from '../../dtos/verification/verification.dto.js';
 import commentRepository from '../../repositories/verification/comment.repository.js';
 
-const verifyWithCamera = async (user_id, challenge_id, body) => {
+const verifyWithCamera = async (user_id, challenge_id, photo_url, body) => {
   const challenge = await listRepository.getChallengeDetailById(challenge_id);
   if (!challenge) {
     throw new listError.ChallengeIdNotExistsError('해당 챌린지를 찾을 수 없습니다.');
@@ -15,7 +15,7 @@ const verifyWithCamera = async (user_id, challenge_id, body) => {
   if (!user_challenge) {
     throw new listError.ChallengeIdNotExistsError('해당 챌린지를 찾을 수 없습니다.');
   }
-  const data = verificationDto.cameraVerificationServiceToRepositoryDto(user_id, user_challenge.id, body);
+  const data = verificationDto.cameraVerificationServiceToRepositoryDto(user_id, user_challenge.id, photo_url, body);
   if (challenge.verificationType != 'camera') {
     throw new verificationError.VerificationTypeDoesntMatchError('챌린지가 카메라 인증 타입이 아닙니다.');
   }

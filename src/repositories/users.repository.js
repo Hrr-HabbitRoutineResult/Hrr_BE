@@ -481,7 +481,6 @@ const getBlockedList = async user_id => {
     });
     return blocked_list;
   } catch (error) {
-    console.log(error);
     throw new databaseError.DataBaseError('Error fetching blocked list');
   }
 };

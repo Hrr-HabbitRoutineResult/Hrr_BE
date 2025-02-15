@@ -283,12 +283,13 @@ const userUnfollows = async (unfollower_user_id, unfollowed_user_id) => {
   ]);
 };
 
-const findUserBadgesCondition = async user_id => {
+const findUserBadgesCondition = async (user_id, badge_id) => {
   try {
     return await prisma.userBadgeCondition.findMany({
       where: {
         userBadge: {
           user_id: user_id,
+          badge_id: badge_id,
         },
       },
       select: {

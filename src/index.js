@@ -1,53 +1,47 @@
-import express from 'express';
 import dotenv from 'dotenv';
 import logger from './logger.js';
-import morganMiddleware from './middlewares/morganMiddleware.js';
-import swaggerAutogen from 'swagger-autogen';
-import swaggerUiExpress from 'swagger-ui-express';
 import app from './app.js';
+import cronjobs from './utils/cronjobs.util.js';
+import swaggerUiExpress from 'swagger-ui-express';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 dotenv.config();
+const port = process.env.PORT;
 
-const port = 3000;
-app.use(
-  '/docs',
-  swaggerUiExpress.serve,
-  swaggerUiExpress.setup(
-    {},
-    {
-      swaggerOptions: {
-        url: '/openapi.json',
-      },
-    },
-  ),
-);
+// 현재 파일의 경로 가져오기
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-app.get('/openapi.json', async (req, res, next) => {
-  // #swagger.ignore = true
-  const options = {
-    openapi: '3.0.0',
-    disableLogs: true,
-    writeOutputFile: false,
-  };
-  const outputFile = '/dev/null'; // 파일 출력은 사용하지 않습니다.
-  const routes = ['./src/index.js', './src/app.js'];
-  const doc = {
-    info: {
-      title: 'UMC 7th',
-      description: 'UMC 7th Node.js 테스트 프로젝트입니다.',
-    },
-    host: 'localhost:3000',
-  };
+// Swagger JSON 불러오기
+const swaggerPath = path.join(__dirname, 'docs', 'swagger.json');
+const swaggerDocument = JSON.parse(fs.readFileSync(swaggerPath, 'utf8'));
 
-  const result = await swaggerAutogen(options)(outputFile, routes, doc);
-  res.json(result ? result.data : null);
-});
+// Swagger UI 설정
+app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(swaggerDocument));
 
-app.use(morganMiddleware);
-
+// 기본 엔드포인트
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+app.get('/error/html', (req, res) => {
+  // 현재 날짜 가져오기
+  const today = new Date().toISOString().split('T')[0];
+  const logFilePath = path.join(__dirname, '..', 'logs', `${today}.exception.log`);
+
+  fs.readFile(logFilePath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(404).send('<h1>해당 날짜의 로그 파일을 찾을 수 없습니다.</h1>');
+    }
+
+    res.send(`<pre>${data}</pre>`);
+  });
+});
+
+// 서버 실행
 app.listen(port, () => {
-  logger.info('Server listening on port 3000');
+  logger.info(`🚀 Server listening on port ${port}`);
+  cronjobs.startCronJobs();
 });

@@ -3,7 +3,7 @@ import usersController from '../controllers/users.controller.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
 const router = express.Router();
 
-router.put('/:userId/interests', usersController.putUserInterests);
+router.put('/interests/category', authMiddleware, usersController.putUserInterests);
 router.put('/me', authMiddleware, usersController.putMe);
 router.get('/:userId/challenges/ongoing', usersController.getUserChallengesOngoing);
 router.get('/:userId/challenges/completed', usersController.getUserChallengesCompleted);

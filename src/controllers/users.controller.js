@@ -2,7 +2,18 @@ import { StatusCodes } from 'http-status-codes';
 import userService from '../services/users.service.js';
 import userDto from '../dtos/user.dto.js';
 
-const putUserInterests = () => {};
+const putUserInterests = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const interests_category = await userService.putUserInterestCategoryById(
+      user_id,
+      userDto.putUserInterestRequestDto(req.body),
+    );
+    return res.success(interests_category, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
 const getUserById = async (req, res, next) => {
   try {
     const user_id = Number(req.params.userId);

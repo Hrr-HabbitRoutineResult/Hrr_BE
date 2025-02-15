@@ -1,6 +1,6 @@
 import { prisma } from '../../db.config.js';
 import databaseError from '../../errors/database.error.js';
-import likeError from '../../errors/challenge/like.error.js';
+import likeError from '../../errors/verification/like.error.js';
 
 const likeChallenge = async (user_id, challenge_id) => {
   try {

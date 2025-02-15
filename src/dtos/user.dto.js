@@ -1,3 +1,20 @@
+const putUserInterestResponseDto = updated_data => {
+  const interest_info = updated_data.map(interest => ({
+    challenge_id: interest.id,
+    name: interest.name,
+    description: interest.description,
+    challengeImage: interest.challengeImage,
+    type: interest.type,
+  }));
+  return interest_info;
+};
+
+const putUserInterestRequestDto = body => {
+  return {
+    category: body.category,
+  };
+};
+
 const serviceToControllerDto = (user, user_badge_1, user_badge_2, user_badge_3) => {
   const response_data = {
     id: user.id,
@@ -145,6 +162,8 @@ const getBlockedListDto = blocked_list => {
 };
 
 export default {
+  putUserInterestResponseDto,
+  putUserInterestRequestDto,
   serviceToControllerDto,
   updateUserInfoResponseDto,
   updateUserInfoRequestDto,

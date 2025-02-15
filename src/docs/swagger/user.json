@@ -1,46 +1,40 @@
 {
   "paths": {
-    "/api/v1/users/interests": {
+    "/api/v1/users/interests/category": {
       "put": {
-        "summary": "사용자 관심사 수정 API",
-        "description": "사용자가 자신의 관심사를 수정하는 API입니다.",
+        "summary": "사용자 관심사 추가 API",
+        "description": "사용자가 자신의 관심사를 추가하는 API입니다.",
         "tags": ["User"],
         "security": [{ "bearerAuth": [] }],
         "parameters": [],
         "requestBody": {
           "required": true,
-          "description": "관심사 수정 요청 정보",
+          "description": "사용자 관심사 정보 추가 요청",
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "resultType": { "type": "string", "example": "SUCCESS" },
-                  "error": { "type": "object", "nullable": true, "example": null },
-                  "success": {
-                    "type": "object",
-                    "properties": {
-                      "interests": {
-                        "type": "array",
-                        "items": { "type": "string", "example": "운동" }
-                      }
-                    }
-                  }
+                  "category": { "type": "string", "example": "exercise" }
                 },
-                "required": ["interests"]
+                "required": ["category"]
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "사용자 관심사 수정 성공",
+            "description": "사용자 관심사 추가 성공",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": { "type": "string", "example": "관심사가 성공적으로 수정되었습니다." }
+                    "challenge_id": { "type": "integer", "example": 1 },
+                    "name": { "type": "string", "example": "조잘조잘" },
+                    "challengeImage": { "type": "string", "example": "https://challengeImage.png" },
+                    "description": { "type": "string", "example": "작은 행동이라도 실천하기" },
+                    "type": { "type": "string", "example": "basic" }
                   }
                 }
               }

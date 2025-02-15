@@ -17,7 +17,6 @@ const scrapChallenge = async (user_id, challenge_id) => {
       }),
     ]);
   } catch (error) {
-    console.log(error);
     throw new databaseError.DataBaseError('Database error occurred while scrapping challenge');
   }
 };
@@ -58,7 +57,6 @@ const checkChallengeScraped = async (user_id, challenge_id) => {
     });
     return !!challenge_scraped; // 값이 있으면 true, 없으면 false
   } catch (error) {
-    console.log(error);
     throw new databaseError.DataBaseError('Database error occurred while scrapping challenge');
   }
 };

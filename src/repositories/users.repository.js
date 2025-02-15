@@ -250,7 +250,6 @@ const createUserFollows = async (follower_user_id, followed_user_id) => {
         throw new userError.UserNotExistError('해당 사용자를 찾을 수 없습니다.');
       }
     }
-
     throw new userError.DataBaseError('Database error occurred while following user');
   }
 };
@@ -395,6 +394,7 @@ const getFollowerList = async user_id => {
             id: true,
             nickname: true,
             profilePhoto: true,
+            level: true,
           },
         },
       },
@@ -417,6 +417,7 @@ const getFollowingList = async user_id => {
             id: true,
             nickname: true,
             profilePhoto: true,
+            level: true,
           },
         },
       },

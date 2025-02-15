@@ -283,19 +283,15 @@ model UserBadge {
 model FavorType {
   id                Int                @id @default(autoincrement())
   name              String?            @db.VarChar(40)
-  userCategoryTypes UserCategoryType[]
 }
 
 model UserCategoryType {
   id           Int
   user_id      Int
-  category_id  Int
-  favorType_id Int
-  category     Category
+  category     Category?
   user         User      @relation(fields: [user_id], references: [id])
-  favorType    FavorType @relation(fields: [favorType_id], references: [id])
 
-  @@id([id, user_id, category_id, favorType_id])
+  @@id([id, user_id])
   @@map("User_CategoryType")
 }
 
@@ -403,21 +399,13 @@ model ChallengeKeyword {
   @@map("Challenge_Keyword")
 }
 
-model Goal {
-  id        Int        @id @default(autoincrement())
-  name      Name
-  userGoals UserGoal[]
-
-  @@map("Goals")
-}
-
 model UserGoal {
+  id      Int  @id @default(autoincrement())
   user_id Int
-  goal_id Int
+  category Category?
+  goal    Goal?
   user    User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  goal    Goal @relation(fields: [goal_id], references: [id], onDelete: Cascade)
 
-  @@id([user_id, goal_id])
   @@map("User_Goal")
 }
 
@@ -508,19 +496,6 @@ enum AlarmType {
   kickOut
   newVerification
   deadline
-}
-
-enum Name {
-  health
-  diet
-  foodControl
-  smallGoal
-  studyTogether
-  makeHabit
-  studyRoutine
-  buildCapacity
-  escape_3
-  qualification
 }
 
 enum ChallengeType {
@@ -614,4 +589,17 @@ enum FrequencyValue {
   week_5
   weekdays
   weekends
+}
+
+enum Goal {
+  건강
+  다이어트
+  식단조절
+  소소한목표달성
+  여럿이공부하기
+  습관형성
+  공부루틴형성
+  역량강화
+  작심삼일탈출
+  자격증취득
 }

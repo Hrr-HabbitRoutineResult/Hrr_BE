@@ -680,7 +680,8 @@
                             "properties": {
                               "id": { "type": "integer", "example": 3 },
                               "nickname": { "type": "string", "example": "박흐르" },
-                              "profilePhoto": { "type": "string", "example": "photo2@example.com" }
+                              "profilePhoto": { "type": "string", "example": "photo2@example.com" },
+                              "level": { "type": "string", "example": "bronze" }
                             }
                           }
                         }
@@ -752,7 +753,8 @@
                             "properties": {
                               "id": { "type": "integer", "example": 3 },
                               "nickname": { "type": "string", "example": "박흐르" },
-                              "profilePhoto": { "type": "string", "example": "photo2@example.com" }
+                              "profilePhoto": { "type": "string", "example": "photo2@example.com" },
+                              "level": { "type": "string", "example": "bronze" }
                             }
                           }
                         }

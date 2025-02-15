@@ -95,13 +95,13 @@ const createUser = async new_user => {
     const created_user = await prisma.user.create({
       data: new_user,
     });
-    return { id: created_user.id, email: created_user.email, nickname: created_user.nickname };
+    return created_user;
   } catch (error) {
     throw new authError.DataBaseError('Error on creating email verification');
   }
 };
 
-//register-appi
+//register-api
 const findEmailVerificationById = async id => {
   const email_verification = await prisma.emailVerification.findUnique({
     where: { id },

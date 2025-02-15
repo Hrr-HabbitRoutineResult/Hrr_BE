@@ -200,6 +200,27 @@ const findUserCategoryBadges = async user_id => {
   }
 };
 
+const findUserLatestBadge = async user_id => {
+  try {
+    return prisma.userBadge.findFirst({
+      where: { user_id },
+      orderBy: { created_at: 'desc' },
+      select: {
+        badge: {
+          select: {
+            id: true,
+            name: true,
+            icon: true,
+            type: true,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    throw new databaseError.DataBaseError('DataBase Error on retrieving latest badge information');
+  }
+};
+
 const createUserFollows = async (follower_user_id, followed_user_id) => {
   try {
     return await prisma.$transaction([
@@ -465,6 +486,24 @@ const getBlockedList = async user_id => {
     throw new databaseError.DataBaseError('Error fetching blocked list');
   }
 };
+const userQuit = async user_id => {
+  try {
+    return await prisma.user.update({
+      where: { id: user_id },
+      data: {
+        isDeleted: true, // 회원 탈퇴 처리
+        deletedAt: new Date(), // 현재 시간 기록
+      },
+      select: {
+        id: true,
+        isDeleted: true,
+        deletedAt: true,
+      },
+    });
+  } catch (error) {
+    throw new databaseError.DataBaseError(`Error during user quit: ${error.message}`);
+  }
+};
 
 export default {
   updateUserInfo,
@@ -472,6 +511,7 @@ export default {
   findCompletedChallenges,
   findUserTypeBadges,
   findUserCategoryBadges,
+  findUserLatestBadge,
   findUserChallengeHistory,
   findUserVerificationHistory,
   createUserFollows,
@@ -486,4 +526,5 @@ export default {
   createBlock,
   deleteBlock,
   getBlockedList,
+  userQuit,
 };

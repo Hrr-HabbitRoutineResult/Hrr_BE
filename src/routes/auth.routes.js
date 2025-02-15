@@ -19,4 +19,5 @@ router.post('/check-nickname', authController.checkNickname);
 
 // Refresh Token Route
 router.post('/token', authController.refreshToken);
+
 export default router;

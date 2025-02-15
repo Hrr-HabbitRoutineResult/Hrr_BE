@@ -58,6 +58,15 @@ const getUserBadges = async (req, res, next) => {
     next(error);
   }
 };
+const getUserBadgesLately = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const badge_lately = await userService.getUserLatestBadgeById(user_id);
+    return res.success(badge_lately, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
 const postUserFollow = async (req, res, next) => {
   try {
     const followed_user_id = req.params.followedUserId;
@@ -179,6 +188,17 @@ const getBlockedList = async (req, res, next) => {
   }
 };
 
+const userQuit = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const response = await userService.userQuit(user_id);
+
+    return res.success(response, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   putUserInterests,
   getUserById,
@@ -187,6 +207,7 @@ export default {
   getUserChallengesCompleted,
   getUserChallengesHistory,
   getUserBadges,
+  getUserBadgesLately,
   postUserFollow,
   deleteUserFollow,
   getUserVerificationScraps,
@@ -198,4 +219,5 @@ export default {
   getFollowerList,
   getFollowingList,
   getBlockedList,
+  userQuit,
 };

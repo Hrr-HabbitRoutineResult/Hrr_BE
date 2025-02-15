@@ -85,6 +85,16 @@ const getUserBadgesById = async user_id => {
   return response_data;
 };
 
+const getUserLatestBadgeById = async user_id => {
+  const badge = await userRepository.findUserLatestBadge(user_id);
+  const response_data = userDto.userLatestBadgeDto(badge);
+  if (!response_data) {
+    return null;
+  }
+
+  return response_data;
+};
+
 const postUserFollowById = async (user_id, followed_user_id) => {
   if (user_id === followed_user_id) {
     throw new userError.CannotFollowSelfError('자기 자신은 팔로우할 수 없습니다.');
@@ -171,6 +181,11 @@ const getBlockedList = async user_id => {
   return { blockedList: response };
 };
 
+const userQuit = async user_id => {
+  const response = await userRepository.userQuit(user_id);
+  return response;
+};
+
 export default {
   getUserInfoById,
   updateUserInfobyEmail,
@@ -178,6 +193,7 @@ export default {
   getCompletedChallenge,
   getUserChallengeHistory,
   getUserBadgesById,
+  getUserLatestBadgeById,
   postUserFollowById,
   deleteUserFollowById,
   getUserBadgesConditionById,
@@ -189,4 +205,5 @@ export default {
   blockUser,
   unblockUser,
   getBlockedList,
+  userQuit,
 };

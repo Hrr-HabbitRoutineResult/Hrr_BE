@@ -23,7 +23,7 @@ export class TokenExpiredError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statusCode = 403;
+    this.statusCode = 401;
     this.data = data;
   }
 }

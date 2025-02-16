@@ -4,6 +4,28 @@ import authError from '../errors/auth.error.js';
 import userError from '../errors/users.error.js';
 import databaseError from '../errors/database.error.js';
 
+const putUserInterestCategory = async (user_id, update_data) => {
+  try {
+    // 사용자의 관심 카테고리 저장
+    const updated_user = await prisma.userCategoryType.upsert({
+      where: { user_id },
+      update: { category: update_data.category },
+      create: { user_id, category: update_data.category },
+    });
+
+    // 해당 카테고리와 같은 타입의 챌린지 중 랜덤으로 9개 가져오기
+    const challenges = await prisma.challenge.findMany({
+      where: { category: update_data.category },
+    });
+
+    const random_challenges = challenges.sort(() => Math.random() - 0.5).slice(0, 9);
+
+    return random_challenges;
+  } catch (error) {
+    throw new databaseError.DataBaseError('Error on updating user Interest');
+  }
+};
+
 const updateUserInfo = async (email, update_data) => {
   try {
     const updated_user = await prisma.user.update({
@@ -506,6 +528,7 @@ const userQuit = async user_id => {
 };
 
 export default {
+  putUserInterestCategory,
   updateUserInfo,
   findOngoingChallenges,
   findCompletedChallenges,

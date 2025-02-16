@@ -286,12 +286,11 @@ model FavorType {
 }
 
 model UserCategoryType {
-  id           Int
-  user_id      Int
-  category     Category?
-  user         User      @relation(fields: [user_id], references: [id])
+  id       Int    @id @default(autoincrement())
+  user_id  Int    @unique
+  category Category?
+  user     User   @relation(fields: [user_id], references: [id])
 
-  @@id([id, user_id])
   @@map("User_CategoryType")
 }
 
@@ -401,7 +400,7 @@ model ChallengeKeyword {
 
 model UserGoal {
   id      Int  @id @default(autoincrement())
-  user_id Int
+  user_id Int  @unique
   category Category?
   goal    Goal?
   user    User @relation(fields: [user_id], references: [id], onDelete: Cascade)

@@ -4,6 +4,18 @@ import authRepository from '../repositories/auth.repository.js';
 import badgeRepository from '../repositories/badge.repository.js';
 import userError from '../errors/users.error.js';
 import { Prisma } from '@prisma/client';
+import databaseError from '../errors/database.error.js';
+
+const putUserInterestCategoryById = async (user_id, update_data) => {
+  try {
+    const updated_data = await userRepository.putUserInterestCategory(user_id, update_data);
+    const response_data = userDto.putUserInterestResponseDto(updated_data);
+
+    return response_data;
+  } catch (error) {
+    throw new databaseError.DataBaseError('DataBase Error on updating user interest');
+  }
+};
 
 const getUserInfoById = async user_id => {
   //유저 인포 가져오기
@@ -187,6 +199,7 @@ const userQuit = async user_id => {
 };
 
 export default {
+  putUserInterestCategoryById,
   getUserInfoById,
   updateUserInfobyEmail,
   getOngoingChallenge,

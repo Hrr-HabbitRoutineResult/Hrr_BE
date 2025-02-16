@@ -13,7 +13,7 @@ export class PasswordMismatchError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statusCode = 401;
+    this.statusCode = 400;
     this.data = data;
   }
 }

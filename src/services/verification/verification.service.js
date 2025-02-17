@@ -61,9 +61,40 @@ const getChallengeVerifications = async challenge_id => {
   return status;
 };
 
+const getWeeklyVerification = async (challengeId, userId) => {
+  const now = new Date();
+  now.setUTCHours(now.getUTCHours() + 9); // KST 변환
+
+  // 이번 주 월요일 00:00:00 (KST 기준)
+  const startOfWeek = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - now.getUTCDay() + 1, 0, 0, 0),
+  );
+
+  // 이번 주 일요일 23:59:59 (KST 기준)
+  const endOfWeek = new Date(
+    Date.UTC(startOfWeek.getUTCFullYear(), startOfWeek.getUTCMonth(), startOfWeek.getUTCDate() + 6, 23, 59, 59, 999),
+  );
+
+  // 인증 내역 가져오기
+  const verifications = await verificationRepository.getWeeklyVerification(challengeId, userId, startOfWeek, endOfWeek);
+
+  //UTC → KST 변환 후 정확한 요일 계산 (getDay() → getUTCDay() 수정)
+  const checkedDays = verifications.map(verification => {
+    const createdAtUTC = new Date(verification.created_at);
+    const createdAtKST = new Date(createdAtUTC.getTime() - 9 * 60 * 60 * 1000); // UTC → KST 변환
+    return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][createdAtKST.getUTCDay()];
+  });
+  return {
+    challengeId,
+    userId,
+    checkedDays: [...new Set(checkedDays)], // 중복 제거
+  };
+};
+
 export default {
   verifyWithCamera,
   verifyWithText,
   getSpecificVerification,
   getChallengeVerifications,
+  getWeeklyVerification,
 };

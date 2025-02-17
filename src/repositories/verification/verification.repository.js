@@ -1,5 +1,6 @@
 import { prisma } from '../../db.config.js';
 import databaseError from '../../errors/database.error.js';
+import verificationError from '../../errors/verification/verification.error.js';
 
 const verifyWithCamera = async dto => {
   try {
@@ -89,10 +90,32 @@ const findChallengeVerificationCounts = async challenge_id => {
   }
 };
 
+const getWeeklyVerification = async (challengeId, userId, startOfWeek, endOfWeek) => {
+  try {
+    return await prisma.verification.findMany({
+      where: {
+        userChallenge: { challenge_id: parseInt(challengeId, 10) },
+        user_id: parseInt(userId, 10),
+        verificationStatus: 'certified',
+        created_at: {
+          gte: startOfWeek,
+          lte: endOfWeek,
+        },
+      },
+      select: {
+        created_at: true,
+      },
+    });
+  } catch (error) {
+    throw new verificationError.VerificationNotExistsError('Error retrieving weekly verification records');
+  }
+};
+
 export default {
   verifyWithCamera,
   verifyWithText,
   getSpecificVerification,
   findChallengeVerificationCurrentParticipants,
   findChallengeVerificationCounts,
+  getWeeklyVerification,
 };

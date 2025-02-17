@@ -12,7 +12,16 @@ const getChallengeVerificationStatus = async (req, res, next) => {
     next(error);
   }
 };
-const getWeeklyVerification = () => {};
+const getWeeklyVerification = async (req, res, next) => {
+  try {
+    const { challengeId } = req.params;
+    const userId = req.user.id; // 토큰에서 유저 ID 추출
+    const result = await verificationService.getWeeklyVerification(challengeId, userId);
+    return res.success(result, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
 const getSpecificVerification = async (req, res, next) => {
   try {
     const verification_id = parseInt(req.params.verificationId, 10);

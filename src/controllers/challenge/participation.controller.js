@@ -55,7 +55,18 @@ const getChallengerList = async (req, res, next) => {
   }
 };
 const kickChallenger = () => {};
-const getChallengeCalendar = () => {};
+const getChallengeCalendar = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const challengeId = parseInt(req.params.challengeId, 10);
+
+    const response = await participationService.getChallengeCalendar(userId, challengeId);
+
+    return res.success(response, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export default {
   getUserChallengeVerification,

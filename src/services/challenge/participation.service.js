@@ -117,10 +117,39 @@ const getUserChallengeVerificationbyId = async (user_id, challenge_id) => {
   return [user_info, verification_info, challenge_verification_list];
 };
 
+const getChallengeCalendar = async (userId, challengeId) => {
+  // 현재 날짜 기준으로 월별 조회
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+
+  // 해당 월의 1일 00:00:00 ~ 말일 23:59:59 계산
+  const startDate = new Date(year, month, 1, 0, 0, 0);
+  const endDate = new Date(year, month + 1, 0, 23, 59, 59, 999);
+
+  // 인증된 날짜 조회
+  const verifications = await participationRepository.getChallengeCalendar(userId, challengeId, startDate, endDate);
+
+  // 날짜 포맷 변환 (YYYY-MM-DD)
+  const verificationSummary = verifications.map(verification => ({
+    date: verification.created_at.toISOString().split('T')[0],
+    status: 'verified',
+  }));
+
+  return {
+    challengeId,
+    year,
+    month: month + 1,
+    userId,
+    verificationSummary,
+  };
+};
+
 export default {
   joinChallenge,
   increaseChallengeLike,
   decreaseChallengeLike,
   getChallengerList,
   getUserChallengeVerificationbyId,
+  getChallengeCalendar,
 };

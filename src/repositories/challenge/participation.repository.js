@@ -183,6 +183,27 @@ const findUserChallengeProgress = async challenge_id => {
   }
 };
 
+const getChallengeCalendar = async (userId, challengeId, startDate, endDate) => {
+  try {
+    return await prisma.verification.findMany({
+      where: {
+        user_id: userId,
+        userChallenge: { challenge_id: challengeId },
+        verificationStatus: 'certified',
+        created_at: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+      select: {
+        created_at: true,
+      },
+    });
+  } catch (error) {
+    throw new participationError.DataBaseError('Error fetching challenge verification calendar');
+  }
+};
+
 export default {
   joinChallenge,
   getUserChallengeById,
@@ -195,4 +216,5 @@ export default {
   findUserInfoForVerification,
   findUserVerificationCount,
   findUserChallengeProgress,
+  getChallengeCalendar,
 };

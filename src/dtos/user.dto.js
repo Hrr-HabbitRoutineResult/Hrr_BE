@@ -110,7 +110,7 @@ const userBadgesConditionDto = (condition, status) => {
     conditionId: condition.condition.id,
     description: condition.condition.description,
     isAchieved: condition.isAchieved,
-    isObtained: status?.isObtained ?? false,
+    isObtained: status?.count === 1,
   }));
 };
 

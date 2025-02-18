@@ -308,6 +308,42 @@ const findUserBadgesCondition = async (user_id, badge_id) => {
   }
 };
 
+const updateUserBadgeStatus = async (user_id, badge_id) => {
+  try {
+    // 해당 user_id, badge_id의 모든 조건 조회
+    const conditions = await prisma.userBadgeCondition.findMany({
+      where: {
+        userBadge: {
+          user_id,
+          badge_id,
+        },
+      },
+      select: {
+        isAchieved: true,
+      },
+    });
+
+    // 모든 조건의 isAchieved가 true인지 확인
+    const all_achieved = conditions.every(cond => cond.isAchieved);
+
+    if (all_achieved) {
+      // userBadge 테이블의 isObtained 업데이트
+      const badge_obtained = await prisma.userBadge.updateMany({
+        where: {
+          user_id,
+          badge_id,
+        },
+        data: {
+          isObtained: true,
+        },
+      });
+      return badge_obtained;
+    }
+  } catch (error) {
+    throw new databaseError.DataBaseError('Database Error on updating user badge status');
+  }
+};
+
 const findUserLevel = async userId => {
   try {
     const result = await prisma.userLevel.findMany({
@@ -517,6 +553,7 @@ export default {
   createUserFollows,
   userUnfollows,
   findUserBadgesCondition,
+  updateUserBadgeStatus,
   findUserLevel,
   getUserVerificationScraps,
   getUserVerificationLikes,

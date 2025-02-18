@@ -115,7 +115,8 @@ const deleteUserFollowById = async (user_id, unfollowed_user_id) => {
 
 const getUserBadgesConditionById = async (user_id, badge_id) => {
   const badges_condition = await userRepository.findUserBadgesCondition(user_id, badge_id);
-  const response_data = userDto.userBadgesConditionDto(badges_condition);
+  const badges_condition_status = await userRepository.updateUserBadgeStatus(user_id, badge_id);
+  const response_data = userDto.userBadgesConditionDto(badges_condition, badges_condition_status);
 
   return response_data;
 };

@@ -7,7 +7,7 @@ import databaseError from '../errors/database.error.js';
 const putUserInterestCategory = async (user_id, update_data) => {
   try {
     // 사용자의 관심 카테고리 저장
-    const updated_user = await prisma.userCategoryType.upsert({
+    await prisma.userCategoryType.upsert({
       where: { user_id },
       update: { category: update_data.category },
       create: { user_id, category: update_data.category },

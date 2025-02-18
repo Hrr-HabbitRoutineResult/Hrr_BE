@@ -162,12 +162,12 @@ const signInKakao = async kakao_token => {
     if (!user) {
       user = await authRepository.signUpKakao(email);
     }
-
+    const id = user.id;
     // 3. JWT 발급
-    const access_token = jwt.sign({ kakao_id, email }, process.env.ACCESS_TOKEN_SECRET);
-    const refresh_token = jwt.sign({ kakao_id, email }, process.env.REFRESH_TOKEN_SECRET);
+    const access_token = jwt.sign({ kakao_id, email, id }, process.env.ACCESS_TOKEN_SECRET);
+    const refresh_token = jwt.sign({ kakao_id, email, id }, process.env.REFRESH_TOKEN_SECRET);
 
-    return { access_token, refresh_token };
+    return { id, access_token, refresh_token };
   } catch (error) {
     throw new authError.KakaoLoginError('카카오 로그인 실패');
   }

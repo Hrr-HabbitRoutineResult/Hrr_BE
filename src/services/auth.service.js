@@ -169,7 +169,7 @@ const signInKakao = async kakao_token => {
 
     const user_id = user.id;
 
-    return { user_id, access_token, refresh_token };
+    return { userId: user_id, accessToken: access_token, refreshToken: refresh_token };
   } catch (error) {
     throw new authError.KakaoLoginError('카카오 로그인 실패');
   }

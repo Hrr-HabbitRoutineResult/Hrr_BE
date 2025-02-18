@@ -25,8 +25,8 @@ const getUserById = async (req, res, next) => {
 };
 const putMe = async (req, res, next) => {
   try {
-    const email = req.user.email;
-    const my_new_info = await userService.updateUserInfobyEmail(email, userDto.updateUserInfoRequestDto(req.body));
+    const user_id = req.user.id;
+    const my_new_info = await userService.updateUserInfobyId(user_id, userDto.updateUserInfoRequestDto(req.body));
     return res.success(my_new_info, StatusCodes.OK);
   } catch (error) {
     next(error);

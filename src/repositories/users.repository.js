@@ -26,10 +26,10 @@ const putUserInterestCategory = async (user_id, update_data) => {
   }
 };
 
-const updateUserInfo = async (email, update_data) => {
+const updateUserInfo = async (user_id, update_data) => {
   try {
     const updated_user = await prisma.user.update({
-      where: { email: email },
+      where: { id: user_id },
       data: update_data,
     });
     return updated_user;

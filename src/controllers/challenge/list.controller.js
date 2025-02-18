@@ -38,9 +38,8 @@ const getChallengeDetail = async (req, res, next) => {
 const createChallenge = async (req, res, next) => {
   try {
     logger.debug('챌린지를 개설했습니다!');
-
-    const { data, keywords } = listDto.bodyToChallenge(req.body);
-    const challenge = await listService.createChallenge(data, keywords);
+    const { data, keywords, frequencyData } = listDto.bodyToChallenge(req.body);
+    const challenge = await listService.createChallenge(data, keywords, frequencyData);
     return res.success({ result: challenge }, StatusCodes.CREATED);
   } catch (error) {
     next(error);

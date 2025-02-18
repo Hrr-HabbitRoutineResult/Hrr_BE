@@ -1,12 +1,11 @@
 import { prisma } from '../../db.config.js';
 import listError from '../../errors/challenge/list.error.js';
 
-const createChallenge = async (data, keywords) => {
+const createChallenge = async (data, keywords, frequencyData) => {
   try {
     return await prisma.$transaction(async prisma => {
-      const created_challenge = await prisma.challenge.create({
-        data: data,
-      });
+      const created_challenge = await prisma.challenge.create({ data });
+      // Keywords 생성 확인
       const keyword_records = await Promise.all(
         keywords.map(async name => {
           return await prisma.keyword.upsert({
@@ -16,15 +15,20 @@ const createChallenge = async (data, keywords) => {
           });
         }),
       );
-
-      await prisma.challengeKeyword.createMany({
-        data: keyword_records.map(keyword => ({
-          challenge_id: created_challenge.id,
-          keyword_id: keyword.id,
-        })),
-      });
-
-      return created_challenge;
+      // Frequencies 생성 확인
+      if (frequencyData) {
+        await prisma.frequency.create({
+          data: {
+            challenge_id: created_challenge.id,
+            ...frequencyData,
+          },
+        });
+      }
+      return {
+        challenge: created_challenge,
+        keywords: keyword_records,
+        frequency: frequencyData,
+      };
     });
   } catch (error) {
     throw new listError.DataBaseError('Error on creating challenge and keywords');

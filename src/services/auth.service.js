@@ -167,9 +167,7 @@ const signInKakao = async kakao_token => {
     const access_token = jwt.sign({ kakao_id, email, id }, process.env.ACCESS_TOKEN_SECRET);
     const refresh_token = jwt.sign({ kakao_id, email, id }, process.env.REFRESH_TOKEN_SECRET);
 
-    const user_id = user.id;
-
-    return { userId: user_id, accessToken: access_token, refreshToken: refresh_token };
+    return { userId: id, accessToken: access_token, refreshToken: refresh_token };
   } catch (error) {
     throw new authError.KakaoLoginError('카카오 로그인 실패');
   }

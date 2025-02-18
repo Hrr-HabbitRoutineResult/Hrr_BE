@@ -130,7 +130,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string", "example": "흐르르" },
+                  "nickname": { "type": "string", "example": "흐르르" },
                   "profilePhoto": { "type": "string", "example": "https://example.com/newprofile.jpg" },
                   "badges": {
                     "type": ["integer", "null"],
@@ -155,7 +155,7 @@
                     "success": {
                       "type": "object",
                       "properties": {
-                        "name": { "type": "string", "example": "흐르르" },
+                        "nickname": { "type": "string", "example": "흐르르" },
                         "profilePhoto": { "type": "string", "example": "https://example.com/newprofile.jpg" },
                         "badges": {
                           "type": "array",

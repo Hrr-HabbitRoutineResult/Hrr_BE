@@ -587,7 +587,8 @@
                           "badgeId": { "type": "integer", "example": 1 },
                           "conditionId": { "type": "integer", "example": 1 },
                           "description": { "type": "string", "example": "운동 챌린지 참가 10회" },
-                          "isAchieved": { "type": "boolean", "example": true }
+                          "isAchieved": { "type": "boolean", "example": true },
+                          "isObtained": { "type": "boolean", "example": true }
                         }
                       }
                     }

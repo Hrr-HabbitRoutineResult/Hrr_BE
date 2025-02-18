@@ -127,12 +127,13 @@ const userUnfollowDto = unfollowed_user_id => {
   return response_data;
 };
 
-const userBadgesConditionDto = condition => {
+const userBadgesConditionDto = (condition, status) => {
   return condition.map(condition => ({
     badgeId: condition.condition.badge_id,
     conditionId: condition.condition.id,
     description: condition.condition.description,
     isAchieved: condition.isAchieved,
+    isObtained: status?.count === 1,
   }));
 };
 

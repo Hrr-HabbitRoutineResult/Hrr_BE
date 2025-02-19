@@ -125,7 +125,26 @@ const getWeeklyVerification = async (challenge_id, user_id, start_of_week, end_o
         },
       },
     });
-    return { verifications, challenge_info };
+    // `challengeId`에 해당하는 Frequencies 모델의 요일 값 가져오기
+    const frequency_info = await prisma.frequency.findFirst({
+      where: { challenge_id: parseInt(challenge_id, 10) },
+      select: {
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: true,
+        sunday: true,
+      },
+    });
+
+    if (!frequency_info) {
+      throw new verificationError.VerificationFrequencyNotExistsError(
+        `No frequency data found for challengeId: ${challenge_id}`,
+      );
+    }
+    return { verifications, challenge_info, frequency_info };
   } catch (error) {
     throw new verificationError.VerificationNotExistsError('Error retrieving weekly verification records');
   }

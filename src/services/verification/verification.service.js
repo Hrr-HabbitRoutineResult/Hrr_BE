@@ -5,7 +5,6 @@ import verificationError from '../../errors/verification/verification.error.js';
 import participationRepository from '../../repositories/challenge/participation.repository.js';
 import verificationDto from '../../dtos/verification/verification.dto.js';
 import commentRepository from '../../repositories/verification/comment.repository.js';
-import prisma from '../../db.config.js';
 
 const verifyWithCamera = async (user_id, challenge_id, photo_url, body) => {
   const challenge = await listRepository.getChallengeDetailById(challenge_id);
@@ -83,50 +82,19 @@ const getWeeklyVerification = async (challenge_id, user_id) => {
       999,
     ),
   );
-
-  // 인증 내역 가져오기
-  const verifications = await prisma.verification.findMany({
-    where: {
-      userChallenge: { challenge_id: parseInt(challenge_id, 10) },
-      user_id: parseInt(user_id, 10),
-      verificationStatus: 'certified',
-      created_at: {
-        gte: start_of_week,
-        lte: end_of_week,
-      },
-    },
-    select: {
-      created_at: true,
-    },
-  });
-
-  // `challengeId`에 해당하는 Frequencies 모델의 요일 값 가져오기
-  const frequency_info = await prisma.frequency.findFirst({
-    where: { challenge_id: parseInt(challenge_id, 10) },
-    select: {
-      monday: true,
-      tuesday: true,
-      wednesday: true,
-      thursday: true,
-      friday: true,
-      saturday: true,
-      sunday: true,
-    },
-  });
-
-  if (!frequency_info) {
-    throw new verificationError.VerificationFrequencyNotExistsError(
-      `No frequency data found for challengeId: ${challenge_id}`,
-    );
-  }
-
+  const weekly_verification = await verificationRepository.getWeeklyVerification(
+    challenge_id,
+    user_id,
+    start_of_week,
+    end_of_week,
+  );
   // Frequencies에서 `1`(true)인 요일만 필터링
-  const need_certified = Object.entries(frequency_info) // frequencyInfo가 null일 수도 있으니 기본값 설정
+  const need_certified = Object.entries(weekly_verification.frequency_info) // frequencyInfo가 null일 수도 있으니 기본값 설정
     .filter(([_, value]) => value) // 값이 `true(1)`인 것만 필터링
     .map(([day]) => day.charAt(0).toUpperCase() + day.slice(1)); // "monday" → "Monday"
 
   // 사용자가 인증한 요일 가져오기
-  const checked_days = verifications.map(verification => {
+  const checked_days = weekly_verification.verifications.map(verification => {
     const createdAtUTC = new Date(verification.created_at);
     const createdAtKST = new Date(createdAtUTC.getTime() - 9 * 60 * 60 * 1000); // UTC → KST 변환
     return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][createdAtKST.getUTCDay()];

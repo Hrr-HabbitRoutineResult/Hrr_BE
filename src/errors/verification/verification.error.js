@@ -23,7 +23,7 @@ export class VerificationFrequencyNotExistsError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statusCode = 500;
+    this.statusCode = 400;
     this.data = data;
   }
 }

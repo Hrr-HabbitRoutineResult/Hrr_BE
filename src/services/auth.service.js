@@ -30,7 +30,7 @@ const login = async (email, password) => {
   }
   const is_password_valid = await bcrypt.compare(password, user.password);
   if (!is_password_valid) {
-    throw new authError.PasswordMismatchError('비밀번호가 일치하지 않습니다.', { password });
+    throw new authError.PasswordMismatchError('비밀번호가 일치하지 않습니다.');
   }
   if (user.isDeleted) {
     throw new authError.UserQuitError('이미 탈퇴한 유저입니다.');
@@ -207,6 +207,18 @@ const changePassword = async (user_id, new_password) => {
   return response;
 };
 
+const checkPassword = async (user_id, password) => {
+  const user = await authRepository.findUserById(user_id);
+  if (!user) {
+    throw new authError.UserNotExistError('존재하지 않는 사용자입니다.');
+  }
+  const is_password_valid = await bcrypt.compare(password, user.password);
+  if (!is_password_valid) {
+    throw new authError.PasswordMismatchError('비밀번호가 일치하지 않습니다.');
+  }
+  return { message: '비밀번호 인증이 완료되었습니다.' };
+};
+
 export default {
   generateTokens,
   verifyRefreshToken,
@@ -218,4 +230,5 @@ export default {
   checkNickname,
   resetPasswordByEmail,
   changePassword,
+  checkPassword,
 };

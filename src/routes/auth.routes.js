@@ -17,6 +17,7 @@ router.post('/send-verify-email', authController.sendVerificationCode);
 router.post('/check-email-verification-code', authController.checkEmailVerificationCode);
 router.post('/check-nickname', authController.checkNickname);
 router.patch('/password', authMiddleware, authController.changePassword);
+router.post('/password/check', authMiddleware, authController.checkPassword);
 // Refresh Token Route
 router.post('/token', authController.refreshToken);
 

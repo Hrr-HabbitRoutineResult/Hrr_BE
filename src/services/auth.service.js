@@ -4,6 +4,7 @@ import authError, { SendmailError } from '../errors/auth.error.js';
 import sendmail from '../utils/sendmail.util.js';
 import crypto from 'crypto';
 import axios from 'axios';
+import bcrypt from 'bcrypt';
 
 //emailLogin-api
 const generateTokens = payload => {
@@ -27,8 +28,9 @@ const login = async (email, password) => {
   if (!user) {
     throw new authError.UserNotExistError('존재하지 않는 이메일입니다.', { email });
   }
-  if (user.password !== password) {
-    throw new authError.PasswordMismatchError('비밀번호가 일치하지 않습니다.', { password });
+  const is_password_valid = await bcrypt.compare(password, user.password);
+  if (!is_password_valid) {
+    throw new authError.PasswordMismatchError('비밀번호가 일치하지 않습니다.');
   }
   if (user.isDeleted) {
     throw new authError.UserQuitError('이미 탈퇴한 유저입니다.');
@@ -43,7 +45,7 @@ const sendVerificationEmail = async email => {
   //   throw new authError.UserAlreadyExistsError('이미 가입된 이메일입니다.', { email });
   // }
 
-  const verificationCode = generateVerificationCode();
+  const verification_code = generateCode(6);
   const email_verification = await authRepository.findEmailVerification(email);
 
   if (email_verification) {
@@ -52,21 +54,24 @@ const sendVerificationEmail = async email => {
 
   const new_email_verification = {
     email,
-    verificationCode,
+    verification_code,
     codeExpires: new Date(Date.now() + 15 * 60 * 1000),
   };
 
   await authRepository.createEmailVerification(new_email_verification);
   try {
-    await sendmail.sendVerificationEmail(email, verificationCode);
+    await sendmail.sendVerificationEmail(email, verification_code);
   } catch (error) {
     throw new SendmailError('이메일 전송 중 오류가 발생했습니다.');
   }
 };
 
 //sendVerficationEmail-api
-const generateVerificationCode = () => {
-  return crypto.randomBytes(3).toString('hex').toUpperCase(); // 6자리 코드 생성
+const generateCode = size => {
+  return crypto
+    .randomBytes(size / 2)
+    .toString('hex')
+    .toUpperCase();
 };
 
 //register-api
@@ -92,9 +97,11 @@ const register = async dto => {
     throw new authError.EmailVerificationNotExistsError('이메일 인증이 완료되지 않았습니다.', { email });
   }
 
+  const hashed_password = await bcrypt.hash(password, 10);
+
   const new_user = {
     email: email,
-    password: password,
+    password: hashed_password,
     nickname: nickname,
     phoneNumber: '010012345678',
     followerCount: 0,
@@ -162,12 +169,12 @@ const signInKakao = async kakao_token => {
     if (!user) {
       user = await authRepository.signUpKakao(email);
     }
-
+    const id = user.id;
     // 3. JWT 발급
-    const access_token = jwt.sign({ kakao_id, email }, process.env.ACCESS_TOKEN_SECRET);
-    const refresh_token = jwt.sign({ kakao_id, email }, process.env.REFRESH_TOKEN_SECRET);
+    const access_token = jwt.sign({ kakao_id, email, id }, process.env.ACCESS_TOKEN_SECRET);
+    const refresh_token = jwt.sign({ kakao_id, email, id }, process.env.REFRESH_TOKEN_SECRET);
 
-    return { access_token, refresh_token };
+    return { userId: id, accessToken: access_token, refreshToken: refresh_token };
   } catch (error) {
     throw new authError.KakaoLoginError('카카오 로그인 실패');
   }
@@ -179,6 +186,39 @@ const checkNickname = async nickname => {
   else return { check: false };
 };
 
+const resetPasswordByEmail = async email => {
+  const user = await authRepository.findUserByEmail(email);
+  if (!user) {
+    throw new authError.UserNotExistError('존재하지 않는 이메일입니다.', { email });
+  }
+  const temp_password = generateCode(8);
+
+  const response = await authRepository.changePassword(user.id, temp_password);
+  try {
+    await sendmail.sendVerificationEmail(email, temp_password);
+  } catch (error) {
+    throw new SendmailError('이메일 전송 중 오류가 발생했습니다.');
+  }
+  return response;
+};
+
+const changePassword = async (user_id, new_password) => {
+  const response = await authRepository.changePassword(user_id, new_password);
+  return response;
+};
+
+const checkPassword = async (user_id, password) => {
+  const user = await authRepository.findUserById(user_id);
+  if (!user) {
+    throw new authError.UserNotExistError('존재하지 않는 사용자입니다.');
+  }
+  const is_password_valid = await bcrypt.compare(password, user.password);
+  if (!is_password_valid) {
+    throw new authError.PasswordMismatchError('비밀번호가 일치하지 않습니다.');
+  }
+  return { message: '비밀번호 인증이 완료되었습니다.' };
+};
+
 export default {
   generateTokens,
   verifyRefreshToken,
@@ -188,4 +228,7 @@ export default {
   checkEmailVerificationCode,
   signInKakao,
   checkNickname,
+  resetPasswordByEmail,
+  changePassword,
+  checkPassword,
 };

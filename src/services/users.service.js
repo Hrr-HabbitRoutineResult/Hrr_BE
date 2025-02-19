@@ -42,9 +42,9 @@ const getUserInfoById = async user_id => {
   return response_data;
 };
 
-const updateUserInfobyEmail = async (email, update_data) => {
+const updateUserInfobyId = async (user_id, update_data) => {
   try {
-    const updated_data = await userRepository.updateUserInfo(email, update_data);
+    const updated_data = await userRepository.updateUserInfo(user_id, update_data);
     const response_data = userDto.updateUserInfoResponseDto(updated_data);
 
     return response_data;
@@ -56,7 +56,7 @@ const updateUserInfobyEmail = async (email, update_data) => {
       }
     } // 다른 Prisma 관련 에러 처리
     else {
-      throw new userError.DataBaseError('DataBase Error on updating user information');
+      throw new databaseError.DataBaseError('DataBase Error on updating user information');
     }
   }
 };
@@ -127,7 +127,8 @@ const deleteUserFollowById = async (user_id, unfollowed_user_id) => {
 
 const getUserBadgesConditionById = async (user_id, badge_id) => {
   const badges_condition = await userRepository.findUserBadgesCondition(user_id, badge_id);
-  const response_data = userDto.userBadgesConditionDto(badges_condition);
+  const badges_condition_status = await userRepository.updateUserBadgeStatus(user_id, badge_id);
+  const response_data = userDto.userBadgesConditionDto(badges_condition, badges_condition_status);
 
   return response_data;
 };
@@ -201,7 +202,7 @@ const userQuit = async user_id => {
 export default {
   putUserInterestCategoryById,
   getUserInfoById,
-  updateUserInfobyEmail,
+  updateUserInfobyId,
   getOngoingChallenge,
   getCompletedChallenge,
   getUserChallengeHistory,

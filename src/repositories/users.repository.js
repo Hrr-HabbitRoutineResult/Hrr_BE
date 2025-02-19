@@ -3,6 +3,8 @@ import { Prisma } from '@prisma/client';
 import authError from '../errors/auth.error.js';
 import userError from '../errors/users.error.js';
 import databaseError from '../errors/database.error.js';
+import logger from '../logger.js';
+import { startOfDay, endOfDay } from 'date-fns';
 
 const putUserInterestCategory = async (user_id, update_data) => {
   try {
@@ -22,6 +24,7 @@ const putUserInterestCategory = async (user_id, update_data) => {
 
     return random_challenges;
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Error on updating user Interest');
   }
 };
@@ -34,11 +37,10 @@ const updateUserInfo = async (user_id, update_data) => {
     });
     return updated_user;
   } catch (error) {
+    logger.error(error);
     throw new authError.DataBaseError('Error on modifying user information');
   }
 };
-
-import { startOfDay, endOfDay } from 'date-fns';
 
 const findOngoingChallenges = async user_id => {
   try {
@@ -84,6 +86,7 @@ const findOngoingChallenges = async user_id => {
         })),
       );
   } catch (error) {
+    logger.error(error);
     throw new authError.DataBaseError('DataBase Error finding ongoing challenges');
   }
 };
@@ -107,6 +110,7 @@ const findCompletedChallenges = async user_id => {
       },
     });
   } catch (error) {
+    logger.error(error);
     throw new authError.DataBaseError('DataBase Error on finding completed challenges');
   }
 };
@@ -127,6 +131,7 @@ const findUserChallengeHistory = async user_id => {
 
     return userChallenges;
   } catch (error) {
+    logger.error(error);
     throw new authError.DataBaseError('DataBase Error on updating user information');
   }
 };
@@ -150,6 +155,7 @@ const findUserVerificationHistory = async user_id => {
 
     return verifications;
   } catch (error) {
+    logger.error(error);
     throw new authError.DataBaseError('DataBase Error on updating user information');
   }
 };
@@ -184,6 +190,7 @@ const findUserTypeBadges = async user_id => {
 
     return badges;
   } catch (error) {
+    logger.error(error);
     throw new authError.DataBaseError('DataBase Error on retrieving badge information');
   }
 };
@@ -218,6 +225,7 @@ const findUserCategoryBadges = async user_id => {
 
     return badges;
   } catch (error) {
+    logger.error(error);
     throw new authError.DataBaseError('DataBase Error on retrieving badge information');
   }
 };
@@ -239,6 +247,7 @@ const findUserLatestBadge = async user_id => {
       },
     });
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('DataBase Error on retrieving latest badge information');
   }
 };
@@ -265,6 +274,7 @@ const createUserFollows = async (follower_user_id, followed_user_id) => {
       }),
     ]);
   } catch (error) {
+    logger.error(error);
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
         throw new userError.FollowedUserError('이미 팔로우한 사용자입니다.');
@@ -325,6 +335,7 @@ const findUserBadgesCondition = async (user_id, badge_id) => {
       },
     });
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('DataBase Error on retrieving badge condition');
   }
 };
@@ -361,6 +372,7 @@ const updateUserBadgeStatus = async (user_id, badge_id) => {
       return badge_obtained;
     }
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Database Error on updating user badge status');
   }
 };
@@ -388,6 +400,7 @@ const findUserLevel = async userId => {
     });
     return result;
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('DataBase Error on retrieving level');
   }
 };
@@ -412,6 +425,7 @@ const getUserVerificationScraps = async user_id => {
 
     return scrapped_verifications;
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Error on finding scrapped verifications');
   }
 };
@@ -436,6 +450,7 @@ const getUserVerificationLikes = async user_id => {
 
     return liked_verifications;
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Error on finding liked verifications');
   }
 };
@@ -459,6 +474,7 @@ const getFollowerList = async user_id => {
     });
     return followers;
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Error fetching followers');
   }
 };
@@ -482,6 +498,7 @@ const getFollowingList = async user_id => {
     });
     return followings;
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Error fetching followers');
   }
 };
@@ -541,6 +558,7 @@ const getBlockedList = async user_id => {
     });
     return blocked_list;
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Error fetching blocked list');
   }
 };
@@ -559,6 +577,7 @@ const userQuit = async user_id => {
       },
     });
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError(`Error during user quit: ${error.message}`);
   }
 };

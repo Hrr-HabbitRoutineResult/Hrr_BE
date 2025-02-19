@@ -62,29 +62,37 @@ const getChallengeVerifications = async challenge_id => {
   return status;
 };
 
-const getWeeklyVerification = async (challengeId, userId) => {
+const getWeeklyVerification = async (challenge_id, user_id) => {
   const now = new Date();
   now.setUTCHours(now.getUTCHours() + 9); // KST 변환
 
   // 이번 주 월요일 00:00:00 (KST 기준)
-  const startOfWeek = new Date(
+  const start_of_week = new Date(
     Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - now.getUTCDay() + 1, 0, 0, 0),
   );
 
   // 이번 주 일요일 23:59:59 (KST 기준)
-  const endOfWeek = new Date(
-    Date.UTC(startOfWeek.getUTCFullYear(), startOfWeek.getUTCMonth(), startOfWeek.getUTCDate() + 6, 23, 59, 59, 999),
+  const end_of_week = new Date(
+    Date.UTC(
+      start_of_week.getUTCFullYear(),
+      start_of_week.getUTCMonth(),
+      start_of_week.getUTCDate() + 6,
+      23,
+      59,
+      59,
+      999,
+    ),
   );
 
   // 인증 내역 가져오기
   const verifications = await prisma.verification.findMany({
     where: {
-      userChallenge: { challenge_id: parseInt(challengeId, 10) },
-      user_id: parseInt(userId, 10),
+      userChallenge: { challenge_id: parseInt(challenge_id, 10) },
+      user_id: parseInt(user_id, 10),
       verificationStatus: 'certified',
       created_at: {
-        gte: startOfWeek,
-        lte: endOfWeek,
+        gte: start_of_week,
+        lte: end_of_week,
       },
     },
     select: {
@@ -93,8 +101,8 @@ const getWeeklyVerification = async (challengeId, userId) => {
   });
 
   // `challengeId`에 해당하는 Frequencies 모델의 요일 값 가져오기
-  const frequencyInfo = await prisma.frequency.findFirst({
-    where: { challenge_id: parseInt(challengeId, 10) },
+  const frequency_info = await prisma.frequency.findFirst({
+    where: { challenge_id: parseInt(challenge_id, 10) },
     select: {
       monday: true,
       tuesday: true,
@@ -106,29 +114,29 @@ const getWeeklyVerification = async (challengeId, userId) => {
     },
   });
 
-  if (!frequencyInfo) {
+  if (!frequency_info) {
     throw new verificationError.VerificationFrequencyNotExistsError(
-      `No frequency data found for challengeId: ${challengeId}`,
+      `No frequency data found for challengeId: ${challenge_id}`,
     );
   }
 
   // Frequencies에서 `1`(true)인 요일만 필터링
-  const needCertified = Object.entries(frequencyInfo) // frequencyInfo가 null일 수도 있으니 기본값 설정
+  const need_certified = Object.entries(frequency_info) // frequencyInfo가 null일 수도 있으니 기본값 설정
     .filter(([_, value]) => value) // 값이 `true(1)`인 것만 필터링
     .map(([day]) => day.charAt(0).toUpperCase() + day.slice(1)); // "monday" → "Monday"
 
   // 사용자가 인증한 요일 가져오기
-  const checkedDays = verifications.map(verification => {
+  const checked_days = verifications.map(verification => {
     const createdAtUTC = new Date(verification.created_at);
     const createdAtKST = new Date(createdAtUTC.getTime() - 9 * 60 * 60 * 1000); // UTC → KST 변환
     return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][createdAtKST.getUTCDay()];
   });
 
   return {
-    challengeId,
-    userId,
-    needCertified: needCertified.length > 0 ? needCertified : null, // 요일이 없으면 null
-    checkedDays: [...new Set(checkedDays)], // 중복 제거
+    challenge_id,
+    user_id,
+    need_certified: need_certified.length > 0 ? need_certified : null, // 요일이 없으면 null
+    checked_days: [...new Set(checked_days)], // 중복 제거
   };
 };
 

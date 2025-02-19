@@ -14,9 +14,9 @@ const getChallengeVerificationStatus = async (req, res, next) => {
 };
 const getWeeklyVerification = async (req, res, next) => {
   try {
-    const { challengeId } = req.params;
-    const userId = req.user.id; // 토큰에서 유저 ID 추출
-    const result = await verificationService.getWeeklyVerification(challengeId, userId);
+    const challenge_id = req.params.challengeId;
+    const user_id = req.user.id; // 토큰에서 유저 ID 추출
+    const result = await verificationService.getWeeklyVerification(challenge_id, user_id);
     return res.success(result, StatusCodes.OK);
   } catch (error) {
     next(error);

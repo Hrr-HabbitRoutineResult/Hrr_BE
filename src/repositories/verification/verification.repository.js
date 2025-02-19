@@ -90,17 +90,17 @@ const findChallengeVerificationCounts = async challenge_id => {
   }
 };
 
-const getWeeklyVerification = async (challengeId, userId, startOfWeek, endOfWeek) => {
+const getWeeklyVerification = async (challenge_id, user_id, start_of_week, end_of_week) => {
   try {
     // 인증된 날짜 조회
     const verifications = await prisma.verification.findMany({
       where: {
-        userChallenge: { challenge_id: parseInt(challengeId, 10) },
-        user_id: parseInt(userId, 10),
+        userChallenge: { challenge_id: parseInt(challenge_id, 10) },
+        user_id: parseInt(user_id, 10),
         verificationStatus: 'certified',
         created_at: {
-          gte: startOfWeek,
-          lte: endOfWeek,
+          gte: start_of_week,
+          lte: end_of_week,
         },
       },
       select: {
@@ -108,8 +108,8 @@ const getWeeklyVerification = async (challengeId, userId, startOfWeek, endOfWeek
       },
     });
     // 챌린지 유형 및 인증 요일 조회
-    const challengeInfo = await prisma.challenge.findUnique({
-      where: { id: parseInt(challengeId, 10) },
+    const challenge_info = await prisma.challenge.findUnique({
+      where: { id: parseInt(challenge_id, 10) },
       select: {
         type: true,
         frequencies: {
@@ -125,7 +125,7 @@ const getWeeklyVerification = async (challengeId, userId, startOfWeek, endOfWeek
         },
       },
     });
-    return { verifications, challengeInfo };
+    return { verifications, challenge_info };
   } catch (error) {
     throw new verificationError.VerificationNotExistsError('Error retrieving weekly verification records');
   }

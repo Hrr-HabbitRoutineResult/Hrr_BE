@@ -1,5 +1,6 @@
 import { prisma } from '../../db.config.js';
 import participationError, { DataBaseError } from '../../errors/challenge/participation.error.js';
+import logger from '../../logger.js';
 
 const joinChallenge = async data => {
   try {
@@ -16,6 +17,7 @@ const joinChallenge = async data => {
       return joined_challenge;
     });
   } catch (error) {
+    logger.error(error);
     throw new participationError.DataBaseError('Error on creating userChallenge and updating currentParticipant');
   }
 };
@@ -30,6 +32,7 @@ const getUserChallengeById = async (user_id, challenge_id) => {
     });
     return user_challenge;
   } catch (error) {
+    logger.error(error);
     throw new participationError.DataBaseError('Failed to fetch user challenge');
   }
 };
@@ -44,6 +47,7 @@ const createChallengeLike = async (user_id, challenge_id) => {
     });
     return created_challenge_like;
   } catch (error) {
+    logger.error(error);
     throw new participationError.DataBaseError('Error on creating challenge likes');
   }
 };
@@ -58,6 +62,7 @@ const deleteChallengeLike = async (user_id, challenge_id) => {
     });
     return deleted_challenge_like;
   } catch (error) {
+    logger.error(error);
     throw new participationError.DataBaseError('Error on deleting challenge likes');
   }
 };
@@ -72,6 +77,7 @@ const increaseChallengeLike = async challenge_id => {
     });
     return updated_challenge.likesCount;
   } catch (error) {
+    logger.error(error);
     throw new participationError.DataBaseError('Error on updating challenge likes');
   }
 };
@@ -86,6 +92,7 @@ const decreaseChallengeLike = async challenge_id => {
     });
     return updated_challenge.likesCount;
   } catch (error) {
+    logger.error(error);
     throw new participationError.DataBaseError('Error on decrementing challenge likes');
   }
 };
@@ -100,6 +107,7 @@ const getChallengeLike = async (user_id, challenge_id) => {
     });
     return challenge_like;
   } catch (error) {
+    logger.error(error);
     throw new participationError.DataBaseError('Failed to fetch user challenge likes');
   }
 };
@@ -129,6 +137,7 @@ const getChallengeList = async challenge_id => {
       owner: challenger.owner,
     }));
   } catch (error) {
+    logger.error(error);
     throw new DataBaseError.DataBaseError('Failed to fetch challenge participants');
   }
 };
@@ -146,6 +155,7 @@ const findUserInfoForVerification = async user_id => {
     });
     return user_info;
   } catch (error) {
+    logger.error(error);
     throw new participationError.DataBaseError('Database error occurred while fetching user verification status');
   }
 };
@@ -163,6 +173,7 @@ const findUserVerificationCount = async (user_id, challenge_id) => {
     });
     return user_challenge;
   } catch (error) {
+    logger.error(error);
     throw new participationError.DataBaseError('Database error occurred while fetching user verification status');
   }
 };
@@ -179,6 +190,7 @@ const findUserChallengeProgress = async challenge_id => {
     });
     return achievement_rate;
   } catch (error) {
+    logger.error(error);
     throw new participationError.DataBaseError('Database error occurred while fetching user verification status');
   }
 };

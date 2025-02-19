@@ -2,6 +2,7 @@ import authError from '../errors/auth.error.js';
 import { prisma } from '../db.config.js';
 import bcrypt from 'bcrypt';
 import databaseError from '../errors/database.error.js';
+import logger from '../logger.js';
 
 const findUserById = async user_id => {
   try {
@@ -10,6 +11,7 @@ const findUserById = async user_id => {
     });
     return user;
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('유저 조회중 에러가 발생했습니다.');
   }
 };
@@ -21,6 +23,7 @@ const findUserByEmail = async email => {
     });
     return user;
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('유저 조회중 에러가 발생했습니다.');
   }
 };
@@ -41,6 +44,7 @@ const deleteEmailVerification = async email => {
     });
     return deleted; // 삭제된 항목 반환
   } catch (error) {
+    logger.error(error);
     throw new authError.DataBaseError('Error on deleting email verification');
   }
 };
@@ -53,7 +57,7 @@ const createEmailVerification = async new_email_verification => {
     });
     return created_verification;
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     throw new authError.DataBaseError('Error on creating email verification');
   }
 };
@@ -70,6 +74,7 @@ const deleteExpiredEmailVerifications = async () => {
     });
     return deleted; // 삭제된 항목 반환
   } catch (error) {
+    logger.error(error);
     throw new authError.DataBaseError('Error on deleting expired email verification');
   }
 };
@@ -86,6 +91,7 @@ const setEmailVerifiedTrue = async email => {
     });
     return { id: updated_verification.id, email: updated_verification.email, verified: updated_verification.verified }; // 업데이트된 정보 반환
   } catch (error) {
+    logger.error(error);
     throw new authError.DataBaseError('Error on updating email verification');
   }
 };
@@ -98,6 +104,7 @@ const createUser = async new_user => {
     });
     return created_user;
   } catch (error) {
+    logger.error(error);
     throw new authError.DataBaseError('Error on creating email verification');
   }
 };
@@ -125,6 +132,7 @@ const signUpKakao = async email => {
     });
     return new_user;
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('DataBase Error on Kakao login');
   }
 };
@@ -137,6 +145,7 @@ const checkNickname = async nickname => {
     });
     return existingUser;
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Database error while checking nickname');
   }
 };
@@ -154,6 +163,7 @@ const changePassword = async (user_id, new_password) => {
 
     return { message: '비밀번호가 성공적으로 변경되었습니다.' };
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('비밀번호 변경 중 데이터베이스 오류 발생');
   }
 };

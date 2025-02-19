@@ -1,6 +1,7 @@
 import { prisma } from '../../db.config.js';
 import databaseError from '../../errors/database.error.js';
 import scrapError from '../../errors/verification/scrap.error.js';
+import logger from '../../logger.js';
 
 const scrapVerification = async (user_id, verification_id) => {
   try {
@@ -17,6 +18,7 @@ const scrapVerification = async (user_id, verification_id) => {
       }),
     ]);
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Database error occurred while following user');
   }
 };
@@ -38,6 +40,7 @@ const unscrapVerification = async (user_id, verification_id) => {
       }),
     ]);
   } catch (error) {
+    logger.error(error);
     if (error.code === 'P2025') {
       throw new scrapError.VerificationScrapsUnderZeroError('스크랩 수가 음수가 되었습니다.');
     }
@@ -61,6 +64,7 @@ const checkVerificationScraped = async (user_id, verification_id) => {
       return false;
     }
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Database error occurred while following user');
   }
 };

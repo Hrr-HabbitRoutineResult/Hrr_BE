@@ -1,7 +1,7 @@
 import { prisma } from '../../db.config.js';
 import listError from '../../errors/challenge/list.error.js';
 
-const createChallenge = async (data, keywords, frequencyData) => {
+const createChallenge = async (data, keywords, frequency_data) => {
   try {
     return await prisma.$transaction(async prisma => {
       const created_challenge = await prisma.challenge.create({ data });
@@ -16,18 +16,18 @@ const createChallenge = async (data, keywords, frequencyData) => {
         }),
       );
       // Frequencies 생성 확인
-      if (frequencyData) {
+      if (frequency_data) {
         await prisma.frequency.create({
           data: {
             challenge_id: created_challenge.id,
-            ...frequencyData,
+            ...frequency_data,
           },
         });
       }
       return {
         challenge: created_challenge,
         keywords: keyword_records,
-        frequency: frequencyData,
+        frequency: frequency_data,
       };
     });
   } catch (error) {

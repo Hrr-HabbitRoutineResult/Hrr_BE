@@ -2,11 +2,11 @@ import { ChallengeStatus } from '@prisma/client';
 import moment from 'moment-timezone';
 
 const bodyToChallenge = body => {
-  const formatted_JoinDate = body.joinDate ? moment.tz(body.joinDate, 'Asia/Seoul').toDate() : null;
-  const formatted_EndDate = body.endDate ? moment.tz(body.endDate, 'Asia/Seoul').toDate() : null;
+  const formatted_join_date = body.joinDate ? moment.tz(body.joinDate, 'Asia/Seoul').toDate() : null;
+  const formatted_end_date = body.endDate ? moment.tz(body.endDate, 'Asia/Seoul').toDate() : null;
 
   const data = {
-    name: body.nickname,
+    name: body.name,
     owner_id: body.owner_id,
     type: body.type,
     description: body.description,
@@ -16,14 +16,14 @@ const bodyToChallenge = body => {
     maxParticipants: body.maxParticipants,
     verificationType: body.verificationType,
     rule: body.rule,
-    joinDate: formatted_JoinDate,
-    endDate: formatted_EndDate,
+    joinDate: formatted_join_date,
+    endDate: formatted_end_date,
     duration: body.duration,
   };
 
   const keywords = body.keywords;
 
-  const frequencyData = {
+  const frequency_data = {
     frequencyType: body.frequencyType || null,
     frequencyValue: body.frequencyValue || null,
     monday: body.days?.includes('월') || false,
@@ -35,7 +35,7 @@ const bodyToChallenge = body => {
     sunday: body.days?.includes('일') || false,
   };
 
-  return { data, keywords, frequencyData };
+  return { data, keywords, frequency_data };
 };
 
 export default {

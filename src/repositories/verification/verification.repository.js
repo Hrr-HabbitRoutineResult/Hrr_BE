@@ -92,7 +92,8 @@ const findChallengeVerificationCounts = async challenge_id => {
 
 const getWeeklyVerification = async (challengeId, userId, startOfWeek, endOfWeek) => {
   try {
-    return await prisma.verification.findMany({
+    // 인증된 날짜 조회
+    const verifications = await prisma.verification.findMany({
       where: {
         userChallenge: { challenge_id: parseInt(challengeId, 10) },
         user_id: parseInt(userId, 10),
@@ -106,6 +107,25 @@ const getWeeklyVerification = async (challengeId, userId, startOfWeek, endOfWeek
         created_at: true,
       },
     });
+    // 챌린지 유형 및 인증 요일 조회
+    const challengeInfo = await prisma.challenge.findUnique({
+      where: { id: parseInt(challengeId, 10) },
+      select: {
+        type: true,
+        frequencies: {
+          select: {
+            monday: true,
+            tuesday: true,
+            wednesday: true,
+            thursday: true,
+            friday: true,
+            saturday: true,
+            sunday: true,
+          },
+        },
+      },
+    });
+    return { verifications, challengeInfo };
   } catch (error) {
     throw new verificationError.VerificationNotExistsError('Error retrieving weekly verification records');
   }

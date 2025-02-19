@@ -5,6 +5,7 @@ import verificationError from '../../errors/verification/verification.error.js';
 import participationRepository from '../../repositories/challenge/participation.repository.js';
 import verificationDto from '../../dtos/verification/verification.dto.js';
 import commentRepository from '../../repositories/verification/comment.repository.js';
+import prisma from '../../db.config.js';
 
 const verifyWithCamera = async (user_id, challenge_id, photo_url, body) => {
   const challenge = await listRepository.getChallengeDetailById(challenge_id);
@@ -76,17 +77,57 @@ const getWeeklyVerification = async (challengeId, userId) => {
   );
 
   // 인증 내역 가져오기
-  const verifications = await verificationRepository.getWeeklyVerification(challengeId, userId, startOfWeek, endOfWeek);
+  const verifications = await prisma.verification.findMany({
+    where: {
+      userChallenge: { challenge_id: parseInt(challengeId, 10) },
+      user_id: parseInt(userId, 10),
+      verificationStatus: 'certified',
+      created_at: {
+        gte: startOfWeek,
+        lte: endOfWeek,
+      },
+    },
+    select: {
+      created_at: true,
+    },
+  });
 
-  //UTC → KST 변환 후 정확한 요일 계산 (getDay() → getUTCDay() 수정)
+  // `challengeId`에 해당하는 Frequencies 모델의 요일 값 가져오기
+  const frequencyInfo = await prisma.frequency.findFirst({
+    where: { challenge_id: parseInt(challengeId, 10) },
+    select: {
+      monday: true,
+      tuesday: true,
+      wednesday: true,
+      thursday: true,
+      friday: true,
+      saturday: true,
+      sunday: true,
+    },
+  });
+
+  if (!frequencyInfo) {
+    throw new verificationError.VerificationFrequencyNotExistsError(
+      `No frequency data found for challengeId: ${challengeId}`,
+    );
+  }
+
+  // Frequencies에서 `1`(true)인 요일만 필터링
+  const needCertified = Object.entries(frequencyInfo) // frequencyInfo가 null일 수도 있으니 기본값 설정
+    .filter(([_, value]) => value) // 값이 `true(1)`인 것만 필터링
+    .map(([day]) => day.charAt(0).toUpperCase() + day.slice(1)); // "monday" → "Monday"
+
+  // 사용자가 인증한 요일 가져오기
   const checkedDays = verifications.map(verification => {
     const createdAtUTC = new Date(verification.created_at);
     const createdAtKST = new Date(createdAtUTC.getTime() - 9 * 60 * 60 * 1000); // UTC → KST 변환
     return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][createdAtKST.getUTCDay()];
   });
+
   return {
     challengeId,
     userId,
+    needCertified: needCertified.length > 0 ? needCertified : null, // 요일이 없으면 null
     checkedDays: [...new Set(checkedDays)], // 중복 제거
   };
 };

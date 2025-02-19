@@ -54,7 +54,7 @@ const sendVerificationEmail = async email => {
 
   const new_email_verification = {
     email,
-    verification_code,
+    verificationCode: verification_code,
     codeExpires: new Date(Date.now() + 15 * 60 * 1000),
   };
 

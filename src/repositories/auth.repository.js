@@ -46,10 +46,10 @@ const deleteEmailVerification = async email => {
 };
 
 // 이메일 인증 정보를 생성하는 함수
-const createEmailVerification = async newEmailVerification => {
+const createEmailVerification = async new_email_verification => {
   try {
     const created_verification = await prisma.emailVerification.create({
-      data: newEmailVerification,
+      data: new_email_verification,
     });
     return created_verification;
   } catch (error) {

@@ -3,7 +3,7 @@ export class VerificationAlreadyScrapedError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -13,7 +13,7 @@ export class VerificationNotScrapedError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -23,7 +23,7 @@ export class VerificationScrapsUnderZeroError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }

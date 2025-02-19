@@ -1,3 +1,20 @@
+const putUserInterestResponseDto = updated_data => {
+  const interest_info = updated_data.map(interest => ({
+    challenge_id: interest.id,
+    name: interest.name,
+    description: interest.description,
+    challengeImage: interest.challengeImage,
+    type: interest.type,
+  }));
+  return interest_info;
+};
+
+const putUserInterestRequestDto = body => {
+  return {
+    category: body.category,
+  };
+};
+
 const serviceToControllerDto = (user, user_badge_1, user_badge_2, user_badge_3) => {
   const response_data = {
     id: user.id,
@@ -18,11 +35,17 @@ const serviceToControllerDto = (user, user_badge_1, user_badge_2, user_badge_3) 
 };
 
 const updateUserInfoResponseDto = updated_user => {
+  const badges = [updated_user.userBadge1_id, updated_user.userBadge2_id, updated_user.userBadge3_id];
+
+  // null이 아닌 값만 먼저 배치하고, null 값들을 뒤에 배치
+  const sorted_badges = badges.filter(badge => badge !== null).concat(badges.filter(badge => badge === null));
+
   const new_info = {
     nickname: updated_user.nickname,
     profilePhoto: updated_user.profilePhoto,
-    badges: [updated_user.userBadge1_id, updated_user.userBadge2_id, updated_user.userBadge3_id],
+    badges: sorted_badges,
   };
+
   return new_info;
 };
 
@@ -30,9 +53,9 @@ const updateUserInfoRequestDto = body => {
   const new_info = {
     nickname: body.nickname,
     profilePhoto: body.profilePhoto,
-    userBadge1: body.badges[0] ? { connect: { id: body.badges[0] } } : undefined,
-    userBadge2: body.badges[1] ? { connect: { id: body.badges[1] } } : undefined,
-    userBadge3: body.badges[2] ? { connect: { id: body.badges[2] } } : undefined,
+    userBadge1: body.badges[0] ? { connect: { id: body.badges[0] } } : { disconnect: true },
+    userBadge2: body.badges[1] ? { connect: { id: body.badges[1] } } : { disconnect: true },
+    userBadge3: body.badges[2] ? { connect: { id: body.badges[2] } } : { disconnect: true },
   };
   return new_info;
 };
@@ -44,7 +67,7 @@ const userChallengeDto = challenges => {
     challengeImage: challenge.challenge.challengeImage,
     type: challenge.challenge.type,
     description: challenge.challenge.description,
-    // 인증 추가
+    verificatedToday: challenge.hasVerificationToday,
   }));
 };
 
@@ -63,19 +86,28 @@ const userBadgesDto = (type_badges, category_badges) => {
   };
 };
 
-const userChallengeHistoryDto = (user_challenges, verifications) => {
-  return user_challenges.map(userChallenge => {
-    const verification = verifications.find(v => v.userChallenge_id === userChallenge.id);
+const userLatestBadgeDto = latest_badge => {
+  return {
+    badge_id: latest_badge.badge.id,
+    name: latest_badge.badge.name,
+    icon: latest_badge.badge.icon,
+    type: latest_badge.badge.type,
+  };
+};
 
-    return {
-      challengeId: userChallenge.challenge_id,
+const userChallengeHistoryDto = (user_challenges, verifications) => {
+  return user_challenges.flatMap(userChallenge => {
+    const verification = verifications.filter(v => v.userChallenge_id === userChallenge.id);
+
+    return verification.map(v => ({
+      challenge_id: userChallenge.challenge_id,
       name: userChallenge.challenge.name,
-      verificationId: verification ? verification.id : null,
-      created_at: verification ? verification.created_at : null,
-      title: verification ? verification.title : null,
-      photoUrl: verification ? verification.photoUrl : null,
-      textUrl: verification ? verification.textUrl : null,
-    };
+      verification_id: v.id,
+      created_at: v.created_at,
+      title: v.title,
+      photoUrl: v.photoUrl,
+      textUrl: v.textUrl,
+    }));
   });
 };
 
@@ -95,23 +127,62 @@ const userUnfollowDto = unfollowed_user_id => {
   return response_data;
 };
 
-const userBadgesConditionDto = condition => {
+const userBadgesConditionDto = (condition, status) => {
   return condition.map(condition => ({
     badgeId: condition.condition.badge_id,
     conditionId: condition.condition.id,
     description: condition.condition.description,
     isAchieved: condition.isAchieved,
+    isObtained: status?.count === 1,
   }));
 };
 
+const userLevelDto = level => {
+  return level.map(level => ({
+    level: level.user.level,
+    points: level.user.points,
+    levelConditionId: level.levelConditionId,
+    condition: level.levelCondition.condition,
+    isAchieved: level.achieved,
+  }));
+};
+
+const getFollowerDto = follower => {
+  const response = [];
+
+  follower.map(follower => response.push(follower.follower));
+  return response;
+};
+
+const getFollowingDto = follower => {
+  const response = [];
+
+  follower.map(following => response.push(following.following));
+  return response;
+};
+
+const getBlockedListDto = blocked_list => {
+  const response = [];
+
+  blocked_list.map(blocked => response.push(blocked.blocked));
+  return response;
+};
+
 export default {
+  putUserInterestResponseDto,
+  putUserInterestRequestDto,
   serviceToControllerDto,
   updateUserInfoResponseDto,
   updateUserInfoRequestDto,
   userChallengeDto,
   userBadgesDto,
+  userLatestBadgeDto,
   userChallengeHistoryDto,
   userFollowDto,
   userUnfollowDto,
   userBadgesConditionDto,
+  userLevelDto,
+  getFollowerDto,
+  getFollowingDto,
+  getBlockedListDto,
 };

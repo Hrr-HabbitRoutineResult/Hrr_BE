@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `Users` MODIFY `followerCount` INTEGER NOT NULL DEFAULT 0,
+    MODIFY `followingCount` INTEGER NOT NULL DEFAULT 0;

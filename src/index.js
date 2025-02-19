@@ -21,28 +21,23 @@ const swaggerDocument = JSON.parse(fs.readFileSync(swaggerPath, 'utf8'));
 // Swagger UI 설정
 app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(swaggerDocument));
 
-// 공통 응답 헬퍼 함수 등록
-app.use((req, res, next) => {
-  res.success = success => res.json({ resultType: 'SUCCESS', error: null, success });
-
-  res.error = ({ errorCode = 'unknown', reason = null, data = null }) => {
-    logger.error(`Error occurred: ${errorCode}, Reason: ${reason}`);
-    return res.json({ resultType: 'FAIL', error: { errorCode, reason, data }, success: null });
-  };
-
-  next();
-});
-
-// 전역 오류 처리 미들웨어
-app.use((err, req, res, next) => {
-  if (res.headersSent) return next(err);
-  logger.error(`Error occurred: ${err.errorCode}, Reason: ${err.reason}`);
-  next(err);
-});
-
 // 기본 엔드포인트
 app.get('/', (req, res) => {
   res.send('Hello World!');
+});
+
+app.get('/error/html', (req, res) => {
+  // 현재 날짜 가져오기
+  const today = new Date().toISOString().split('T')[0];
+  const logFilePath = path.join(__dirname, '..', 'logs/error', `${today}.error.log`);
+
+  fs.readFile(logFilePath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(404).send('<h1>해당 날짜의 로그 파일을 찾을 수 없습니다.</h1>');
+    }
+
+    res.send(`<pre>${data}</pre>`);
+  });
 });
 
 // 서버 실행

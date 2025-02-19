@@ -3,7 +3,7 @@ export class CreateChallengeError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -13,7 +13,7 @@ export class SendChallengeError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -24,7 +24,7 @@ export class ChallengeExpiredError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -35,7 +35,7 @@ export class DataBaseError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -45,7 +45,17 @@ export class ChallengeIdNotExistsError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
+export class NoChallengeFoundError extends Error {
+  errorCode = 'B006';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 404;
     this.data = data;
   }
 }
@@ -56,4 +66,5 @@ export default {
   ChallengeExpiredError,
   SendChallengeError,
   ChallengeIdNotExistsError,
+  NoChallengeFoundError,
 };

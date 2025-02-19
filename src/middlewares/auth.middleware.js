@@ -36,10 +36,13 @@ export const authMiddleware = async (req, res, next) => {
 
         // Send new tokens in response header or body
         res.setHeader('Authorization', `Bearer ${access_token}`);
-        return res.status(StatusCodes.OK).json({
-          access_token,
-          refreshToken: new_refresh_token,
-        });
+        return res.success(
+          {
+            access_token,
+            refreshToken: new_refresh_token,
+          },
+          StatusCodes.OK,
+        );
       } catch (refreshError) {
         next(new authError.RefreshTokenError('Invalid refresh token'));
       }

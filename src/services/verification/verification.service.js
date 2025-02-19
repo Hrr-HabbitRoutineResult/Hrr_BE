@@ -4,8 +4,9 @@ import listError from '../../errors/challenge/list.error.js';
 import verificationError from '../../errors/verification/verification.error.js';
 import participationRepository from '../../repositories/challenge/participation.repository.js';
 import verificationDto from '../../dtos/verification/verification.dto.js';
+import commentRepository from '../../repositories/verification/comment.repository.js';
 
-const verifyWithCamera = async (user_id, challenge_id, body) => {
+const verifyWithCamera = async (user_id, challenge_id, photo_url, body) => {
   const challenge = await listRepository.getChallengeDetailById(challenge_id);
   if (!challenge) {
     throw new listError.ChallengeIdNotExistsError('해당 챌린지를 찾을 수 없습니다.');
@@ -14,7 +15,7 @@ const verifyWithCamera = async (user_id, challenge_id, body) => {
   if (!user_challenge) {
     throw new listError.ChallengeIdNotExistsError('해당 챌린지를 찾을 수 없습니다.');
   }
-  const data = verificationDto.cameraVerificationServiceToRepositoryDto(user_id, user_challenge.id, body);
+  const data = verificationDto.cameraVerificationServiceToRepositoryDto(user_id, user_challenge.id, photo_url, body);
   if (challenge.verificationType != 'camera') {
     throw new verificationError.VerificationTypeDoesntMatchError('챌린지가 카메라 인증 타입이 아닙니다.');
   }
@@ -41,7 +42,28 @@ const verifyWithText = async (user_id, challenge_id, body) => {
   return text_verification_response;
 };
 
+const getSpecificVerification = async verification_id => {
+  const verification = await verificationRepository.getSpecificVerification(verification_id);
+  if (!verification) {
+    throw new verificationError.VerificationNotExistsError('해당 ID를 가진 인증이 존재하지 않습니다.');
+  }
+  const comment = await commentRepository.getVerificationComment(verification.id);
+  return { ...verification, comment: comment };
+};
+
+const getChallengeVerifications = async challenge_id => {
+  const verification = await verificationRepository.findChallengeVerificationCurrentParticipants(challenge_id);
+  if (!verification) {
+    throw new verificationError.VerificationNotExistsError('해당 ID를 가진 인증이 존재하지 않습니다.');
+  }
+  const count = await verificationRepository.findChallengeVerificationCounts(challenge_id);
+  const status = verificationDto.verificationStatusServiceToControllerDto(verification, count);
+  return status;
+};
+
 export default {
   verifyWithCamera,
   verifyWithText,
+  getSpecificVerification,
+  getChallengeVerifications,
 };

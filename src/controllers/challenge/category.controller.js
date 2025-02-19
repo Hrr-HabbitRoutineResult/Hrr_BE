@@ -6,17 +6,23 @@ const getChallengeCategory = async (req, res, next) => {
   try {
     logger.debug('카테고리를 불러옵니다!');
     const category = await categoryService.getChallengeCategories();
-    res.status(StatusCodes.OK).json(category);
+    return res.success({ category: category }, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
 };
 
-const getWeeklyHotChallenge = () => {
-  return null;
+const getDailyHotChallenge = async (req, res, next) => {
+  try {
+    logger.debug('인기 챌린지를 불러옵니다!');
+    const hot_challenges = await categoryService.getDailyHotChallenge();
+    return res.success({ challenges: hot_challenges }, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
 };
 
 export default {
   getChallengeCategory,
-  getWeeklyHotChallenge,
+  getDailyHotChallenge,
 };

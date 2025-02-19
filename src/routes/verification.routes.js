@@ -4,14 +4,19 @@ import likeController from '../controllers/verification/like.controller.js';
 import commentController from '../controllers/verification/comment.controller.js';
 import scrapController from '../controllers/verification/scrap.controller.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
-
+import upload from '../middlewares/uploadMiddleware.js';
 const router = express.Router();
 
 // Verification
-router.get('/:challengeId/verification-status', veriificationController.getChallengeVerificationStatus);
+router.get('/:challengeId/verification-status', authMiddleware, veriificationController.getChallengeVerificationStatus);
 router.get('/:challengeId/verification/weekly', veriificationController.getWeeklyVerification);
-router.get('/:challengeId/verifications/:verificationId', veriificationController.getSpecificVerification);
-router.post('/:challengeId/verification/camera', authMiddleware, veriificationController.cameraVerification);
+router.get('/:verificationId', authMiddleware, veriificationController.getSpecificVerification);
+router.post(
+  '/:challengeId/verification/camera',
+  authMiddleware,
+  upload.single('photo'),
+  veriificationController.cameraVerification,
+);
 router.post('/:challengeId/verification/text', authMiddleware, veriificationController.textVerification);
 router.get(
   '/:challengeId/verification/text/:temporaryVerificationId',

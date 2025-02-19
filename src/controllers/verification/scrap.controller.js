@@ -6,7 +6,7 @@ export const scrapVerification = async (req, res, next) => {
     const user_id = req.user.id;
     const verification_id = Number(req.params.verificationId);
     const scrap_verification = await scrapService.scrapVerification(user_id, verification_id);
-    return res.status(StatusCodes.OK).json(scrap_verification);
+    return res.success(scrap_verification, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
@@ -17,7 +17,7 @@ export const unscrapVerification = async (req, res, next) => {
     const user_id = req.user.id;
     const verification_id = Number(req.params.verificationId);
     const unscrap_verification = await scrapService.unscrapVerification(user_id, verification_id);
-    return res.status(StatusCodes.OK).json(unscrap_verification);
+    return res.success(unscrap_verification, StatusCodes.OK);
   } catch (error) {
     next(error);
   }

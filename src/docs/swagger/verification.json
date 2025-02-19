@@ -5,7 +5,7 @@
         "summary": "챌린지 인증 현황 조회 API",
         "description": "현재 참가 중인 챌린지의 인증 현황(총 인원, 인증 완료 인원, 미인증 인원)을 조회하는 API입니다.",
         "tags": ["Challenge:Verification"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "in": "path",
@@ -28,23 +28,10 @@
                     "success": {
                       "type": "object",
                       "properties": {
-                        "challengeInfo": {
-                          "type": "object",
-                          "properties": {
-                            "id": { "type": "integer", "example": 3 },
-                            "name": { "type": "string", "example": "2025년 개발 챌린지" },
-                            "challengeType": { "type": "string", "example": "basic" }
-                          }
-                        },
-                        "participants": {
-                          "type": "object",
-                          "properties": {
-                            "total": { "type": "integer", "example": 50 },
-                            "verified": { "type": "integer", "example": 35 },
-                            "unverified": { "type": "integer", "example": 15 }
-                          }
-                        },
-                        "verificationRate": { "type": "number", "format": "float", "example": 0.7 }
+                        "challengeId": { "type": "integer", "example": 3 },
+                        "total": { "type": "integer", "example": 50 },
+                        "verified": { "type": "integer", "example": 35 },
+                        "unverified": { "type": "integer", "example": 15 }
                       }
                     }
                   }
@@ -60,7 +47,7 @@
         "summary": "이번 주 인증 현황 조회 API",
         "description": "특정 챌린지에서 사용자가 이번 주 어떤 요일에 인증했는지를 조회하는 API입니다.",
         "tags": ["Challenge:Verification"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "in": "path",
@@ -100,25 +87,18 @@
         }
       }
     },
-    "/api/v1/verification/{challengeId}/verifications/{verificationId}": {
+    "/api/v1/verification/{verificationId}": {
       "get": {
         "summary": "특정 인증 상세 조회 API",
         "description": "특정 챌린지 인증의 상세 정보를 조회하는 API입니다.",
         "tags": ["Challenge:Verification"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
-          {
-            "in": "path",
-            "name": "challengeId",
-            "required": true,
-            "schema": { "type": "string", "example": "101" },
-            "description": "챌린지 ID"
-          },
           {
             "in": "path",
             "name": "verificationId",
             "required": true,
-            "schema": { "type": "string", "example": "202" },
+            "schema": { "type": "string", "example": 1 },
             "description": "인증 ID"
           }
         ],
@@ -131,11 +111,85 @@
                   "type": "object",
                   "properties": {
                     "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
                     "success": {
                       "type": "object",
                       "properties": {
-                        "verificationId": { "type": "string", "example": "202" },
-                        "description": { "type": "string", "example": "오늘의 인증: 5km 러닝 완료!" }
+                        "id": { "type": "integer", "example": 1 },
+                        "user_id": { "type": "integer", "example": 4 },
+                        "userChallenge_id": { "type": "integer", "example": 1 },
+                        "verificationType": { "type": "string", "example": "camera" },
+                        "photoUrl": { "type": "string", "example": "https://example.com/photo.jpg" },
+                        "title": { "type": "string", "example": "1일차 챌린지 인증" },
+                        "content": { "type": "string", "example": "This is a sample verification content." },
+                        "question": { "type": "boolean", "example": true },
+                        "textUrl": { "type": "string", "example": "https://example.com/text" },
+                        "verificationStatus": { "type": "string", "example": "certified" },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-02-06T11:03:51.693Z"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-02-06T11:28:39.228Z"
+                        },
+                        "adoptionComplete": { "type": "boolean", "example": false },
+                        "likesCount": { "type": "integer", "example": 0 },
+                        "scrapsCount": { "type": "integer", "example": 0 },
+                        "commentsCount": { "type": "integer", "example": 2 },
+                        "comment": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": { "type": "integer", "example": 1 },
+                              "user_id": { "type": "integer", "example": 4 },
+                              "nickname": { "type": "string", "example": "test" },
+                              "content": { "type": "string", "example": "이 인증은 정말 멋집니다!" },
+                              "parent_id": { "type": ["integer", "null"], "example": null },
+                              "created_at": {
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2025-02-06T11:11:56.754Z"
+                              },
+                              "updated_at": {
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2025-02-06T11:16:07.146Z"
+                              },
+                              "selected": { "type": "boolean", "example": false },
+                              "anonymous": { "type": "boolean", "example": false },
+                              "replies": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": { "type": "integer", "example": 2 },
+                                    "user_id": { "type": "integer", "example": 4 },
+                                    "nickname": { "type": "string", "example": "test" },
+                                    "content": { "type": "string", "example": "이 인증 정말 좋네요!" },
+                                    "parent_id": { "type": "integer", "example": 1 },
+                                    "created_at": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "example": "2025-02-06T11:13:38.771Z"
+                                    },
+                                    "updated_at": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "example": "2025-02-06T11:13:38.771Z"
+                                    },
+                                    "selected": { "type": "boolean", "example": false },
+                                    "anonymous": { "type": "boolean", "example": false },
+                                    "replies": { "type": "array", "items": {} }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
                       }
                     }
                   }
@@ -151,16 +205,29 @@
         "summary": "챌린지 사진 인증 등록 API",
         "description": "특정 챌린지에 사진 인증을 등록하는 API입니다.",
         "tags": ["Challenge:Verification"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "challengeId",
+            "required": true,
+            "schema": { "type": "string", "example": "1" },
+            "description": "챌린지 ID"
+          }
+        ],
         "requestBody": {
           "required": true,
           "description": "사진 인증 등록 데이터",
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "photoUrl": { "type": "string", "example": "https://photo.com" }
+                  "photo": { "type": "string", "format": "binary" },
+                  "title": { "type": "string", "example": "1일차 챌린지 인증" },
+                  "content": { "type": "string", "example": "This is a sample verification content." },
+                  "textUrl": { "type": "string", "example": "https://example.com/text" },
+                  "question": { "type": "boolean", "example": 1 }
                 }
               }
             }
@@ -168,7 +235,36 @@
         },
         "responses": {
           "200": {
-            "description": "사진 인증 등록 성공"
+            "description": "사진 인증 등록 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "object",
+                      "properties": {
+                        "message": { "type": "string", "example": "챌린지 인증이 완료되었습니다." },
+                        "verification": {
+                          "type": "object",
+                          "properties": {
+                            "verificationId": { "type": "integer", "example": 1 },
+                            "verificationType": { "type": "string", "example": "camera" },
+                            "title": { "type": "string", "example": "1일차 챌린지 인증" },
+                            "photoUrl": {
+                              "type": "string",
+                              "example": "https://s3.amazonaws.com/example-bucket/uploads/image.jpg"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -178,7 +274,16 @@
         "summary": "챌린지 글 인증 등록 API",
         "description": "사용자가 챌린지 글로 인증을 등록하는 API입니다.",
         "tags": ["Challenge:Verification"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "challengeId",
+            "required": true,
+            "schema": { "type": "string", "example": "1" },
+            "description": "챌린지 ID"
+          }
+        ],
         "requestBody": {
           "required": true,
           "description": "챌린지 글 인증 요청 데이터",
@@ -196,7 +301,32 @@
         },
         "responses": {
           "200": {
-            "description": "글 인증 등록 성공"
+            "description": "글 인증 등록 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultType": { "type": "string", "example": "SUCCESS" },
+                    "error": { "type": "object", "nullable": true, "example": null },
+                    "success": {
+                      "type": "object",
+                      "properties": {
+                        "message": { "type": "string", "example": "챌린지 인증이 완료되었습니다." },
+                        "verification": {
+                          "type": "object",
+                          "properties": {
+                            "verificationId": { "type": "integer", "example": 2 },
+                            "verificationType": { "type": "string", "example": "text" },
+                            "title": { "type": "string", "example": "챌린지 글로 인증하기" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -206,7 +336,7 @@
         "summary": "챌린지 글 인증 임시저장 조회 API",
         "description": "챌린지 글 인증 작성 중 임시 저장된 내용을 조회하는 API입니다.",
         "tags": ["Challenge:Verification"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
             "description": "임시 저장된 인증 조회 성공"
@@ -217,7 +347,7 @@
         "summary": "임시 저장된 글 삭제 API",
         "description": "챌린지 글 인증 작성 중 임시 저장된 내용을 삭제하는 API입니다.",
         "tags": ["Challenge:Verification"],
-        "security": [{ "BearerAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
             "description": "임시 저장된 인증 삭제 성공"

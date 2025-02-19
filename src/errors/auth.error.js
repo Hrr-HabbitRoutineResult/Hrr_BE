@@ -3,7 +3,7 @@ export class UserNotExistError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -13,7 +13,7 @@ export class PasswordMismatchError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 401;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -23,7 +23,7 @@ export class TokenExpiredError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 403;
+    this.statusCode = 401;
     this.data = data;
   }
 }
@@ -33,7 +33,7 @@ export class RefreshTokenError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 403;
+    this.statusCode = 403;
     this.data = data;
   }
 }
@@ -43,7 +43,7 @@ export class AccessTokenError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 401;
+    this.statusCode = 401;
     this.data = data;
   }
 }
@@ -53,7 +53,7 @@ export class InvalidTokenError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 403;
+    this.statusCode = 403;
     this.data = data;
   }
 }
@@ -63,7 +63,7 @@ export class RefreshTokenMissingError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 401;
+    this.statusCode = 401;
     this.data = data;
   }
 }
@@ -73,7 +73,7 @@ export class UserAlreadyExistsError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -83,7 +83,7 @@ export class SendmailError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -93,7 +93,7 @@ export class DataBaseError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -103,37 +103,77 @@ export class EmailVerificationNotExistsError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
 
 export class EmailVerificationExpiredError extends Error {
-  errorCode = 'A011';
+  errorCode = 'A012';
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
 
 export class InvalidVerificationCodeError extends Error {
-  errorCode = 'A012';
+  errorCode = 'A013';
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
 
 export class EmailVerificationError extends Error {
-  errorCode = 'A013';
+  errorCode = 'A014';
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
+export class MissingAuthorizationHeader extends Error {
+  errorCode = 'A015';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
+export class KakaoLoginError extends Error {
+  errorCode = 'A016';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 500;
+    this.data = data;
+  }
+}
+
+export class MissingKakaoTokenError extends Error {
+  errorCode = 'A017';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 401;
+    this.data = data;
+  }
+}
+
+export class UserQuitError extends Error {
+  errorCode = 'A018';
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 401;
     this.data = data;
   }
 }
@@ -149,8 +189,12 @@ export default {
   UserAlreadyExistsError,
   SendmailError,
   DataBaseError,
-  EmailVerificationExpiredError,
   EmailVerificationNotExistsError,
+  EmailVerificationExpiredError,
   InvalidVerificationCodeError,
   EmailVerificationError,
+  MissingAuthorizationHeader,
+  KakaoLoginError,
+  MissingKakaoTokenError,
+  UserQuitError,
 };

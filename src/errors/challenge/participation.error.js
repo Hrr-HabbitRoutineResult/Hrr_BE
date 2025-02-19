@@ -3,7 +3,7 @@ export class UserAlreadyJoinedChallenge extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -13,7 +13,7 @@ export class DataBaseError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -23,7 +23,7 @@ export class ChallengeExpiredError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -33,7 +33,7 @@ export class AlreadyLikedError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -43,7 +43,7 @@ export class LikesBelowZero extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -53,7 +53,7 @@ export class DidntLikedError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statuscode = 400;
+    this.statusCode = 400;
     this.data = data;
   }
 }

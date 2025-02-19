@@ -249,6 +249,7 @@ const getWeeklyRecords = async (challenge_id, date) => {
         },
       },
       select: {
+        id: true,
         user_id: true,
         photoUrl: true,
         title: true,

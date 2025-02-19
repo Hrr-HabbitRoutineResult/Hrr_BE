@@ -165,6 +165,7 @@ const getChallengeCalendar = async (user_id, challenge_id) => {
     weekly_records[date] = records
       .filter(record => record.verificationStatus === 'certified') // 인증된 것만 필터링
       .map(record => ({
+        verification_id: record.id,
         user_id: record.user_id,
         photoUrl: record.photoUrl,
         title: record.title,

@@ -53,7 +53,6 @@ const createEmailVerification = async new_email_verification => {
     });
     return created_verification;
   } catch (error) {
-    console.log(error);
     throw new authError.DataBaseError('Error on creating email verification');
   }
 };

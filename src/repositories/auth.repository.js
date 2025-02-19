@@ -136,7 +136,24 @@ const checkNickname = async nickname => {
     });
     return existingUser;
   } catch (error) {
-    throw new Error('Database error while checking nickname');
+    throw new databaseError.DataBaseError('Database error while checking nickname');
+  }
+};
+
+const changePassword = async (user_id, new_password) => {
+  try {
+    // 새로운 비밀번호 해싱
+    const hashedPassword = await bcrypt.hash(new_password, 10);
+
+    // 비밀번호 업데이트
+    await prisma.user.update({
+      where: { id: user_id },
+      data: { password: hashedPassword },
+    });
+
+    return { message: '비밀번호가 성공적으로 변경되었습니다.' };
+  } catch (error) {
+    throw new databaseError.DataBaseError('비밀번호 변경 중 데이터베이스 오류 발생');
   }
 };
 
@@ -152,4 +169,5 @@ export default {
   findEmailVerificationById,
   signUpKakao,
   checkNickname,
+  changePassword,
 };

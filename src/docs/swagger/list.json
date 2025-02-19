@@ -383,6 +383,7 @@
                         "description": { "type": "string", "example": "공부합니다" },
                         "challengeImage": { "type": "string", "example": "image1@example.com" },
                         "challengeStatus": { "type": "string", "example": "ongoing" },
+                        "currentParticipants": { "type": "integer", "example": 30 },
                         "maxParticipants": { "type": "integer", "example": 30 },
                         "verificationType": { "type": "string", "example": "camera" },
                         "rule": { "type": "string", "example": "3" },

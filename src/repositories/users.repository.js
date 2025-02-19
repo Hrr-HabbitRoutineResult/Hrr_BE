@@ -7,7 +7,7 @@ import databaseError from '../errors/database.error.js';
 const putUserInterestCategory = async (user_id, update_data) => {
   try {
     // 사용자의 관심 카테고리 저장
-    const updated_user = await prisma.userCategoryType.upsert({
+    await prisma.userCategoryType.upsert({
       where: { user_id },
       update: { category: update_data.category },
       create: { user_id, category: update_data.category },
@@ -26,10 +26,10 @@ const putUserInterestCategory = async (user_id, update_data) => {
   }
 };
 
-const updateUserInfo = async (email, update_data) => {
+const updateUserInfo = async (user_id, update_data) => {
   try {
     const updated_user = await prisma.user.update({
-      where: { email: email },
+      where: { id: user_id },
       data: update_data,
     });
     return updated_user;
@@ -329,6 +329,42 @@ const findUserBadgesCondition = async (user_id, badge_id) => {
   }
 };
 
+const updateUserBadgeStatus = async (user_id, badge_id) => {
+  try {
+    // 해당 user_id, badge_id의 모든 조건 조회
+    const conditions = await prisma.userBadgeCondition.findMany({
+      where: {
+        userBadge: {
+          user_id,
+          badge_id,
+        },
+      },
+      select: {
+        isAchieved: true,
+      },
+    });
+
+    // 모든 조건의 isAchieved가 true인지 확인
+    const all_achieved = conditions.every(cond => cond.isAchieved);
+
+    if (all_achieved) {
+      // userBadge 테이블의 isObtained 업데이트
+      const badge_obtained = await prisma.userBadge.updateMany({
+        where: {
+          user_id,
+          badge_id,
+        },
+        data: {
+          isObtained: true,
+        },
+      });
+      return badge_obtained;
+    }
+  } catch (error) {
+    throw new databaseError.DataBaseError('Database Error on updating user badge status');
+  }
+};
+
 const findUserLevel = async userId => {
   try {
     const result = await prisma.userLevel.findMany({
@@ -540,6 +576,7 @@ export default {
   createUserFollows,
   userUnfollows,
   findUserBadgesCondition,
+  updateUserBadgeStatus,
   findUserLevel,
   getUserVerificationScraps,
   getUserVerificationLikes,

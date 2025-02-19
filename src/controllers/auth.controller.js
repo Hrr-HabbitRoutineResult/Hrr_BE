@@ -54,8 +54,17 @@ const kakaoLogin = async (req, res, next) => {
 
 const naverLogin = () => {};
 const findEmail = () => {};
-const ressetPasswordByPhone = () => {};
-const ressetPasswordByEmail = () => {};
+const resetPasswordByPhone = () => {};
+
+const resetPasswordByEmail = async (req, res, next) => {
+  try {
+    const email = req.body.email;
+    const response = await authService.resetPasswordByEmail(email);
+    return res.success(response, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
 
 const register = async (req, res, next) => {
   try {
@@ -97,16 +106,28 @@ const checkNickname = async (req, res, next) => {
   }
 };
 
+const changePassword = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const new_password = req.body.newPassword;
+    const response = await authService.changePassword(user_id, new_password);
+    return res.success(response, StatusCodes.OK);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export default {
   emailLogin,
   kakaoLogin,
   refreshToken,
   naverLogin,
   findEmail,
-  ressetPasswordByPhone,
-  ressetPasswordByEmail,
+  resetPasswordByPhone,
+  resetPasswordByEmail,
   register,
   sendVerificationCode,
   checkEmailVerificationCode,
   checkNickname,
+  changePassword,
 };

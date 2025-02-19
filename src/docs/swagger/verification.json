@@ -219,11 +219,11 @@
           "required": true,
           "description": "사진 인증 등록 데이터",
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "photo": { "type": "string", "format": "binary" },
+                  "photoUrl": { "type": "string", "example": "photo_example.com" },
                   "title": { "type": "string", "example": "1일차 챌린지 인증" },
                   "content": { "type": "string", "example": "This is a sample verification content." },
                   "textUrl": { "type": "string", "example": "https://example.com/text" },

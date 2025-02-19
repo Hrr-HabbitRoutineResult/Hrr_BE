@@ -7,6 +7,7 @@ import messageRoutes from './routes/message.routes.js';
 import postRoutes from './routes/post.routes.js';
 import boardRoutes from './routes/board.routes.js';
 import verificationRoutes from './routes/verification.routes.js';
+import utilRoutes from './routes/util.routes.js';
 import morganMiddleware from './middlewares/morganMiddleware.js';
 import logger from './logger.js';
 
@@ -37,7 +38,7 @@ app.use('/api/v1/message', messageRoutes);
 app.use('/api/v1/board', boardRoutes);
 app.use('/api/v1/post', postRoutes);
 app.use('/api/v1/verification', verificationRoutes);
-
+app.use('/api/v1/utils', utilRoutes);
 // ✅ 마지막으로 전역 오류 처리 미들웨어를 추가
 app.use((err, req, res, next) => {
   if (res.headersSent) return next(err);

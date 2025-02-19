@@ -16,6 +16,7 @@
     "seed": "node prisma/seed.js"
   },
   "dependencies": {
+    "@aws-sdk/lib-storage": "^3.750.0",
     "@prisma/client": "^6.2.1",
     "aws-sdk": "^2.1692.0",
     "axios": "^1.7.9",

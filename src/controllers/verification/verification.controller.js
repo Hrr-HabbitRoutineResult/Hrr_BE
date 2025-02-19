@@ -26,12 +26,8 @@ const cameraVerification = async (req, res, next) => {
   try {
     const user_id = req.user.id;
     const challenge_id = parseInt(req.params.challengeId, 10);
-    if (!req.file) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ error: '파일이 필요합니다.' });
-    }
+    const photo_url = req.body.photoUrl;
 
-    // S3 업로드
-    const photo_url = await uploadToS3(req.file);
     const completed_challenge = await verificationService.verifyWithCamera(user_id, challenge_id, photo_url, req.body);
 
     return res.success(completed_challenge, StatusCodes.OK);

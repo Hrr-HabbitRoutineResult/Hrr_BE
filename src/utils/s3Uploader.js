@@ -10,7 +10,6 @@ const s3 = new S3Client({
 });
 
 export const uploadToS3 = async file => {
-  console.log(file);
   const file_name = `uploads/${Date.now()}-${file.originalname}`;
   const upload_params = {
     Bucket: process.env.AWS_BUCKET_NAME,

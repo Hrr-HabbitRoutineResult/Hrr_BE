@@ -117,6 +117,17 @@ const changePassword = async (req, res, next) => {
   }
 };
 
+const checkPassword = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const password = req.body.password;
+    const response = await authService.checkPassword(user_id, password);
+    return res.success(response, StatusCodes.OK);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export default {
   emailLogin,
   kakaoLogin,
@@ -130,4 +141,5 @@ export default {
   checkEmailVerificationCode,
   checkNickname,
   changePassword,
+  checkPassword,
 };

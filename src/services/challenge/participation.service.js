@@ -117,10 +117,77 @@ const getUserChallengeVerificationbyId = async (user_id, challenge_id) => {
   return [user_info, verification_info, challenge_verification_list];
 };
 
+const getChallengeCalendar = async (user_id, challenge_id) => {
+  // 현재 KST 날짜 가져오기
+  const now = new Date();
+  now.setUTCHours(now.getUTCHours() + 9); // KST 변환
+  const today = now.toISOString().split('T')[0]; // "YYYY-MM-DD"
+
+  // 이번 주 일요일(2월 16일)과 토요일(2월 22일) 계산 (KST 기준)
+  const start_of_week = new Date(now);
+  start_of_week.setUTCDate(now.getUTCDate() - now.getUTCDay()); // 일요일 (2/16)
+  start_of_week.setUTCHours(0, 0, 0, 0);
+
+  const end_of_week = new Date(start_of_week);
+  end_of_week.setUTCDate(start_of_week.getUTCDate() + 6); // 토요일 (2/22)
+  end_of_week.setUTCHours(23, 59, 59, 999);
+
+  // 이번 주 모든 날짜 리스트 생성
+  const week_range = [];
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(start_of_week);
+    date.setUTCDate(start_of_week.getUTCDate() + i);
+    week_range.push({
+      date: date.toISOString().split('T')[0], // "YYYY-MM-DD"
+      day: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][i],
+    });
+  }
+
+  // 인증해야 하는 요일 조회
+  const challenge_frequencies = await participationRepository.getChallengeFrequencies(challenge_id);
+  const need_certified = Object.keys(challenge_frequencies)
+    .filter(day => challenge_frequencies[day])
+    .map(day => day.charAt(0).toUpperCase() + day.slice(1));
+
+  // 이번 주 사용자가 인증한 날짜 조회 (certified만 조회)
+  const verified_days = await participationRepository.getVerifiedDays(
+    user_id,
+    challenge_id,
+    start_of_week,
+    end_of_week,
+  );
+  const verified_days_formatted = verified_days.map(v => v.created_at.toISOString().split('T')[0]);
+
+  // 이번 주 모든 챌린저들의 인증 기록 조회 (certified & challengeId 필터링)
+  const weekly_records = {};
+  for (const { date } of week_range) {
+    const records = await participationRepository.getWeeklyRecords(challenge_id, date);
+    weekly_records[date] = records
+      .filter(record => record.verificationStatus === 'certified') // 인증된 것만 필터링
+      .map(record => ({
+        verification_id: record.id,
+        user_id: record.user_id,
+        photoUrl: record.photoUrl,
+        title: record.title,
+        textUrl: record.textUrl,
+      }));
+  }
+
+  return {
+    today,
+    week_range,
+    challenge_id,
+    user_id,
+    need_certified,
+    verified_days: verified_days_formatted,
+    weekly_records,
+  };
+};
 export default {
   joinChallenge,
   increaseChallengeLike,
   decreaseChallengeLike,
   getChallengerList,
   getUserChallengeVerificationbyId,
+  getChallengeCalendar,
 };

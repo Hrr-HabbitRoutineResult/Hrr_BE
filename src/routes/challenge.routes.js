@@ -24,7 +24,7 @@ router.post('/:challengeId/like', authMiddleware, participationController.likeCh
 router.delete('/:challengeId/unlike', authMiddleware, participationController.unlikeChallenge);
 router.get('/:challengeId/challengerslist', participationController.getChallengerList);
 router.get('/:challengeId/challengerslist/kick', participationController.kickChallenger);
-router.get('/:challengeId/calendar', participationController.getChallengeCalendar);
+router.get('/:challengeId/calendar', authMiddleware, participationController.getChallengeCalendar);
 
 // Like
 router.post('/:challengeId/like', authMiddleware, likeController.likeSpecificChallenge);

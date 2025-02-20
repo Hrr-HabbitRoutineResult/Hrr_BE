@@ -1,6 +1,7 @@
 import { prisma } from '../../db.config.js';
 import databaseError from '../../errors/database.error.js';
 import likeError from '../../errors/verification/like.error.js';
+import logger from '../../logger.js';
 
 const likeChallenge = async (user_id, challenge_id) => {
   try {
@@ -17,6 +18,7 @@ const likeChallenge = async (user_id, challenge_id) => {
       }),
     ]);
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Database error occurred while following user');
   }
 };
@@ -38,6 +40,7 @@ const unlikeChallenge = async (user_id, challenge_id) => {
       }),
     ]);
   } catch (error) {
+    logger.error(error);
     if (error.code === 'P2025') {
       throw new likeError.ChallengeLikesUnderZeroError('좋아요 개수가 음수가 되었습니다.');
     }
@@ -61,6 +64,7 @@ const checkChallengeLiked = async (user_id, challenge_id) => {
       return false;
     }
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Database error occurred while following user');
   }
 };

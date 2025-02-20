@@ -2,6 +2,8 @@ import { prisma } from '../db.config.js';
 import { Prisma } from '@prisma/client';
 import authError from '../errors/auth.error.js';
 import boardError from '../errors/board.error.js';
+import logger from '../logger.js';
+
 const getUserBoard = async user_email => {
   try {
     // 이메일로 사용자 찾기
@@ -21,6 +23,7 @@ const getUserBoard = async user_email => {
     }
     return user_board;
   } catch (error) {
+    logger.error(error);
     throw error;
   }
 };
@@ -37,6 +40,7 @@ const patchBoardPinStatus = async (board_id, status) => {
     });
     return updated_verification;
   } catch (error) {
+    logger.error(error);
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2025') {
         // 레코드가 없을 경우(해당 ID로 업데이트할 레코드를 찾을 수 없을 경우)
@@ -56,6 +60,7 @@ const createBoard = async new_board_info => {
     });
     return created_board;
   } catch (error) {
+    logger.error(error);
     throw new boardError.DataBaseError('Error on creating board');
   }
 };

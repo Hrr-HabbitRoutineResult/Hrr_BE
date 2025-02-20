@@ -1,6 +1,7 @@
 import { prisma } from '../../db.config.js';
 import databaseError from '../../errors/database.error.js';
 import commentError from '../../errors/verification/comment.error.js';
+import logger from '../../logger.js';
 
 const getVerificationComment = async verification_id => {
   try {
@@ -55,6 +56,7 @@ const getVerificationComment = async verification_id => {
 
     return structuredComments;
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Failed to fetch comments');
   }
 };
@@ -71,6 +73,7 @@ const postVerificationComment = async request_data => {
       }),
     ]);
   } catch (error) {
+    logger.error(error);
     if (error.code === 'P2025') {
       throw new databaseError.DataBaseNotExistError('해당 인증이 존재하지 않습니다.');
     }
@@ -94,6 +97,7 @@ const updateVerificationComment = async (comment_id, content) => {
       anonymous: updated_comment.anonymous,
     };
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Failed to update comment');
   }
 };
@@ -133,6 +137,7 @@ const getCommentById = async comment_id => {
       anonymous: comment.anonymous,
     };
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Failed to fetch comment');
   }
 };

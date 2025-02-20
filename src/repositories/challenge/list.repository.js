@@ -1,5 +1,6 @@
 import { prisma } from '../../db.config.js';
 import listError from '../../errors/challenge/list.error.js';
+import logger from '../../logger.js';
 
 const createChallenge = async (data, keywords, frequency_data) => {
   try {
@@ -31,6 +32,7 @@ const createChallenge = async (data, keywords, frequency_data) => {
       };
     });
   } catch (error) {
+    logger.error(error);
     throw new listError.DataBaseError('Error on creating challenge and keywords');
   }
 };
@@ -61,6 +63,7 @@ const challengeList = async (filters, orderBy) => {
       orderBy, // 정렬 조건 적용
     });
   } catch (error) {
+    logger.error(error);
     throw new listError.DataBaseError('Error on listing challenge');
   }
 };

@@ -1,6 +1,7 @@
 import { prisma } from '../../db.config.js';
 import databaseError from '../../errors/database.error.js';
 import verificationError from '../../errors/verification/verification.error.js';
+import logger from '../../logger.js';
 
 const verifyWithCamera = async dto => {
   try {
@@ -25,6 +26,7 @@ const verifyWithCamera = async dto => {
 
     return result;
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Error on creating camera verification');
   }
 };
@@ -36,6 +38,7 @@ const verifyWithText = async dto => {
     });
     return text_verification;
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Error on creating text verification');
   }
 };
@@ -62,6 +65,7 @@ const findChallengeVerificationCurrentParticipants = async challenge_id => {
     });
     return status;
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Error on finding challenge verification status');
   }
 };
@@ -86,6 +90,7 @@ const findChallengeVerificationCounts = async challenge_id => {
     });
     return verification_count;
   } catch (error) {
+    logger.error(error);
     throw new databaseError.DataBaseError('Error on finding challenge verification status');
   }
 };

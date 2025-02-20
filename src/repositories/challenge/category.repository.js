@@ -1,6 +1,7 @@
 import { prisma } from '../../db.config.js';
 import { Category } from '@prisma/client';
 import categoryError from '../../errors/challenge/category.error.js';
+import logger from '../../logger.js';
 
 const getAllCategories = async () => {
   try {
@@ -15,6 +16,7 @@ const getAllCategories = async () => {
 
     return result;
   } catch (error) {
+    logger.error(error);
     throw new categoryError.DataBaseError('카테고리를 불러오는 중 오류가 발생했습니다..');
   }
 };
@@ -65,6 +67,7 @@ const getDailyHotChallenge = async (yesterday_start, yesterday_end) => {
 
     return challenges.filter(challenge => challenge !== null);
   } catch (error) {
+    logger.error(error);
     throw new categoryError.SendCategoryError('챌린지를 불러오는 중 오류가 발생했습니다.');
   }
 };

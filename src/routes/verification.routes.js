@@ -9,7 +9,7 @@ const router = express.Router();
 
 // Verification
 router.get('/:challengeId/verification-status', authMiddleware, veriificationController.getChallengeVerificationStatus);
-router.get('/:challengeId/verification/weekly', veriificationController.getWeeklyVerification);
+router.get('/:challengeId/verification/weekly', authMiddleware, veriificationController.getWeeklyVerification);
 router.get('/:verificationId', authMiddleware, veriificationController.getSpecificVerification);
 router.post(
   '/:challengeId/verification/camera',

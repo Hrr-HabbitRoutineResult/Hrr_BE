@@ -99,10 +99,10 @@ const getUserBadgesById = async user_id => {
 
 const getUserLatestBadgeById = async user_id => {
   const badge = await userRepository.findUserLatestBadge(user_id);
-  const response_data = userDto.userLatestBadgeDto(badge);
-  if (!response_data) {
+  if (!badge) {
     return null;
   }
+  const response_data = userDto.userLatestBadgeDto(badge);
 
   return response_data;
 };

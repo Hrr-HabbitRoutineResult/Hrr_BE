@@ -1,5 +1,6 @@
 import { prisma } from '../../db.config.js';
 import databaseError from '../../errors/database.error.js';
+import verificationError from '../../errors/verification/verification.error.js';
 import logger from '../../logger.js';
 
 const verifyWithCamera = async dto => {
@@ -94,10 +95,71 @@ const findChallengeVerificationCounts = async challenge_id => {
   }
 };
 
+const getWeeklyVerification = async (challenge_id, user_id, start_of_week, end_of_week) => {
+  try {
+    // 인증된 날짜 조회
+    const verifications = await prisma.verification.findMany({
+      where: {
+        userChallenge: { challenge_id: parseInt(challenge_id, 10) },
+        user_id: parseInt(user_id, 10),
+        verificationStatus: 'certified',
+        created_at: {
+          gte: start_of_week,
+          lte: end_of_week,
+        },
+      },
+      select: {
+        created_at: true,
+      },
+    });
+    // 챌린지 유형 및 인증 요일 조회
+    const challenge_info = await prisma.challenge.findUnique({
+      where: { id: parseInt(challenge_id, 10) },
+      select: {
+        type: true,
+        frequencies: {
+          select: {
+            monday: true,
+            tuesday: true,
+            wednesday: true,
+            thursday: true,
+            friday: true,
+            saturday: true,
+            sunday: true,
+          },
+        },
+      },
+    });
+    // `challengeId`에 해당하는 Frequencies 모델의 요일 값 가져오기
+    const frequency_info = await prisma.frequency.findFirst({
+      where: { challenge_id: parseInt(challenge_id, 10) },
+      select: {
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: true,
+        sunday: true,
+      },
+    });
+
+    if (!frequency_info) {
+      throw new verificationError.VerificationFrequencyNotExistsError(
+        `No frequency data found for challengeId: ${challenge_id}`,
+      );
+    }
+    return { verifications, challenge_info, frequency_info };
+  } catch (error) {
+    throw new verificationError.VerificationNotExistsError('Error retrieving weekly verification records');
+  }
+};
+
 export default {
   verifyWithCamera,
   verifyWithText,
   getSpecificVerification,
   findChallengeVerificationCurrentParticipants,
   findChallengeVerificationCounts,
+  getWeeklyVerification,
 };

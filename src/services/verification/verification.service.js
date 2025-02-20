@@ -61,9 +61,57 @@ const getChallengeVerifications = async challenge_id => {
   return status;
 };
 
+const getWeeklyVerification = async (challenge_id, user_id) => {
+  const now = new Date();
+  now.setUTCHours(now.getUTCHours() + 9); // KST 변환
+
+  // 이번 주 월요일 00:00:00 (KST 기준)
+  const start_of_week = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - now.getUTCDay() + 1, 0, 0, 0),
+  );
+
+  // 이번 주 일요일 23:59:59 (KST 기준)
+  const end_of_week = new Date(
+    Date.UTC(
+      start_of_week.getUTCFullYear(),
+      start_of_week.getUTCMonth(),
+      start_of_week.getUTCDate() + 6,
+      23,
+      59,
+      59,
+      999,
+    ),
+  );
+  const weekly_verification = await verificationRepository.getWeeklyVerification(
+    challenge_id,
+    user_id,
+    start_of_week,
+    end_of_week,
+  );
+  // Frequencies에서 `1`(true)인 요일만 필터링
+  const need_certified = Object.entries(weekly_verification.frequency_info) // frequencyInfo가 null일 수도 있으니 기본값 설정
+    .filter(([_, value]) => value) // 값이 `true(1)`인 것만 필터링
+    .map(([day]) => day.charAt(0).toUpperCase() + day.slice(1)); // "monday" → "Monday"
+
+  // 사용자가 인증한 요일 가져오기
+  const checked_days = weekly_verification.verifications.map(verification => {
+    const createdAtUTC = new Date(verification.created_at);
+    const createdAtKST = new Date(createdAtUTC.getTime() - 9 * 60 * 60 * 1000); // UTC → KST 변환
+    return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][createdAtKST.getUTCDay()];
+  });
+
+  return {
+    challenge_id,
+    user_id,
+    need_certified: need_certified.length > 0 ? need_certified : null, // 요일이 없으면 null
+    checked_days: [...new Set(checked_days)], // 중복 제거
+  };
+};
+
 export default {
   verifyWithCamera,
   verifyWithText,
   getSpecificVerification,
   getChallengeVerifications,
+  getWeeklyVerification,
 };

@@ -6,6 +6,8 @@ import swaggerUiExpress from 'swagger-ui-express';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import https from 'https';
+import http from 'http';
 
 dotenv.config();
 const port = process.env.PORT;
@@ -40,8 +42,29 @@ app.get('/error/html', (req, res) => {
   });
 });
 
-// 서버 실행
+// SSL 인증서 설정
+const sslOptions = {
+  key: fs.readFileSync(path.join(__dirname, '../ssl', 'privkey.pem')),
+  cert: fs.readFileSync(path.join(__dirname, '../ssl', 'fullchain.pem')),
+};
+
+// HTTPS 서버 실행
+https.createServer(sslOptions, app).listen(443, () => {
+  logger.info(`✅ HTTPS Server listening on port 443`);
+});
+
+// HTTP 리다이렉트
+http
+  .createServer((req, res) => {
+    res.writeHead(301, { Location: `https://${req.headers.host}${req.url}` });
+    res.end();
+  })
+  .listen(80, () => {
+    logger.info(`🔄 HTTP requests are redirected to HTTPS`);
+  });
+
+// 서버 실행 (여기서는 HTTP를 80 포트로 리다이렉트)
 app.listen(port, () => {
-  logger.info(`🚀 Server listening on port ${port}`);
+  logger.info(`🚀 Server listening on port 80`);
   cronjobs.startCronJobs();
 });

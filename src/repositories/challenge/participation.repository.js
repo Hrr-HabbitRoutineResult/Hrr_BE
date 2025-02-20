@@ -195,6 +195,73 @@ const findUserChallengeProgress = async challenge_id => {
   }
 };
 
+const getVerifiedDays = async (user_id, challenge_id, start_date, end_date) => {
+  try {
+    return await prisma.verification.findMany({
+      where: {
+        user_id: user_id,
+        userChallenge: { challenge_id: challenge_id },
+        verificationStatus: 'certified', // certified 인증만 조회
+        created_at: {
+          gte: start_date,
+          lte: end_date,
+        },
+      },
+      select: {
+        created_at: true,
+      },
+    });
+  } catch (error) {
+    throw new participationError.DataBaseError('Error fetching verified days');
+  }
+};
+
+const getChallengeFrequencies = async challenge_id => {
+  try {
+    const frequency = await prisma.frequency.findFirst({
+      where: { challenge_id: challenge_id },
+      select: {
+        sunday: true,
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: true,
+      },
+    });
+    return frequency || {};
+  } catch (error) {
+    throw new participationError.DataBaseError('Error fetching challenge frequencies');
+  }
+};
+
+// 해당 날짜의 challengeId가 동일하고 verificationStatus가 certified인 인증만 조회
+const getWeeklyRecords = async (challenge_id, date) => {
+  try {
+    return await prisma.verification.findMany({
+      where: {
+        userChallenge: { challenge_id: challenge_id },
+        verificationStatus: 'certified', // 인증된 것만 조회
+        created_at: {
+          gte: new Date(date + 'T00:00:00.000Z'),
+          lte: new Date(date + 'T23:59:59.999Z'),
+        },
+      },
+      select: {
+        id: true,
+        user_id: true,
+        photoUrl: true,
+        title: true,
+        textUrl: true,
+        verificationStatus: true,
+      },
+    });
+  } catch (error) {
+    throw new participationError.DataBaseError(`Error fetching records for ${date}`);
+  }
+};
+
 export default {
   joinChallenge,
   getUserChallengeById,
@@ -207,4 +274,7 @@ export default {
   findUserInfoForVerification,
   findUserVerificationCount,
   findUserChallengeProgress,
+  getVerifiedDays,
+  getChallengeFrequencies,
+  getWeeklyRecords,
 };
